@@ -10,8 +10,8 @@
         <relativePath/>
     </parent>
     <groupId>com.ztbsuper</groupId>
-    <artifactId>dingding</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>dingding-plugin</artifactId>
+    <version>1.0</version>
     <packaging>hpi</packaging>
 
     <properties>
@@ -28,8 +28,8 @@
         -->
     </properties>
 
-    <name>Dingding Plugin</name>
-    <description>钉钉Jenkins机器人插件</description>
+    <name>Dingding[钉钉] Plugin</name>
+    <description>钉钉Jenkins通知插件</description>
     <url>https://wiki.jenkins-ci.org/display/JENKINS/dingding+Plugin</url>
 
     <!-- The default licence for Jenkins OSS Plugins is MIT. Substitute for the applicable one if needed. -->
