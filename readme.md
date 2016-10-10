@@ -1,4 +1,5 @@
-# Dingding Notification Plugin
+# Dingding Notification Plugin 
+![](https://travis-ci.org/ztbsuper/dingding-plugin.svg?branch=master)
 Dingding notification plugin is a simply config plugin, it can notify to your specified dingding group the build job status including:start build\build success\build failed. 
 
 Chinese Intro: [中文介绍](https://github.com/ztbsuper/dingding-plugin/wiki/中文Wiki)
