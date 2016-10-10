@@ -35,7 +35,7 @@ public class DingdingServiceImpl implements DingdingService {
 
     private AbstractBuild build;
 
-    private final String apiUrl = "https://oapi.dingtalk.com/robot/send?access_token=";
+    private static final String apiUrl = "https://oapi.dingtalk.com/robot/send?access_token=";
 
     private String api;
 
@@ -51,14 +51,15 @@ public class DingdingServiceImpl implements DingdingService {
 
     @Override
     public void start() {
-
         String pic = "http://icon-park.com/imagefiles/loading7_gray.gif";
         String title = String.format("%s%s开始构建", build.getProject().getDisplayName(), build.getDisplayName());
         String content = String.format("项目[%s%s]开始构建", build.getProject().getDisplayName(), build.getDisplayName());
 
         String link = jenkinsURL + build.getUrl();
-        logger.info(link);
-        sendLinkMessage(link, content, title, pic);
+        if (onStart) {
+            logger.info("send link msg from " + listener.toString());
+            sendLinkMessage(link, content, title, pic);
+        }
 
     }
 
@@ -70,7 +71,10 @@ public class DingdingServiceImpl implements DingdingService {
 
         String link = jenkinsURL + build.getUrl();
         logger.info(link);
-        sendLinkMessage(link, content, title, pic);
+        if (onSuccess) {
+            logger.info("send link msg from " + listener.toString());
+            sendLinkMessage(link, content, title, pic);
+        }
     }
 
     @Override
@@ -81,7 +85,10 @@ public class DingdingServiceImpl implements DingdingService {
 
         String link = jenkinsURL + build.getUrl();
         logger.info(link);
-        sendLinkMessage(link, content, title, pic);
+        if (onFailed) {
+            logger.info("send link msg from " + listener.toString());
+            sendLinkMessage(link, content, title, pic);
+        }
     }
 
     private void sendTextMessage(String msg) {
@@ -121,9 +128,10 @@ public class DingdingServiceImpl implements DingdingService {
 
     private HttpClient getHttpClient() {
         HttpClient client = new HttpClient();
-        if (Jenkins.getInstance() != null) {
-            ProxyConfiguration proxy = Jenkins.getInstance().proxy;
-            if (proxy != null) {
+        Jenkins jenkins = Jenkins.getInstance();
+        if (jenkins != null && jenkins.proxy != null) {
+            ProxyConfiguration proxy = jenkins.proxy;
+            if (proxy != null && client.getHostConfiguration() != null) {
                 client.getHostConfiguration().setProxy(proxy.name, proxy.port);
                 String username = proxy.getUserName();
                 String password = proxy.getPassword();

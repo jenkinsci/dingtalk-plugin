@@ -1,7 +1,5 @@
 package com.ztbsuper.dingding;
 
-import com.ztbsuper.dingding.DingdingNotifier;
-import com.ztbsuper.dingding.DingdingService;
 import hudson.Extension;
 import hudson.model.AbstractBuild;
 import hudson.model.Descriptor;
@@ -32,7 +30,7 @@ public class JobListener extends RunListener<AbstractBuild> {
     @Override
     public void onCompleted(AbstractBuild r, @Nonnull TaskListener listener) {
         Result result = r.getResult();
-        if (result.equals(Result.FAILURE)) {
+        if (null != result && result.equals(Result.FAILURE)) {
             getService(r, listener).failed();
         } else {
             getService(r, listener).success();

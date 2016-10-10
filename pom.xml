@@ -10,7 +10,7 @@
         <relativePath/>
     </parent>
     <groupId>com.ztbsuper</groupId>
-    <artifactId>dingding-plugin</artifactId>
+    <artifactId>dingding-notifications</artifactId>
     <version>1.0</version>
     <packaging>hpi</packaging>
 

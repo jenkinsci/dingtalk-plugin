@@ -1,45 +1,40 @@
-# 钉钉通知器插件
-## Summary
-该插件用于通知指定钉钉群build的触发, 成功和失败, 作为钉钉和jenkins使用者强烈推荐使用, 可以不用再使用邮件通知build情况.
-陆续还将增加@指定用户的功能
+# Dingding Notification Plugin
+Dingding notification plugin is a simply config plugin, it can notify to your specified dingding group the build job status including:start build\build success\build failed. 
 
-## 安装
-等待jenkins hosting, 目前开发版本可以自行build
+Chinese Intro: [中文介绍](https://github.com/ztbsuper/dingding-plugin/wiki/中文Wiki)
+
+## Contributing
+1. Fork it
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -am 'Add some feature')
+4. Push to the branch (git push origin my-new-feature)
+5. Create new Pull Request
+6. Dev build
 ```
 mvn package --settings=./settings.xml
 ```
 
-然后使用target/dingding.hpi上传到jenkins使用
 
-## 如何配置
-1. 新建一个机器人
+## Installation
+1. create a Dingding robot in Dingding side
 
-钉钉->设置...->机器人管理
-
+Dingding -> ... config -> new robot
 ![](https://github.com/ztbsuper/dingding-plugin/blob/master/static/entry.png?raw=true)
 
-选择自定义机器人
-
+choose the 'custom robot' 
 ![](https://github.com/ztbsuper/dingding-plugin/blob/master/static/robot.png?raw=true)
 
-设定机器人
-
+config robot
 ![](https://github.com/ztbsuper/dingding-plugin/blob/master/static/create_robot.png?raw=true)
 
-获取最重要的token
-
+save the access token
 ![](https://github.com/ztbsuper/dingding-plugin/blob/master/static/token.png?raw=true)
-
-2. 配置jenkins
-
-在安装完插件后, 每个jenkins job都可以新增一个构建后的步骤
-
+2. Config Jenkins
+After you installed the plugin, each job can add a post build step, choose 'dingding notification config'
 ![](https://github.com/ztbsuper/dingding-plugin/blob/master/static/config_post_step.png?raw=true)
 
-把刚才记录下的token填入, 以及jenkins的ROOT url填上, 勾选需要的通知
-
+input the access token in previous step, and please input the Jenkins URL
+because plugin don't know where is your jenkins, if you wanna the notification can link directly to your build, please make sure the URL is the Jenkins ROOT url.
 ![](https://github.com/ztbsuper/dingding-plugin/blob/master/static/config.png?raw=true)
-
 3. Enjoy!
-
 ![](https://github.com/ztbsuper/dingding-plugin/blob/master/static/result.png?raw=true)
