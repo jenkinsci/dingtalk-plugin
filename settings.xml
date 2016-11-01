@@ -32,4 +32,10 @@
             <mirrorOf>m.g.o-public</mirrorOf>
         </mirror>
     </mirrors>
+
+    <servers>
+        <server>
+            <id>maven.jenkins-ci.org</id> <!-- For parent 1.397 or newer; before this use id java.net-m2-repository -->
+        </server>
+    </servers>
 </settings>
