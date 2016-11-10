@@ -11,7 +11,7 @@
     </parent>
     <groupId>com.ztbsuper</groupId>
     <artifactId>dingding-notifications</artifactId>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>hpi</packaging>
 
     <properties>
