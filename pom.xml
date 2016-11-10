@@ -48,13 +48,11 @@
         <email>ztbsuper@gmail.com</email>
       </developer>
     </developers>
-    <!-- Assuming you want to host on @jenkinsci:
     <scm>
       <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
       <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
       <url>http://github.com/jenkinsci/${project.artifactId}-plugin</url>
     </scm>
-     -->
     <repositories>
         <repository>
             <id>repo.jenkins-ci.org</id>
