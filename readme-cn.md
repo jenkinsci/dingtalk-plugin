@@ -1,6 +1,4 @@
 # Jenkins 钉钉通知插件 
-![](https://travis-ci.org/ztbsuper/dingding-plugin.svg?branch=master)
-
 Jenkins钉钉配置插件可以让你的build结果第一时间反馈到你所在的工作群中， 帮助你了解build状况
 
 ## 如何贡献 
