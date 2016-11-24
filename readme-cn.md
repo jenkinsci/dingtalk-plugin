@@ -1,42 +1,40 @@
-# Dingding Notification Plugin 
+# Jenkins 钉钉通知插件 
 ![](https://travis-ci.org/ztbsuper/dingding-plugin.svg?branch=master)
 
-Dingding notification plugin is a simply config plugin, it can notify to your specified dingding group the build job status including:start build\build success\build failed. 
+Jenkins钉钉配置插件可以让你的build结果第一时间反馈到你所在的工作群中， 帮助你了解build状况
 
-Chinese Intro: [中文介绍](https://github.com/jenkinsci/dingding-notifications-plugin/wiki/中文Wiki)
-
-## Contributing
+## 如何贡献 
 1. Fork it
 2. Create your feature branch (git checkout -b my-new-feature)
 3. Commit your changes (git commit -am 'Add some feature')
 4. Push to the branch (git push origin my-new-feature)
 5. Create new Pull Request
 6. Dev build
+7. checkout jenkins settings.xml from jenkins-ci.org
 ```
-mvn package --settings=./settings.xml
+mvn package -s /PATH/TO/settings.xml 
 ```
 
 
-## Installation
-1. create a Dingding robot in Dingding side
+## 如何使用 
+1. 创建钉钉机器人 
 
-Dingding -> ... config -> new robot
+钉钉 -> ... -> 机器人管理 
 ![](https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/entry.png?raw=true)
 
-choose the 'custom robot' 
 ![](https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/robot.png?raw=true)
 
-config robot
 ![](https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/create_robot.png?raw=true)
 
-save the access token
+保存 最后一个参数accesstoken
 ![](https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/token.png?raw=true)
-2. Config Jenkins
-After you installed the plugin, each job can add a post build step, choose 'dingding notification config'
+
+2. 配置Jenkins 
+当你拿到钉钉群机器人的accessToken后， 在每一个job之后，你都可以选择添加'钉钉配置通知器'
 ![](https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/config_post_step.png?raw=true)
 
 input the access token in previous step, and please input the Jenkins URL
-because plugin don't know where is your jenkins, if you wanna the notification can link directly to your build, please make sure the URL is the Jenkins ROOT url.
+填入accessToken， 以及很重要的： 填上你Jenkins的URL，因为Jenkins自己不知道自己的URL是什么
 ![](https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/config.png?raw=true)
 3. Enjoy!
 ![](https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/result.png?raw=true)
