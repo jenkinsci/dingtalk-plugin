@@ -55,12 +55,20 @@ public class DingdingServiceImpl implements DingdingService {
         String title = String.format("%s%s开始构建", build.getProject().getDisplayName(), build.getDisplayName());
         String content = String.format("项目[%s%s]开始构建", build.getProject().getDisplayName(), build.getDisplayName());
 
-        String link = jenkinsURL + build.getUrl();
+        String link = getBuildUrl();
         if (onStart) {
             logger.info("send link msg from " + listener.toString());
             sendLinkMessage(link, content, title, pic);
         }
 
+    }
+
+    private String getBuildUrl() {
+        if (jenkinsURL.endsWith("/")) {
+            return jenkinsURL + build.getUrl();
+        } else {
+            return jenkinsURL + "/" + build.getUrl();
+        }
     }
 
     @Override
@@ -69,7 +77,7 @@ public class DingdingServiceImpl implements DingdingService {
         String title = String.format("%s%s构建成功", build.getProject().getDisplayName(), build.getDisplayName());
         String content = String.format("项目[%s%s]构建成功, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
 
-        String link = jenkinsURL + build.getUrl();
+        String link = getBuildUrl();
         logger.info(link);
         if (onSuccess) {
             logger.info("send link msg from " + listener.toString());
@@ -83,7 +91,7 @@ public class DingdingServiceImpl implements DingdingService {
         String title = String.format("%s%s构建失败", build.getProject().getDisplayName(), build.getDisplayName());
         String content = String.format("项目[%s%s]构建失败, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
 
-        String link = jenkinsURL + build.getUrl();
+        String link = getBuildUrl();
         logger.info(link);
         if (onFailed) {
             logger.info("send link msg from " + listener.toString());
