@@ -30,10 +30,10 @@ public class JobListener extends RunListener<AbstractBuild> {
     @Override
     public void onCompleted(AbstractBuild r, @Nonnull TaskListener listener) {
         Result result = r.getResult();
-        if (null != result && result.equals(Result.FAILURE)) {
-            getService(r, listener).failed();
-        } else {
+        if (null != result && result.equals(Result.SUCCESS)) {
             getService(r, listener).success();
+        } else {
+            getService(r, listener).failed();
         }
     }
 
