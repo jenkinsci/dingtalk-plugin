@@ -23,8 +23,6 @@ public class DingdingServiceImpl implements DingdingService {
 
     private Logger logger = LoggerFactory.getLogger(DingdingService.class);
 
-    private String jenkinsURL;
-
     private boolean onStart;
 
     private boolean onSuccess;
@@ -39,8 +37,7 @@ public class DingdingServiceImpl implements DingdingService {
 
     private String api;
 
-    public DingdingServiceImpl(String jenkinsURL, String token, boolean onStart, boolean onSuccess, boolean onFailed, TaskListener listener, AbstractBuild build) {
-        this.jenkinsURL = jenkinsURL;
+    public DingdingServiceImpl(String token, boolean onStart, boolean onSuccess, boolean onFailed, TaskListener listener, AbstractBuild build) {
         this.onStart = onStart;
         this.onSuccess = onSuccess;
         this.onFailed = onFailed;
@@ -64,6 +61,7 @@ public class DingdingServiceImpl implements DingdingService {
     }
 
     private String getBuildUrl() {
+        String jenkinsURL = Jenkins.getInstance().getRootUrl();
         if (jenkinsURL.endsWith("/")) {
             return jenkinsURL + build.getUrl();
         } else {
