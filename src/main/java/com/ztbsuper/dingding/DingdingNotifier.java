@@ -28,12 +28,6 @@ public class DingdingNotifier extends Notifier {
 
     private boolean onFailed;
 
-    public String getJenkinsURL() {
-        return jenkinsURL;
-    }
-
-    private String jenkinsURL;
-
     public boolean isOnStart() {
         return onStart;
     }
@@ -57,11 +51,10 @@ public class DingdingNotifier extends Notifier {
         this.onStart = onStart;
         this.onSuccess = onSuccess;
         this.onFailed = onFailed;
-        this.jenkinsURL = jenkinsURL;
     }
 
     public DingdingService newDingdingService(AbstractBuild build, TaskListener listener) {
-        return new DingdingServiceImpl(jenkinsURL, accessToken, onStart, onSuccess, onFailed, listener, build);
+        return new DingdingServiceImpl(accessToken, onStart, onSuccess, onFailed, listener, build);
     }
 
     @Override
@@ -82,7 +75,6 @@ public class DingdingNotifier extends Notifier {
 
     @Extension
     public static class DingdingNotifierDescriptor extends BuildStepDescriptor<Publisher> {
-
 
         @Override
         public boolean isApplicable(Class<? extends AbstractProject> jobType) {

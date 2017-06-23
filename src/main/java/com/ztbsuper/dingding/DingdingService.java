@@ -5,7 +5,6 @@ package com.ztbsuper.dingding;
  */
 public interface DingdingService {
 
-
     void start();
 
     void success();
