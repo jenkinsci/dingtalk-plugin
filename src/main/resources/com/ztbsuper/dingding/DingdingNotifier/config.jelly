@@ -7,11 +7,11 @@
   -->
 
   <f:entry title="jenkins URL" field="jenkinsURL">
-    <f:textbox />
+    <f:textbox default="${descriptor.getDefaultURL()}" />
   </f:entry>
 
   <f:entry title="钉钉access token" field="accessToken">
-    <f:textbox />
+    <f:textbox  />
   </f:entry>
   <f:entry title="在启动构建时通知">
       <f:checkbox name="onStart" value="true" checked="${instance.isOnStart()}"/>

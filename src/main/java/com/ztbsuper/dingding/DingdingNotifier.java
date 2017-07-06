@@ -11,6 +11,8 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Notifier;
 import hudson.tasks.Publisher;
+import jenkins.model.Jenkins;
+import jenkins.model.JenkinsLocationConfiguration;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.io.IOException;
@@ -92,6 +94,10 @@ public class DingdingNotifier extends Notifier {
         @Override
         public String getDisplayName() {
             return "钉钉通知器配置";
+        }
+
+        public String getDefaultURL(){
+            return Jenkins.getInstance().getRootUrl();
         }
 
     }
