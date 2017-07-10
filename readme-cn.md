@@ -31,8 +31,9 @@ mvn package -s /PATH/TO/settings.xml
 当你拿到钉钉群机器人的accessToken后， 在每一个job之后，你都可以选择添加'钉钉配置通知器'
 ![](https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/config_post_step.png?raw=true)
 
-input the access token in previous step, and please input the Jenkins URL
+~~input the access token in previous step, and please input the Jenkins URL~~
 ~~填入accessToken， 以及很重要的： 填上你Jenkins的URL，因为Jenkins自己不知道自己的URL是什么~~
+
 新版本钉钉插件在创建通知时会自动获取一次Jenkins的ROOT URL，所以如果这里你能看到，就不用再填写ROOT URL了（版本1.3+）
 
 ![](https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/config.png?raw=true)
