@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.ztbsuper</groupId>
     <artifactId>dingding-notifications</artifactId>
-    <version>1.4</version>
+    <version>1.5-SNAPSHOT</version>
     <packaging>hpi</packaging>
 
     <properties>
@@ -51,7 +51,7 @@
         <connection>scm:git:ssh://github.com/jenkinsci/dingding-notifications-plugin.git</connection>
 	<developerConnection>scm:git:ssh://git@github.com/jenkinsci/dingding-notifications-plugin.git</developerConnection>
         <url>http://github.com/jenkinsci/dingding-notifications-plugin</url>
-        <tag>dingding-notifications-1.4</tag>
+        <tag>dingding-notifications-1.0</tag>
     </scm>
     <repositories>
         <repository>
