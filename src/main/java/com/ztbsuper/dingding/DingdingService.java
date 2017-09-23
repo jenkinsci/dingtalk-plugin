@@ -11,4 +11,6 @@ public interface DingdingService {
     void success();
 
     void failed();
+    
+    void abort();
 }

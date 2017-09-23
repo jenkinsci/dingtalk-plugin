@@ -32,8 +32,11 @@ public class JobListener extends RunListener<AbstractBuild> {
         Result result = r.getResult();
         if (null != result && result.equals(Result.SUCCESS)) {
             getService(r, listener).success();
-        } else {
+        } else if (null != result && result.equals(Result.FAILURE)) {
             getService(r, listener).failed();
+        // } else if (null != result && result.equals(Result.ABORTED)) {
+        } else {
+            getService(r, listener).abort();
         }
     }
 
