@@ -1,0 +1,20 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    <f:entry title="${%AccessToken}" field="accessToken">
+        <f:textbox />
+    </f:entry>
+    <f:advanced>
+        <f:entry title="${%NotifyPeople}" field="notifyPeople">
+            <f:textbox />
+        </f:entry>
+        <f:entry title="${%Message}" field="message">
+            <f:textbox />
+        </f:entry>
+                <f:entry title="${%ImageUrl}" field="imageUrl">
+                    <f:textbox />
+                </f:entry>
+                        <f:entry title="${%JenkinsUrl}" field="jenkinsUrl">
+                            <f:textbox />
+                        </f:entry>
+    </f:advanced>
+</j:jelly>
