@@ -31,6 +31,8 @@ public class DingdingServiceImpl implements DingdingService {
 
     private boolean onFailed;
 
+    private boolean onAbort;
+
     private TaskListener listener;
 
     private AbstractBuild build;
@@ -39,11 +41,12 @@ public class DingdingServiceImpl implements DingdingService {
 
     private String api;
 
-    public DingdingServiceImpl(String jenkinsURL, String token, boolean onStart, boolean onSuccess, boolean onFailed, TaskListener listener, AbstractBuild build) {
+    public DingdingServiceImpl(String jenkinsURL, String token, boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort, TaskListener listener, AbstractBuild build) {
         this.jenkinsURL = jenkinsURL;
         this.onStart = onStart;
         this.onSuccess = onSuccess;
         this.onFailed = onFailed;
+        this.onAbort =  onAbort;
         this.listener = listener;
         this.build = build;
         this.api = apiUrl + token;
@@ -94,6 +97,20 @@ public class DingdingServiceImpl implements DingdingService {
         String link = getBuildUrl();
         logger.info(link);
         if (onFailed) {
+            logger.info("send link msg from " + listener.toString());
+            sendLinkMessage(link, content, title, pic);
+        }
+    }
+
+    @Override
+    public void abort() {
+        String pic = "http://www.iconsdb.com/icons/preview/soylent-red/x-mark-3-xxl.png";
+        String title = String.format("%s%s构建中断", build.getProject().getDisplayName(), build.getDisplayName());
+        String content = String.format("项目[%s%s]构建中断, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
+
+        String link = getBuildUrl();
+        logger.info(link);
+        if (onAbort) {
             logger.info("send link msg from " + listener.toString());
             sendLinkMessage(link, content, title, pic);
         }

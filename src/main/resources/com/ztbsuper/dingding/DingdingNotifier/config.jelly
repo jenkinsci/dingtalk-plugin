@@ -22,4 +22,7 @@
   <f:entry title="构建失败时通知">
       <f:checkbox name="onFailed" value="true" checked="${instance.isOnFailed()}"/>
   </f:entry>
+  <f:entry title="构建中断时通知">
+      <f:checkbox name="onAbort" value="true" checked="${instance.isOnAbort()}"/>
+  </f:entry>
 </j:jelly>
