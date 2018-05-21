@@ -56,7 +56,7 @@ public class DingdingServiceImpl implements DingdingService {
     public void start() {
         String pic = "http://icon-park.com/imagefiles/loading7_gray.gif";
         String title = String.format("%s%s started", build.getProject().getDisplayName(), build.getDisplayName());
-        String content = String.format("project [%s%s] started", build.getProject().getDisplayName(), build.getDisplayName());
+        String content = String.format("[%s%s] started", build.getProject().getDisplayName(), build.getDisplayName());
 
         String link = getBuildUrl();
         if (onStart) {
@@ -77,8 +77,8 @@ public class DingdingServiceImpl implements DingdingService {
     @Override
     public void success() {
         String pic = "http://icons.iconarchive.com/icons/paomedia/small-n-flat/1024/sign-check-icon.png";
-        String title = String.format("%s%s built successfuly", build.getProject().getDisplayName(), build.getDisplayName());
-        String content = String.format("project [%s%s] built successfuly, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
+        String title = String.format("%s%s built successfully", build.getProject().getDisplayName(), build.getDisplayName());
+        String content = String.format("[%s%s] built successfully, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
 
         String link = getBuildUrl();
         logger.info(link);
@@ -92,7 +92,7 @@ public class DingdingServiceImpl implements DingdingService {
     public void failed() {
         String pic = "http://www.iconsdb.com/icons/preview/soylent-red/x-mark-3-xxl.png";
         String title = String.format("%s%s failed to build", build.getProject().getDisplayName(), build.getDisplayName());
-        String content = String.format("project [%s%s] failed to build, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
+        String content = String.format("[%s%s] failed to build, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
 
         String link = getBuildUrl();
         logger.info(link);
@@ -106,7 +106,7 @@ public class DingdingServiceImpl implements DingdingService {
     public void abort() {
         String pic = "http://www.iconsdb.com/icons/preview/soylent-red/x-mark-3-xxl.png";
         String title = String.format("%s%s build interrupted", build.getProject().getDisplayName(), build.getDisplayName());
-        String content = String.format("project [%s%s] build interrupted, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
+        String content = String.format("[%s%s] build interrupted, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
 
         String link = getBuildUrl();
         logger.info(link);
