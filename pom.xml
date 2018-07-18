@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.ztbsuper</groupId>
     <artifactId>dingding-notifications</artifactId>
-    <version>1.7</version>
+    <version>1.8-SNAPSHOT</version>
     <packaging>hpi</packaging>
 
     <properties>
