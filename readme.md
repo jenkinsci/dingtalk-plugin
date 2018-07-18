@@ -39,3 +39,6 @@ because plugin don't know where is your jenkins, if you wanna the notification c
 ![](https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/config.png?raw=true)
 3. Enjoy!
 ![](https://github.com/jenkinsci/dingding-notifications-plugin/blob/master/static/result.png?raw=true)
+
+4. Pipeline syntax support(merge from : [pull-request-5](https://github.com/jenkinsci/dingding-notifications-plugin/pull/5) ) 
+![](https://user-images.githubusercontent.com/12759495/40215633-1b304956-5a94-11e8-9170-187aa506b583.png)
