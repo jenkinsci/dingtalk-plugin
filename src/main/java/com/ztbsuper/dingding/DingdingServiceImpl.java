@@ -15,6 +15,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.lang.String.format;
 
 /**
  * Created by Marvin on 16/10/8.
@@ -37,9 +42,9 @@ public class DingdingServiceImpl implements DingdingService {
 
     private AbstractBuild build;
 
-    private static final String apiUrl = "https://oapi.dingtalk.com/robot/send?access_token=";
+    private static final String apiUrl = "https://oapi.dingtalk.com/robot/send?access_token=%s";
 
-    private String api;
+    private List<String> api;
 
     public DingdingServiceImpl(String jenkinsURL, String token, boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort, TaskListener listener, AbstractBuild build) {
         this.jenkinsURL = jenkinsURL;
@@ -49,14 +54,17 @@ public class DingdingServiceImpl implements DingdingService {
         this.onAbort =  onAbort;
         this.listener = listener;
         this.build = build;
-        this.api = apiUrl + token;
+        this.api = Arrays.stream(token.split(","))
+                .map(String::trim)
+                .filter(t -> t.length() > 0)
+                .map(t -> format(apiUrl, t)).collect(Collectors.toList());
     }
 
     @Override
     public void start() {
         String pic = "http://icon-park.com/imagefiles/loading7_gray.gif";
-        String title = String.format("%s%s开始构建", build.getProject().getDisplayName(), build.getDisplayName());
-        String content = String.format("项目[%s%s]开始构建", build.getProject().getDisplayName(), build.getDisplayName());
+        String title = format("%s%s开始构建", build.getProject().getDisplayName(), build.getDisplayName());
+        String content = format("项目[%s%s]开始构建", build.getProject().getDisplayName(), build.getDisplayName());
 
         String link = getBuildUrl();
         if (onStart) {
@@ -77,8 +85,8 @@ public class DingdingServiceImpl implements DingdingService {
     @Override
     public void success() {
         String pic = "http://icons.iconarchive.com/icons/paomedia/small-n-flat/1024/sign-check-icon.png";
-        String title = String.format("%s%s构建成功", build.getProject().getDisplayName(), build.getDisplayName());
-        String content = String.format("项目[%s%s]构建成功, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
+        String title = format("%s%s构建成功", build.getProject().getDisplayName(), build.getDisplayName());
+        String content = format("项目[%s%s]构建成功, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
 
         String link = getBuildUrl();
         logger.info(link);
@@ -91,8 +99,8 @@ public class DingdingServiceImpl implements DingdingService {
     @Override
     public void failed() {
         String pic = "http://www.iconsdb.com/icons/preview/soylent-red/x-mark-3-xxl.png";
-        String title = String.format("%s%s构建失败", build.getProject().getDisplayName(), build.getDisplayName());
-        String content = String.format("项目[%s%s]构建失败, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
+        String title = format("%s%s构建失败", build.getProject().getDisplayName(), build.getDisplayName());
+        String content = format("项目[%s%s]构建失败, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
 
         String link = getBuildUrl();
         logger.info(link);
@@ -105,8 +113,8 @@ public class DingdingServiceImpl implements DingdingService {
     @Override
     public void abort() {
         String pic = "http://www.iconsdb.com/icons/preview/soylent-red/x-mark-3-xxl.png";
-        String title = String.format("%s%s构建中断", build.getProject().getDisplayName(), build.getDisplayName());
-        String content = String.format("项目[%s%s]构建中断, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
+        String title = format("%s%s构建中断", build.getProject().getDisplayName(), build.getDisplayName());
+        String content = format("项目[%s%s]构建中断, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
 
         String link = getBuildUrl();
         logger.info(link);
@@ -116,12 +124,14 @@ public class DingdingServiceImpl implements DingdingService {
         }
     }
 
-    private void sendTextMessage(String msg) {
-
+    private void sendLinkMessage(String link, String msg, String title, String pic) {
+        final HttpClient httpClient = getHttpClient();
+        this.api.forEach(api -> {
+            sendLinkMessage(httpClient, api, link, msg, title, pic);
+        });
     }
 
-    private void sendLinkMessage(String link, String msg, String title, String pic) {
-        HttpClient client = getHttpClient();
+    private void sendLinkMessage(HttpClient httpClient, String api, String link, String msg, String title, String pic) {
         PostMethod post = new PostMethod(api);
 
         JSONObject body = new JSONObject();
@@ -142,7 +152,7 @@ public class DingdingServiceImpl implements DingdingService {
             logger.error("build request error", e);
         }
         try {
-            client.executeMethod(post);
+            httpClient.executeMethod(post);
             logger.info(post.getResponseBodyAsString());
         } catch (IOException e) {
             logger.error("send msg error", e);
