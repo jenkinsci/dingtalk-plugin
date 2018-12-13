@@ -93,8 +93,10 @@ public class DingTalkNotifier extends Notifier implements SimpleBuildStep {
     @Override
     public void perform(@Nonnull Run<?, ?> run, @Nonnull FilePath filePath, @Nonnull Launcher launcher, @Nonnull TaskListener taskListener) throws InterruptedException, IOException {
         String buildInfo = run.getFullDisplayName();
+        String apiToken = run.getCharacteristicEnvVars().expand(accessToken);
+
         if (!StringUtils.isBlank(message)) {
-            sendMessage(LinkMessage.builder()
+            sendMessage(apiToken, LinkMessage.builder()
                     .title(buildInfo + message)
                     .picUrl(imageUrl)
                     .text(message)
@@ -103,10 +105,10 @@ public class DingTalkNotifier extends Notifier implements SimpleBuildStep {
         }
     }
 
-    private void sendMessage(DingMessage message) {
+    private void sendMessage(String apiToken, DingMessage message) {
         DingTalkClient dingTalkClient = DingTalkClient.getInstance();
         try {
-            dingTalkClient.sendMessage(accessToken, message);
+            dingTalkClient.sendMessage(apiToken, message);
         } catch (IOException e) {
             e.printStackTrace();
         }

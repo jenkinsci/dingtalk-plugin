@@ -1,12 +1,15 @@
 package com.ztbsuper.dingding;
 
 
+import hudson.EnvVars;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
 import hudson.model.TaskListener;
+import hudson.slaves.EnvironmentVariablesNodeProperty;
+import hudson.slaves.NodeProperty;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Notifier;
@@ -15,6 +18,7 @@ import jenkins.model.Jenkins;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Created by Marvin on 16/8/25.
@@ -69,7 +73,21 @@ public class DingdingNotifier extends Notifier {
     }
 
     public DingdingService newDingdingService(AbstractBuild build, TaskListener listener) {
-        return new DingdingServiceImpl(jenkinsURL, accessToken, onStart, onSuccess, onFailed, onAbort, listener, build);
+
+        EnvVars envVars = new EnvVars();
+
+        for (NodeProperty<?> nodeProperty : Jenkins.getInstance().getGlobalNodeProperties()) {
+            if (nodeProperty instanceof EnvironmentVariablesNodeProperty) {
+                try {
+                    nodeProperty.buildEnvVars(envVars, listener);
+                } catch (IOException | InterruptedException e) {
+                    return null;
+                }
+            }
+        }
+
+        String apiToken = envVars.expand(accessToken);
+        return new DingdingServiceImpl(jenkinsURL, apiToken, onStart, onSuccess, onFailed, onAbort, listener, build);
     }
 
     @Override
