@@ -6,7 +6,7 @@
     See global.jelly for a general discussion about jelly script.
   -->
 
-  <f:entry title="jenkins URL" field="jenkinsURL">
+  <f:entry title="Jenkins URL" field="jenkinsURL">
     <f:textbox default="${descriptor.getDefaultURL()}" />
   </f:entry>
 
