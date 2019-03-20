@@ -13,4 +13,6 @@ public interface DingdingService {
     void failed();
     
     void abort();
+
+    void unstable();
 }

@@ -33,6 +33,8 @@ public class DingdingServiceImpl implements DingdingService {
 
     private boolean onAbort;
 
+    private boolean onUnstable;
+
     private TaskListener listener;
 
     private AbstractBuild build;
@@ -41,12 +43,13 @@ public class DingdingServiceImpl implements DingdingService {
 
     private String api;
 
-    public DingdingServiceImpl(String jenkinsURL, String token, boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort, TaskListener listener, AbstractBuild build) {
+    public DingdingServiceImpl(String jenkinsURL, String token, boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort, boolean onUnstable,TaskListener listener, AbstractBuild build) {
         this.jenkinsURL = jenkinsURL;
         this.onStart = onStart;
         this.onSuccess = onSuccess;
         this.onFailed = onFailed;
         this.onAbort =  onAbort;
+        this.onUnstable=onUnstable;
         this.listener = listener;
         this.build = build;
         this.api = apiUrl + token;
@@ -111,6 +114,20 @@ public class DingdingServiceImpl implements DingdingService {
         String link = getBuildUrl();
         logger.info(link);
         if (onAbort) {
+            logger.info("send link msg from " + listener.toString());
+            sendLinkMessage(link, content, title, pic);
+        }
+    }
+
+    @Override
+    public void unstable() {
+        String pic = "https://www.iconsdb.com/icons/preview/orange/warning-xxl.png";
+        String title = String.format("%s%s构建不稳定", build.getProject().getDisplayName(), build.getDisplayName());
+        String content = String.format("项目[%s%s]构建不稳定, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
+
+        String link = getBuildUrl();
+        logger.info(link);
+        if (onUnstable) {
             logger.info("send link msg from " + listener.toString());
             sendLinkMessage(link, content, title, pic);
         }
