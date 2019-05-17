@@ -18,6 +18,9 @@ import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ren.wizard.dingtalkclient.DingTalkClient;
 import ren.wizard.dingtalkclient.message.DingMessage;
 import ren.wizard.dingtalkclient.message.LinkMessage;
@@ -29,6 +32,9 @@ import java.io.IOException;
  * @author uyangjie
  */
 public class DingTalkNotifier extends Notifier implements SimpleBuildStep {
+
+    private Logger logger = LoggerFactory.getLogger(DingTalkNotifier.class);
+
 
     private String accessToken;
     private String notifyPeople;
@@ -104,11 +110,20 @@ public class DingTalkNotifier extends Notifier implements SimpleBuildStep {
     }
 
     private void sendMessage(DingMessage message) {
+
+        //logger.info("DingTalkNotifier::sendMessage" + message.toJson());
+
         DingTalkClient dingTalkClient = DingTalkClient.getInstance();
+        String[] arrToken = accessToken.split(",");
+        for (String token : arrToken) {
         try {
-            dingTalkClient.sendMessage(accessToken, message);
+                dingTalkClient.sendMessage(token, message);
+                //logger.info("DingTalkNotifier::sendMessage" + message.toJson());
         } catch (IOException e) {
-            e.printStackTrace();
+                e.printStackTrace();
+
+                //logger.info(String.format("DingTalkNotifier::sendMessage error: %s" + e.getMessage()));
+            }
         }
     }
 

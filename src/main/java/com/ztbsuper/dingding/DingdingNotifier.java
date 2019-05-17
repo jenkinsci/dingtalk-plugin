@@ -49,7 +49,7 @@ public class DingdingNotifier extends Notifier {
         return onFailed;
     }
     
-    public boolean onAbort() {
+    public boolean isOnAbort() {
         return onAbort;
     }
 

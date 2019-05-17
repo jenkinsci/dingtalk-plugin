@@ -41,6 +41,8 @@ public class DingdingServiceImpl implements DingdingService {
 
     private String api;
 
+    private String token_;
+
     public DingdingServiceImpl(String jenkinsURL, String token, boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort, TaskListener listener, AbstractBuild build) {
         this.jenkinsURL = jenkinsURL;
         this.onStart = onStart;
@@ -50,6 +52,7 @@ public class DingdingServiceImpl implements DingdingService {
         this.listener = listener;
         this.build = build;
         this.api = apiUrl + token;
+        this.token_ = token;
     }
 
     @Override
@@ -121,8 +124,19 @@ public class DingdingServiceImpl implements DingdingService {
     }
 
     private void sendLinkMessage(String link, String msg, String title, String pic) {
+
+        //logger.info("DingdingServiceImpl::sendMessage" + msg);
+        
+        String[] arrTokens = token_.split(",");
+        for (String token : arrTokens) {
+            if (null != token && token.length() > 0)
+                sendLinkMessage(token, link, msg, title, pic);
+        }
+    }
+
+    private void sendLinkMessage(String token, String link, String msg, String title, String pic) {
         HttpClient client = getHttpClient();
-        PostMethod post = new PostMethod(api);
+        PostMethod post = new PostMethod(apiUrl + token);
 
         JSONObject body = new JSONObject();
         body.put("msgtype", "link");
