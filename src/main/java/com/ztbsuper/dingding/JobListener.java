@@ -24,19 +24,31 @@ public class JobListener extends RunListener<AbstractBuild> {
 
     @Override
     public void onStarted(AbstractBuild r, TaskListener listener) {
-        getService(r, listener).start();
+        DingdingService dingdingService = getService(r, listener);
+        if (dingdingService != null) {
+            dingdingService.start();
+        }
     }
 
     @Override
     public void onCompleted(AbstractBuild r, @Nonnull TaskListener listener) {
         Result result = r.getResult();
         if (null != result && result.equals(Result.SUCCESS)) {
-            getService(r, listener).success();
+            DingdingService dingdingService = getService(r, listener);
+            if (dingdingService != null) {
+                dingdingService.success();
+            }
         } else if (null != result && result.equals(Result.FAILURE)) {
-            getService(r, listener).failed();
+            DingdingService dingdingService = getService(r, listener);
+            if (dingdingService != null) {
+                dingdingService.failed();
+            }
         // } else if (null != result && result.equals(Result.ABORTED)) {
         } else {
-            getService(r, listener).abort();
+            DingdingService dingdingService = getService(r, listener);
+            if (dingdingService != null) {
+                dingdingService.abort();
+            }
         }
     }
 
