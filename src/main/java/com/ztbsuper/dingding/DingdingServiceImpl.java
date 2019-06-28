@@ -1,6 +1,7 @@
 package com.ztbsuper.dingding;
 
 import com.alibaba.fastjson.JSONObject;
+import hudson.EnvVars;
 import hudson.ProxyConfiguration;
 import hudson.model.AbstractBuild;
 import hudson.model.TaskListener;
@@ -10,6 +11,7 @@ import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +43,17 @@ public class DingdingServiceImpl implements DingdingService {
 
     private String api;
 
-    public DingdingServiceImpl(String jenkinsURL, String token, boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort, TaskListener listener, AbstractBuild build) {
+    private String displayName;
+
+    private String envStr;
+
+    public DingdingServiceImpl(String jenkinsURL, String token, String displayName, String environment,
+        boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort,
+        TaskListener listener, AbstractBuild build) {
+
+        String customizedDisplayName = getExpandedValue(displayName, listener, build);
+        String envName = getExpandedValue(environment, listener, build);
+
         this.jenkinsURL = jenkinsURL;
         this.onStart = onStart;
         this.onSuccess = onSuccess;
@@ -50,13 +62,15 @@ public class DingdingServiceImpl implements DingdingService {
         this.listener = listener;
         this.build = build;
         this.api = apiUrl + token;
+        this.displayName = StringUtils.isNotEmpty(customizedDisplayName) ? customizedDisplayName : build.getProject().getDisplayName();
+        this.envStr = StringUtils.isNotEmpty(envName) ? '[' + envName + ']' : "";
     }
 
     @Override
     public void start() {
         String pic = "http://icon-park.com/imagefiles/loading7_gray.gif";
-        String title = String.format("%s%s开始构建", build.getProject().getDisplayName(), build.getDisplayName());
-        String content = String.format("项目[%s%s]开始构建", build.getProject().getDisplayName(), build.getDisplayName());
+        String title = String.format("%s%s开始构建%s", displayName, build.getDisplayName(), envStr);
+        String content = String.format("项目[%s%s]开始构建", displayName, build.getDisplayName());
 
         String link = getBuildUrl();
         if (onStart) {
@@ -77,8 +91,8 @@ public class DingdingServiceImpl implements DingdingService {
     @Override
     public void success() {
         String pic = "http://icons.iconarchive.com/icons/paomedia/small-n-flat/1024/sign-check-icon.png";
-        String title = String.format("%s%s构建成功", build.getProject().getDisplayName(), build.getDisplayName());
-        String content = String.format("项目[%s%s]构建成功, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
+        String title = String.format("%s%s构建成功%s", displayName, build.getDisplayName(), envStr);
+        String content = String.format("项目[%s%s]构建成功, summary:%s, duration:%s", displayName, build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
 
         String link = getBuildUrl();
         logger.info(link);
@@ -91,8 +105,8 @@ public class DingdingServiceImpl implements DingdingService {
     @Override
     public void failed() {
         String pic = "http://www.iconsdb.com/icons/preview/soylent-red/x-mark-3-xxl.png";
-        String title = String.format("%s%s构建失败", build.getProject().getDisplayName(), build.getDisplayName());
-        String content = String.format("项目[%s%s]构建失败, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
+        String title = String.format("%s%s构建失败%s", displayName, build.getDisplayName(), envStr);
+        String content = String.format("项目[%s%s]构建失败, summary:%s, duration:%s", displayName, build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
 
         String link = getBuildUrl();
         logger.info(link);
@@ -105,8 +119,8 @@ public class DingdingServiceImpl implements DingdingService {
     @Override
     public void abort() {
         String pic = "http://www.iconsdb.com/icons/preview/soylent-red/x-mark-3-xxl.png";
-        String title = String.format("%s%s构建中断", build.getProject().getDisplayName(), build.getDisplayName());
-        String content = String.format("项目[%s%s]构建中断, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
+        String title = String.format("%s%s构建中断%s", displayName, build.getDisplayName(), envStr);
+        String content = String.format("项目[%s%s]构建中断, summary:%s, duration:%s", displayName, build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
 
         String link = getBuildUrl();
         logger.info(link);
@@ -114,6 +128,24 @@ public class DingdingServiceImpl implements DingdingService {
             logger.info("send link msg from " + listener.toString());
             sendLinkMessage(link, content, title, pic);
         }
+    }
+
+    /**
+     * 获取参数值
+     *
+     * @param paramName 参数名，可能是变量
+     * @param listener 任务监听器
+     * @param build 构建对象
+     * @return 参数值
+     */
+    private String getExpandedValue(String paramName, TaskListener listener, AbstractBuild build) {
+        EnvVars envVars = null;
+        try {
+            envVars = build.getEnvironment(listener);
+        } catch (IOException | InterruptedException e) {
+            logger.error("getEnvironment", e);
+        }
+        return envVars != null ? envVars.expand(paramName) : paramName;
     }
 
     private void sendTextMessage(String msg) {

@@ -11,10 +11,9 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Notifier;
 import hudson.tasks.Publisher;
+import java.io.IOException;
 import jenkins.model.Jenkins;
 import org.kohsuke.stapler.DataBoundConstructor;
-
-import java.io.IOException;
 
 /**
  * Created by Marvin on 16/8/25.
@@ -30,6 +29,16 @@ public class DingdingNotifier extends Notifier {
     private boolean onFailed;
     
     private boolean onAbort;
+
+    /**
+     * 自定义钉钉显示项目名称
+     */
+    private String displayName;
+
+    /**
+     * 构建环境名，用于区分
+     */
+    private String environment;
 
     public String getJenkinsURL() {
         return jenkinsURL;
@@ -57,8 +66,18 @@ public class DingdingNotifier extends Notifier {
         return accessToken;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public String getEnvironment() {
+        return environment;
+    }
+
     @DataBoundConstructor
-    public DingdingNotifier(String accessToken, boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort, String jenkinsURL) {
+    public DingdingNotifier(String jenkinsURL, String accessToken, String displayName, String environment,
+        boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort) {
+
         super();
         this.accessToken = accessToken;
         this.onStart = onStart;
@@ -66,10 +85,12 @@ public class DingdingNotifier extends Notifier {
         this.onFailed = onFailed;
         this.onAbort = onAbort;
         this.jenkinsURL = jenkinsURL;
+        this.displayName = displayName;
+        this.environment = environment;
     }
 
     public DingdingService newDingdingService(AbstractBuild build, TaskListener listener) {
-        return new DingdingServiceImpl(jenkinsURL, accessToken, onStart, onSuccess, onFailed, onAbort, listener, build);
+        return new DingdingServiceImpl(jenkinsURL, accessToken, displayName, environment, onStart, onSuccess, onFailed, onAbort, listener, build);
     }
 
     @Override
