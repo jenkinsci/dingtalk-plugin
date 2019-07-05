@@ -1,34 +1,33 @@
 package com.ztbsuper.dingtalk;
 
 import com.ztbsuper.Messages;
+
+import org.apache.commons.lang3.StringUtils;
+import org.jenkinsci.Symbol;
+import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
+import org.kohsuke.stapler.QueryParameter;
+
+import java.io.IOException;
+
+import javax.annotation.Nonnull;
+
 import hudson.Extension;
-import hudson.FilePath;
 import hudson.Launcher;
+import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
-import hudson.model.Run;
+import hudson.model.BuildListener;
 import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Notifier;
 import hudson.tasks.Publisher;
 import hudson.util.FormValidation;
-import jenkins.tasks.SimpleBuildStep;
-import org.apache.commons.lang3.StringUtils;
-import org.jenkinsci.Symbol;
-import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.DataBoundSetter;
-import org.kohsuke.stapler.QueryParameter;
-import ren.wizard.dingtalkclient.DingTalkClient;
-import ren.wizard.dingtalkclient.message.DingMessage;
-import ren.wizard.dingtalkclient.message.LinkMessage;
-
-import javax.annotation.Nonnull;
-import java.io.IOException;
 
 /**
  * @author uyangjie
  */
-public class DingTalkNotifier extends Notifier implements SimpleBuildStep {
+public class DingTalkNotifier extends Notifier {
 
     private String accessToken;
     private String notifyPeople;
@@ -90,26 +89,14 @@ public class DingTalkNotifier extends Notifier implements SimpleBuildStep {
         this.jenkinsUrl = jenkinsUrl;
     }
 
-    @Override
-    public void perform(@Nonnull Run<?, ?> run, @Nonnull FilePath filePath, @Nonnull Launcher launcher, @Nonnull TaskListener taskListener) throws InterruptedException, IOException {
-        String buildInfo = run.getFullDisplayName();
-        if (!StringUtils.isBlank(message)) {
-            sendMessage(LinkMessage.builder()
-                    .title(buildInfo + message)
-                    .picUrl(imageUrl)
-                    .text(message)
-                    .messageUrl((jenkinsUrl.endsWith("/") ? jenkinsUrl : jenkinsUrl + "/") + run.getUrl())
-                    .build());
-        }
+
+    public DingTalkServiceImpl newDingTalkService(AbstractBuild build, TaskListener listener) {
+        return new DingTalkServiceImpl(accessToken, notifyPeople, message, imageUrl, jenkinsUrl, listener, build);
     }
 
-    private void sendMessage(DingMessage message) {
-        DingTalkClient dingTalkClient = DingTalkClient.getInstance();
-        try {
-            dingTalkClient.sendMessage(accessToken, message);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {
+        return true;
     }
 
     @Override
