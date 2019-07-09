@@ -41,13 +41,13 @@ public class DingdingServiceImpl implements DingdingService {
 
     private static final String apiUrl = "https://oapi.dingtalk.com/robot/send?access_token=";
 
-    private String api;
+    private String tokens;
 
     private String displayName;
 
     private String envStr;
 
-    public DingdingServiceImpl(String jenkinsURL, String token, String displayName, String environment,
+    public DingdingServiceImpl(String jenkinsURL, String tokens, String displayName, String environment,
         boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort,
         TaskListener listener, AbstractBuild build) {
 
@@ -61,7 +61,7 @@ public class DingdingServiceImpl implements DingdingService {
         this.onAbort =  onAbort;
         this.listener = listener;
         this.build = build;
-        this.api = apiUrl + token;
+        this.tokens = tokens;
         this.displayName = StringUtils.isNotEmpty(customizedDisplayName) ? customizedDisplayName : build.getProject().getDisplayName();
         this.envStr = StringUtils.isNotEmpty(envName) ? '[' + envName + ']' : "";
     }
@@ -153,12 +153,18 @@ public class DingdingServiceImpl implements DingdingService {
     }
 
     private void sendLinkMessage(String link, String msg, String title, String pic) {
+        String[] tokenArray = tokens.split(",", -1);
+        for (String token : tokenArray) {
+            doSendLinkMessage(apiUrl + token, link, msg, title, pic);
+        }
+    }
+
+    private void doSendLinkMessage(String uri, String link, String msg, String title, String pic) {
         HttpClient client = getHttpClient();
-        PostMethod post = new PostMethod(api);
+        PostMethod post = new PostMethod(uri);
 
         JSONObject body = new JSONObject();
         body.put("msgtype", "link");
-
 
         JSONObject linkObject = new JSONObject();
         linkObject.put("text", msg);

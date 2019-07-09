@@ -20,7 +20,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
  */
 public class DingdingNotifier extends Notifier {
 
-    private String accessToken;
+    private String accessTokens;
 
     private boolean onStart;
 
@@ -62,8 +62,8 @@ public class DingdingNotifier extends Notifier {
         return onAbort;
     }
 
-    public String getAccessToken() {
-        return accessToken;
+    public String getAccessTokens() {
+        return accessTokens;
     }
 
     public String getDisplayName() {
@@ -75,11 +75,11 @@ public class DingdingNotifier extends Notifier {
     }
 
     @DataBoundConstructor
-    public DingdingNotifier(String jenkinsURL, String accessToken, String displayName, String environment,
+    public DingdingNotifier(String jenkinsURL, String accessTokens, String displayName, String environment,
         boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort) {
 
         super();
-        this.accessToken = accessToken;
+        this.accessTokens = accessTokens;
         this.onStart = onStart;
         this.onSuccess = onSuccess;
         this.onFailed = onFailed;
@@ -90,7 +90,7 @@ public class DingdingNotifier extends Notifier {
     }
 
     public DingdingService newDingdingService(AbstractBuild build, TaskListener listener) {
-        return new DingdingServiceImpl(jenkinsURL, accessToken, displayName, environment, onStart, onSuccess, onFailed, onAbort, listener, build);
+        return new DingdingServiceImpl(jenkinsURL, accessTokens, displayName, environment, onStart, onSuccess, onFailed, onAbort, listener, build);
     }
 
     @Override
