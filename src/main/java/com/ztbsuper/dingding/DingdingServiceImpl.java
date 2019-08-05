@@ -1,6 +1,7 @@
 package com.ztbsuper.dingding;
 
 import com.alibaba.fastjson.JSONObject;
+import hudson.EnvVars;
 import hudson.ProxyConfiguration;
 import hudson.model.AbstractBuild;
 import hudson.model.TaskListener;
@@ -25,6 +26,10 @@ public class DingdingServiceImpl implements DingdingService {
 
     private String jenkinsURL;
 
+    private String customTitle;
+
+    private String message;
+
     private boolean onStart;
 
     private boolean onSuccess;
@@ -41,8 +46,10 @@ public class DingdingServiceImpl implements DingdingService {
 
     private String api;
 
-    public DingdingServiceImpl(String jenkinsURL, String token, boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort, TaskListener listener, AbstractBuild build) {
+    public DingdingServiceImpl(String jenkinsURL, String token, String customTitle, String message, boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort, TaskListener listener, AbstractBuild build) {
         this.jenkinsURL = jenkinsURL;
+        this.customTitle = customTitle;
+        this.message = message;
         this.onStart = onStart;
         this.onSuccess = onSuccess;
         this.onFailed = onFailed;
@@ -55,15 +62,14 @@ public class DingdingServiceImpl implements DingdingService {
     @Override
     public void start() {
         String pic = "http://icon-park.com/imagefiles/loading7_gray.gif";
-        String title = String.format("%s%s开始构建", build.getProject().getDisplayName(), build.getDisplayName());
-        String content = String.format("项目[%s%s]开始构建", build.getProject().getDisplayName(), build.getDisplayName());
+        String title = String.format("%s%s", build.getProject().getDisplayName(), build.getDisplayName());
+        String content = String.format("%s%s", build.getProject().getDisplayName(), build.getDisplayName());
 
         String link = getBuildUrl();
         if (onStart) {
             logger.info("send link msg from " + listener.toString());
             sendLinkMessage(link, content, title, pic);
         }
-
     }
 
     private String getBuildUrl() {
@@ -77,8 +83,8 @@ public class DingdingServiceImpl implements DingdingService {
     @Override
     public void success() {
         String pic = "http://icons.iconarchive.com/icons/paomedia/small-n-flat/1024/sign-check-icon.png";
-        String title = String.format("%s%s构建成功", build.getProject().getDisplayName(), build.getDisplayName());
-        String content = String.format("项目[%s%s]构建成功, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
+        String title = String.format("%s%s", build.getProject().getDisplayName(), build.getDisplayName());
+        String content = String.format("%s%s, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
 
         String link = getBuildUrl();
         logger.info(link);
@@ -91,8 +97,8 @@ public class DingdingServiceImpl implements DingdingService {
     @Override
     public void failed() {
         String pic = "http://www.iconsdb.com/icons/preview/soylent-red/x-mark-3-xxl.png";
-        String title = String.format("%s%s构建失败", build.getProject().getDisplayName(), build.getDisplayName());
-        String content = String.format("项目[%s%s]构建失败, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
+        String title = String.format("%s%s", build.getProject().getDisplayName(), build.getDisplayName());
+        String content = String.format("%s%s, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
 
         String link = getBuildUrl();
         logger.info(link);
@@ -105,8 +111,8 @@ public class DingdingServiceImpl implements DingdingService {
     @Override
     public void abort() {
         String pic = "http://www.iconsdb.com/icons/preview/soylent-red/x-mark-3-xxl.png";
-        String title = String.format("%s%s构建中断", build.getProject().getDisplayName(), build.getDisplayName());
-        String content = String.format("项目[%s%s]构建中断, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
+        String title = String.format("%s%s", build.getProject().getDisplayName(), build.getDisplayName());
+        String content = String.format("%s%s, summary:%s, duration:%s", build.getProject().getDisplayName(), build.getDisplayName(), build.getBuildStatusSummary().message, build.getDurationString());
 
         String link = getBuildUrl();
         logger.info(link);
@@ -121,6 +127,7 @@ public class DingdingServiceImpl implements DingdingService {
     }
 
     private void sendLinkMessage(String link, String msg, String title, String pic) {
+        EnvVars envVars = null;
         HttpClient client = getHttpClient();
         PostMethod post = new PostMethod(api);
 
@@ -129,15 +136,17 @@ public class DingdingServiceImpl implements DingdingService {
 
 
         JSONObject linkObject = new JSONObject();
-        linkObject.put("text", msg);
-        linkObject.put("title", title);
         linkObject.put("picUrl", pic);
         linkObject.put("messageUrl", link);
 
         body.put("link", linkObject);
         try {
+            envVars = build.getEnvironment(listener);
+            String duration = String.format(", duration:%s", build.getDurationString());
+            linkObject.put("text", message == null || message.isEmpty() ? msg : envVars.expand(message) + duration);
+            linkObject.put("title", customTitle == null || customTitle.isEmpty() ? title : envVars.expand(customTitle));
             post.setRequestEntity(new StringRequestEntity(body.toJSONString(), "application/json", "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             logger.error("build request error", e);
         }

@@ -13,6 +13,12 @@
   <f:entry title="钉钉access token" field="accessToken">
     <f:textbox  />
   </f:entry>
+  <f:entry title="自定义标题" field="title">
+    <f:textbox  />
+  </f:entry>
+  <f:entry title="自定义内容" field="message">
+    <f:textbox  />
+  </f:entry>
   <f:entry title="在启动构建时通知">
       <f:checkbox name="onStart" value="true" checked="${instance.isOnStart()}"/>
   </f:entry>
