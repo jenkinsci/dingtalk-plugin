@@ -73,7 +73,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.12</version>
+            <version>1.2.25</version>
         </dependency>
         <dependency>
             <groupId>com.github.chnyangjie</groupId>
