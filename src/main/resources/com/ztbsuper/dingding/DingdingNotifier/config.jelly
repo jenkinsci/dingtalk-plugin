@@ -25,4 +25,16 @@
   <f:entry title="构建中断时通知">
       <f:checkbox name="onAbort" value="true" checked="${instance.isOnAbort()}"/>
   </f:entry>
+
+  <f:advanced>
+
+      <f:optionalProperty title="${%加签}" field="dingDingSign"/>
+      <!--
+      <f:entry title="${%自定义关键词}">
+        <f:repeatableProperty field="keywords" minimum="1" noAddButton="true">
+        </f:repeatableProperty>
+      </f:entry>
+      <f:optionalProperty title="IP地址(段)" field="ipAddress"/>
+      -->
+  </f:advanced>
 </j:jelly>

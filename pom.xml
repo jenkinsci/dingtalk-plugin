@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>2.11</version>
-        <relativePath />
+        <version>3.42</version>
+        <relativePath/>
     </parent>
     <groupId>com.ztbsuper</groupId>
     <artifactId>dingding-notifications</artifactId>
-    <version>1.10-SNAPSHOT</version>
+    <version>1.11-SNAPSHOT</version>
     <packaging>hpi</packaging>
 
     <properties>
         <!-- Baseline Jenkins version you use to build the plugin. Users must have this version or newer to run. -->
-        <jenkins.version>2.7.3</jenkins.version>
+        <jenkins.version>2.19</jenkins.version>
         <!-- Java Level to use. Java 7 required when using core >= 1.612 -->
         <java.level>8</java.level>
         <!-- Jenkins Test Harness version you use to test the plugin. -->
@@ -46,10 +48,18 @@
             <name>Marvin Zhang</name>
             <email>ztbsuper@gmail.com</email>
         </developer>
+        <developer>
+            <id>margo</id>
+            <name>peng zhou</name>
+            <email>zxavier94@gmail.com</email>
+        </developer>
     </developers>
     <scm>
-        <connection>scm:git:ssh://github.com/jenkinsci/dingding-notifications-plugin.git</connection>
-	<developerConnection>scm:git:ssh://git@github.com/jenkinsci/dingding-notifications-plugin.git</developerConnection>
+        <connection>scm:git:ssh://github.com/jenkinsci/dingding-notifications-plugin.git
+        </connection>
+        <developerConnection>
+            scm:git:ssh://git@github.com/jenkinsci/dingding-notifications-plugin.git
+        </developerConnection>
         <url>http://github.com/jenkinsci/dingding-notifications-plugin</url>
         <tag>dingding-notifications-1.7</tag>
     </scm>
@@ -69,11 +79,44 @@
             <url>https://repo.jenkins-ci.org/public/</url>
         </pluginRepository>
     </pluginRepositories>
+
+    <!-- 锁定版本，ant 1.9.2 -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.ant</groupId>
+                <artifactId>ant</artifactId>
+                <version>1.9.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-util</artifactId>
+                <version>9.2.15.v20160210</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-io</artifactId>
+                <version>9.2.15.v20160210</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-utils</artifactId>
+                <version>3.0.10</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-classworlds</artifactId>
+                <version>2.4.2</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.12</version>
+            <version>1.2.62</version>
         </dependency>
         <dependency>
             <groupId>com.github.chnyangjie</groupId>
@@ -91,6 +134,42 @@
         <!--<version>1.9.4</version>-->
         <!--</dependency>-->
 
+        <!--钉钉工具包
+        mvn install:install-file -Dfile=taobao-sdk-java-auto_1479188381469-20191104.jar -DgroupId=com.taobao.top -DartifactId=top-api-sdk-dev -Dversion=ding-open-mc-SNAPSHOT -Dpackaging=jar
+        -->
+        <dependency>
+            <groupId>com.taobao.top</groupId>
+            <artifactId>top-api-sdk-dev</artifactId>
+            <version>ding-open-mc-SNAPSHOT</version>
+            <!--<scope>system</scope>-->
+            <!--<systemPath>-->
+                <!--${pom.basedir}/src/main/webapp/WEB-INF/lib/taobao-sdk-java-auto_1479188381469-20191104.jar-->
+            <!--</systemPath>-->
+        </dependency>
     </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                    <compilerArguments>
+                        <extdirs>src\main\webapp\WEB-INF\lib</extdirs>
+                    </compilerArguments>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

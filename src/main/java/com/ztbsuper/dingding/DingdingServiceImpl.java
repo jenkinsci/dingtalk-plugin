@@ -1,20 +1,25 @@
 package com.ztbsuper.dingding;
 
-import com.alibaba.fastjson.JSONObject;
+import com.dingtalk.api.DefaultDingTalkClient;
+import com.dingtalk.api.DingTalkClient;
+import com.dingtalk.api.request.OapiRobotSendRequest;
+import com.dingtalk.api.response.OapiRobotSendResponse;
 import hudson.ProxyConfiguration;
 import hudson.model.AbstractBuild;
 import hudson.model.TaskListener;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import jenkins.model.Jenkins;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 /**
  * Created by Marvin on 16/10/8.
@@ -37,19 +42,27 @@ public class DingdingServiceImpl implements DingdingService {
 
     private AbstractBuild build;
 
-    private static final String apiUrl = "https://oapi.dingtalk.com/robot/send?access_token=";
+    private static final String apiUrl = "https://oapi.dingtalk.com/robot/send";
 
     private String api;
 
-    public DingdingServiceImpl(String jenkinsURL, String token, boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort, TaskListener listener, AbstractBuild build) {
+    private String accessToken;
+
+    private String secret;
+
+    public DingdingServiceImpl(String jenkinsURL, String token, boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort, TaskListener listener, AbstractBuild build, String secret) {
         this.jenkinsURL = jenkinsURL;
+        this.accessToken = token;
         this.onStart = onStart;
         this.onSuccess = onSuccess;
         this.onFailed = onFailed;
         this.onAbort =  onAbort;
         this.listener = listener;
         this.build = build;
-        this.api = apiUrl + token;
+        this.secret = secret;
+        long timestamp = System.currentTimeMillis();
+        String sign = getSign(timestamp, secret);
+        this.api = apiUrl + "?sign=" + sign + "&timestamp=" + timestamp;
     }
 
     @Override
@@ -121,33 +134,22 @@ public class DingdingServiceImpl implements DingdingService {
     }
 
     private void sendLinkMessage(String link, String msg, String title, String pic) {
-        HttpClient client = getHttpClient();
-        PostMethod post = new PostMethod(api);
+        DingTalkClient client = new DefaultDingTalkClient(api);
+        OapiRobotSendRequest request = new OapiRobotSendRequest();
 
-        JSONObject body = new JSONObject();
-        body.put("msgtype", "link");
+        request.setMsgtype("link");
+        OapiRobotSendRequest.Link requestLink = new OapiRobotSendRequest.Link();
+        requestLink.setMessageUrl(link);
+        requestLink.setPicUrl(pic);
+        requestLink.setTitle(title);
+        requestLink.setText(msg);
+        request.setLink(requestLink);
 
-
-        JSONObject linkObject = new JSONObject();
-        linkObject.put("text", msg);
-        linkObject.put("title", title);
-        linkObject.put("picUrl", pic);
-        linkObject.put("messageUrl", link);
-
-        body.put("link", linkObject);
         try {
-            post.setRequestEntity(new StringRequestEntity(body.toJSONString(), "application/json", "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
+            OapiRobotSendResponse response = client.execute(request,accessToken);
+        } catch (Exception e) {
             e.printStackTrace();
-            logger.error("build request error", e);
         }
-        try {
-            client.executeMethod(post);
-            logger.info(post.getResponseBodyAsString());
-        } catch (IOException e) {
-            logger.error("send msg error", e);
-        }
-        post.releaseConnection();
     }
 
 
@@ -169,5 +171,23 @@ public class DingdingServiceImpl implements DingdingService {
             }
         }
         return client;
+    }
+
+    private String getSign(Long timestamp,String secret) {
+        try {
+            String stringToSign = timestamp + "\n" + secret;
+            Mac mac = Mac.getInstance("HmacSHA256");
+            mac.init(new SecretKeySpec(secret.getBytes("UTF-8"), "HmacSHA256"));
+            byte[] signData = mac.doFinal(stringToSign.getBytes("UTF-8"));
+            String encode = URLEncoder.encode(new String(Base64.encodeBase64(signData)), "UTF-8");
+            return encode;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
