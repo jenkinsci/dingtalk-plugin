@@ -1,0 +1,21 @@
+<?jelly escape-by-default='true'?>
+
+<!--
+  ~
+  ~ 2019-11-8 16:00:55
+  ~ by margo
+  ~
+  -->
+
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form" >
+
+    <f:entry title="关键词" field="keyword">
+        <f:textbox />
+    </f:entry>
+    <f:entry>
+        <div align="right">
+            <input type="button" value="${%Add}" class="repeatable-add show-if-last" onclick="fp_initAllDetailLinks();"/>
+            <input type="button" value="${%Delete}" class="repeatable-delete show-if-not-only" style="margin-left: 1em;" />
+        </div>
+    </f:entry>
+</j:jelly>

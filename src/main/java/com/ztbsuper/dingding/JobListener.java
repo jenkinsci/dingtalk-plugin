@@ -7,9 +7,8 @@ import hudson.model.Result;
 import hudson.model.TaskListener;
 import hudson.model.listeners.RunListener;
 import hudson.tasks.Publisher;
-
-import javax.annotation.Nonnull;
 import java.util.Map;
+import javax.annotation.Nonnull;
 
 /**
  * Created by Marvin on 16/10/7.
@@ -36,6 +35,7 @@ public class JobListener extends RunListener<AbstractBuild> {
             getService(r, listener).failed();
         // } else if (null != result && result.equals(Result.ABORTED)) {
         } else {
+            System.out.println("abort ... ");
             getService(r, listener).abort();
         }
     }

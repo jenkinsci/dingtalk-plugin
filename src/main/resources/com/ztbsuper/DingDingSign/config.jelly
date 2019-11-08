@@ -1,0 +1,16 @@
+<?jelly escape-by-default='true'?>
+
+<!--
+  ~
+  ~ 2019年11月7日15:22:31
+  ~ by margo
+  ~
+  -->
+
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form" >
+
+    <f:entry title="钉钉sign" field="sign">
+        <f:password field="sign"/>
+    </f:entry>
+
+</j:jelly>
