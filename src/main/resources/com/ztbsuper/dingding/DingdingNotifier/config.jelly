@@ -14,21 +14,28 @@
     <f:textbox  />
   </f:entry>
   <f:entry title="在启动构建时通知">
-      <f:checkbox name="onStart" value="true" checked="${instance.isOnStart()}"/>
+    <f:checkbox name="onStart" value="true" checked="${instance.isOnStart()}"/>
   </f:entry>
   <f:entry title="构建成功时通知">
-      <f:checkbox name="onSuccess" value="true" checked="${instance.isOnSuccess()}"/>
+    <f:checkbox name="onSuccess" value="true" checked="${instance.isOnSuccess()}"/>
   </f:entry>
   <f:entry title="构建失败时通知">
-      <f:checkbox name="onFailed" value="true" checked="${instance.isOnFailed()}"/>
+    <f:checkbox name="onFailed" value="true" checked="${instance.isOnFailed()}"/>
   </f:entry>
   <f:entry title="构建中断时通知">
-      <f:checkbox name="onAbort" value="true" checked="${instance.isOnAbort()}"/>
+    <f:checkbox name="onAbort" value="true" checked="${instance.isOnAbort()}"/>
   </f:entry>
 
+  <f:radioBlock name="msgType" value="link" title="发送link链接" checked="${instance.msgType.getString('value') == 'link' ? true : false}"/>
+  <f:radioBlock name="msgType" value="markdown" title="发送markdown" checked="${instance.msgType.getString('value') == 'markdown' ? true : false}">
+
+    <f:entry title="markdown" field="markdownText">
+      <f:textarea value="${instance.msgType.containsKey('markdownText') ? instance.msgType.getString('markdownText') : ''}"/>
+    </f:entry>
+  </f:radioBlock>
   <f:advanced>
 
-      <f:optionalProperty title="${%加签}" field="dingDingSign"/>
+    <f:optionalProperty title="${%加签}" field="dingDingSign"/>
       <!--
       <f:entry title="${%自定义关键词}">
         <f:repeatableProperty field="keywords" minimum="1" noAddButton="true">

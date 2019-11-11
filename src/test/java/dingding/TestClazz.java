@@ -5,10 +5,12 @@ import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiRobotSendRequest;
 import com.dingtalk.api.response.OapiRobotSendResponse;
 import com.taobao.api.ApiException;
+import hudson.EnvVars;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.codec.binary.Base64;
@@ -21,8 +23,8 @@ import org.junit.Test;
  */
 public class TestClazz {
 
-    String secret = "";
-    String access_token = "";
+    String secret = "SECdc04657cd72e4dab643583398db33e84e067afc87ea097324a56a27242245a32";
+    String access_token = "837983b648ad1a8c3ddf416a0c21283f7f7f98f791899956f400787a0ad9bbfa";
 
     @Test
     public void test1()
@@ -76,6 +78,18 @@ public class TestClazz {
         byte[] signData = mac.doFinal(stringToSign.getBytes("UTF-8"));
         String encode = URLEncoder.encode(new String(Base64.encodeBase64(signData)), "UTF-8");
         return encode;
+    }
+
+    @Test
+    public void test3() {
+//        String original = "1 ${aa}2 ${cc}.";
+        String original = "1  2  .";
+        HashMap<String, String> envMap = new HashMap<>();
+        envMap.put("aa", "true");
+        envMap.put("cc", "ccx");
+        EnvVars env = new EnvVars(envMap);
+        String expand = env.expand(original);
+        System.out.println("expand = " + expand);
     }
 
 }

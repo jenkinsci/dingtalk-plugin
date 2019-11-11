@@ -15,8 +15,12 @@ import hudson.tasks.Notifier;
 import hudson.tasks.Publisher;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import jenkins.model.Jenkins;
+import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 /**
@@ -78,8 +82,28 @@ public class DingdingNotifier extends Notifier {
         return ipAddress;
     }
 
+    private String markdownText;
+
+    private JSONObject msgType;
+
+    public String getMarkdownText() {
+        return markdownText;
+    }
+
+    public JSONObject getMsgType() {
+        return msgType;
+    }
+
+    public void setMarkdownText() {
+        if(Objects.nonNull(msgType) && "markdown".equals(msgType.getString("value"))) {
+            this.markdownText = msgType.getOrDefault("markdownText","").toString();
+        } else {
+            this.markdownText = "";
+        }
+    }
+
     @DataBoundConstructor
-    public DingdingNotifier(String accessToken, boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort, String jenkinsURL,DingDingSign dingDingSign,List<KeyWord> keywords) {
+    public DingdingNotifier(String accessToken, boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort, String jenkinsURL,DingDingSign dingDingSign,List<KeyWord> keywords, JSONObject msgType) {
         super();
         this.accessToken = accessToken;
         this.onStart = onStart;
@@ -89,10 +113,21 @@ public class DingdingNotifier extends Notifier {
         this.jenkinsURL = jenkinsURL;
         this.dingDingSign = dingDingSign;
         this.keywords = keywords;
+        this.msgType = msgType;
+        setMarkdownText();
     }
 
     public DingdingService newDingdingService(AbstractBuild build, TaskListener listener) {
-        return new DingdingServiceImpl(jenkinsURL, accessToken, onStart, onSuccess, onFailed, onAbort, listener, build, dingDingSign.getSign());
+        Map vars = new HashMap();
+        try {
+            vars = build.getEnvironment(listener);
+            System.out.println("vars = " + vars);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return new DingdingServiceImpl(jenkinsURL, accessToken, onStart, onSuccess, onFailed, onAbort, listener, build, dingDingSign.getSign(),msgType,vars);
     }
 
     @Override
@@ -114,6 +149,9 @@ public class DingdingNotifier extends Notifier {
     @Extension
     public static class DingdingNotifierDescriptor extends BuildStepDescriptor<Publisher> {
 
+        public DingdingNotifierDescriptor() {
+            load();
+        }
 
         @Override
         public boolean isApplicable(Class<? extends AbstractProject> jobType) {

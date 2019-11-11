@@ -4,6 +4,7 @@ import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiRobotSendRequest;
 import com.dingtalk.api.response.OapiRobotSendResponse;
+import hudson.EnvVars;
 import hudson.ProxyConfiguration;
 import hudson.model.AbstractBuild;
 import hudson.model.TaskListener;
@@ -11,9 +12,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import jenkins.model.Jenkins;
+import net.sf.json.JSONObject;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
@@ -50,7 +53,12 @@ public class DingdingServiceImpl implements DingdingService {
 
     private String secret;
 
-    public DingdingServiceImpl(String jenkinsURL, String token, boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort, TaskListener listener, AbstractBuild build, String secret) {
+    private JSONObject msgType;
+
+    private EnvVars env;
+
+    public DingdingServiceImpl(String jenkinsURL, String token, boolean onStart, boolean onSuccess, boolean onFailed, boolean onAbort, TaskListener listener, AbstractBuild build, String secret, JSONObject msgType,
+        Map vars) {
         this.jenkinsURL = jenkinsURL;
         this.accessToken = token;
         this.onStart = onStart;
@@ -63,6 +71,8 @@ public class DingdingServiceImpl implements DingdingService {
         long timestamp = System.currentTimeMillis();
         String sign = getSign(timestamp, secret);
         this.api = apiUrl + "?sign=" + sign + "&timestamp=" + timestamp;
+        this.msgType = msgType;
+        this.env = new EnvVars(vars);
     }
 
     @Override
@@ -74,7 +84,11 @@ public class DingdingServiceImpl implements DingdingService {
         String link = getBuildUrl();
         if (onStart) {
             logger.info("send link msg from " + listener.toString());
-            sendLinkMessage(link, content, title, pic);
+            if("markdown".equals(msgType.getString("value"))) {
+                sendMarkdownMessage(link,title);
+            } else {
+                sendLinkMessage(link, content, title, pic);
+            }
         }
 
     }
@@ -97,7 +111,11 @@ public class DingdingServiceImpl implements DingdingService {
         logger.info(link);
         if (onSuccess) {
             logger.info("send link msg from " + listener.toString());
-            sendLinkMessage(link, content, title, pic);
+            if("markdown".equals(msgType.getString("value"))) {
+                sendMarkdownMessage(link,title);
+            } else {
+                sendLinkMessage(link, content, title, pic);
+            }
         }
     }
 
@@ -111,7 +129,11 @@ public class DingdingServiceImpl implements DingdingService {
         logger.info(link);
         if (onFailed) {
             logger.info("send link msg from " + listener.toString());
-            sendLinkMessage(link, content, title, pic);
+            if("markdown".equals(msgType.getString("value"))) {
+                sendMarkdownMessage(link,title);
+            } else {
+                sendLinkMessage(link, content, title, pic);
+            }
         }
     }
 
@@ -125,12 +147,37 @@ public class DingdingServiceImpl implements DingdingService {
         logger.info(link);
         if (onAbort) {
             logger.info("send link msg from " + listener.toString());
-            sendLinkMessage(link, content, title, pic);
+            if("markdown".equals(msgType.getString("value"))) {
+                sendMarkdownMessage(link,title);
+            } else {
+                sendLinkMessage(link, content, title, pic);
+            }
         }
     }
 
     private void sendTextMessage(String msg) {
 
+    }
+
+    private void sendMarkdownMessage(String link,String title) {
+        DingTalkClient client = new DefaultDingTalkClient(api);
+        OapiRobotSendRequest request = new OapiRobotSendRequest();
+
+        request.setMsgtype("markdown");
+        OapiRobotSendRequest.Markdown markdown = new OapiRobotSendRequest.Markdown();
+        markdown.setTitle(title);
+        markdown.setText("# " + title + "\n" +
+            "----\n" +
+            env.expand(msgType.getString("markdownText")) + "\n" +
+            "----\n" +
+            "[" + title + "](" + link +")\n");
+        request.setMarkdown(markdown);
+
+        try {
+            OapiRobotSendResponse response = client.execute(request,accessToken);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void sendLinkMessage(String link, String msg, String title, String pic) {
@@ -188,6 +235,6 @@ public class DingdingServiceImpl implements DingdingService {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return null;
+        return "";
     }
 }
