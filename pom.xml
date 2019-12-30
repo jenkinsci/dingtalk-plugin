@@ -25,6 +25,7 @@
  -->
   </properties>
 
+
   <name>DingTalk</name>
   <description>钉钉机器人消息通知插件</description>
   <url>https://wiki.jenkins-ci.org/display/JENKINS/Dingding+Notification+Plugin</url>
@@ -58,7 +59,6 @@
     <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
     <tag>${project.version}</tag>
   </scm>
-
 
   <dependencyManagement>
     <dependencies>
