@@ -1,96 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <!--  该插件决定了可以使用的 jenkins 版本 -->
+  <parent>
+    <groupId>org.jenkins-ci.plugins</groupId>
+    <artifactId>plugin</artifactId>
+    <version>3.55</version>
+    <relativePath/>
+  </parent>
 
-    <parent>
-        <groupId>org.jenkins-ci.plugins</groupId>
-        <artifactId>plugin</artifactId>
-        <version>2.11</version>
-        <relativePath />
-    </parent>
-    <groupId>com.ztbsuper</groupId>
-    <artifactId>dingding-notifications</artifactId>
-    <version>1.9</version>
-    <packaging>hpi</packaging>
+  <groupId>org.jenkins-ci.plugins</groupId>
+  <artifactId>dingding-notifications</artifactId>
+  <version>2.0.0</version>
+  <packaging>hpi</packaging>
+  <properties>
+    <!--    除了 jdk 版本，其他的在 org.jenkins-ci.plugins.plugin 中都定义了   -->
+    <jenkins.version>2.164.3</jenkins.version>
+    <java.level>8</java.level>
+    <!-- Other properties you may want to use:
+      ~ jenkins-test-harness.version: Jenkins Test Harness version you use to test the plugin. For Jenkins version >= 1.580.1 use JTH 2.0 or higher.
+      ~ hpi-plugin.version: The HPI Maven Plugin version used by the plugin..
+      ~ stapler-plugin.version: The Stapler Maven plugin version required by the plugin.
+ -->
+  </properties>
 
-    <properties>
-        <!-- Baseline Jenkins version you use to build the plugin. Users must have this version or newer to run. -->
-        <jenkins.version>2.7.3</jenkins.version>
-        <!-- Java Level to use. Java 7 required when using core >= 1.612 -->
-        <java.level>8</java.level>
-        <!-- Jenkins Test Harness version you use to test the plugin. -->
-        <!-- For Jenkins version >= 1.580.1 use JTH 2.x or higher. -->
-        <jenkins-test-harness.version>2.13</jenkins-test-harness.version>
-        <!-- Other properties you may want to use:
-             ~ hpi-plugin.version: The HPI Maven Plugin version used by the plugin..
-             ~ stapler-plugin.version: The Stapler Maven plugin version required by the plugin.
-        -->
-    </properties>
+  <name>DingTalk</name>
+  <description>钉钉机器人消息通知插件</description>
+  <url>https://wiki.jenkins-ci.org/display/JENKINS/Dingding+Notification+Plugin</url>
 
-    <name>Dingding[钉钉] Plugin</name>
-    <description>钉钉Jenkins通知插件</description>
-    <url>https://wiki.jenkins-ci.org/display/JENKINS/Dingding+Notification+Plugin</url>
+  <!-- The default licence for Jenkins OSS Plugins is MIT. Substitute for the applicable one if needed. -->
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/licenses/MIT</url>
+    </license>
+  </licenses>
 
-    <!-- The default licence for Jenkins OSS Plugins is MIT. Substitute for the applicable one if needed. -->
+  <!--  If you want this to appear on the wiki page:  -->
+  <developers>
+    <developer>
+      <id>liuweiGL</id>
+      <name>liuweiGL</name>
+      <email>wei2460@qq.com</email>
+    </developer>
+    <developer>
+      <id>ztbsuper</id>
+      <name>Marvin Zhang</name>
+      <email>ztbsuper@gmail.com</email>
+    </developer>
+  </developers>
 
-    <licenses>
-        <license>
-            <name>MIT License</name>
-            <url>http://opensource.org/licenses/MIT</url>
-        </license>
-    </licenses>
+  <!--  Assuming you want to host on @jenkinsci: -->
+  <scm>
+    <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
+    <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
+    <tag>${project.version}</tag>
+  </scm>
 
-    <developers>
-        <developer>
-            <id>ztbsuper</id>
-            <name>Marvin Zhang</name>
-            <email>ztbsuper@gmail.com</email>
-        </developer>
-    </developers>
-    <scm>
-        <connection>scm:git:ssh://github.com/jenkinsci/dingding-notifications-plugin.git</connection>
-	<developerConnection>scm:git:ssh://git@github.com/jenkinsci/dingding-notifications-plugin.git</developerConnection>
-        <url>http://github.com/jenkinsci/dingding-notifications-plugin</url>
-        <tag>dingding-notifications-1.9</tag>
-    </scm>
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-        <repository>
-            <id>repo.jenkins-ci.org</id>
-            <url>https://repo.jenkins-ci.org/public/</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>repo.jenkins-ci.org</id>
-            <url>https://repo.jenkins-ci.org/public/</url>
-        </pluginRepository>
-    </pluginRepositories>
+
+  <dependencyManagement>
     <dependencies>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.12</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.chnyangjie</groupId>
-            <artifactId>dingTalkClient</artifactId>
-            <version>0.0.8</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jenkins-ci.plugins</groupId>
-            <artifactId>structs</artifactId>
-            <version>1.7</version>
-        </dependency>
-        <!--<dependency>-->
-        <!--<groupId>org.jenkins-ci.plugins</groupId>-->
-        <!--<artifactId>credentials</artifactId>-->
-        <!--<version>1.9.4</version>-->
-        <!--</dependency>-->
-
+      <dependency>
+        <!-- Pick up common dependencies for 2.164.x: https://github.com/jenkinsci/bom#usage -->
+        <groupId>io.jenkins.tools.bom</groupId>
+        <artifactId>bom-2.164.x</artifactId>
+        <version>3</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
     </dependencies>
+  </dependencyManagement>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins</groupId>
+      <artifactId>structs</artifactId>
+    </dependency>
+
+    <!--    获取 git 的 changeSet    -->
+    <!--    <dependency>-->
+    <!--      <groupId>org.jenkins-ci.plugins</groupId>-->
+    <!--      <artifactId>git</artifactId>-->
+    <!--    </dependency>-->
+
+    <!--    多配置项目   -->
+    <!--    <dependency>-->
+    <!--      <groupId>org.jenkins-ci.plugins</groupId>-->
+    <!--      <artifactId>matrix-project</artifactId>-->
+    <!--    </dependency>-->
+
+    <dependency>
+      <groupId>com.dingtalk.open</groupId>
+      <artifactId>taobao-sdk-java-auto</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.10</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <repositories>
+    <repository>
+      <id>repo.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/public/</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>repo.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/public/</url>
+    </pluginRepository>
+  </pluginRepositories>
 </project>

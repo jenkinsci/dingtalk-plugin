@@ -1,0 +1,24 @@
+<?jelly escape-by-default='true'?>
+
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
+  xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <f:optionalBlock
+    title="${instance.getRobotName()}"
+    field="checked"
+    inline="true"
+    checked="${instance.isChecked()}">
+    <f:entry field="atMobile" title="通知人">
+      <f:textarea/>
+    </f:entry>
+    <f:invisibleEntry>
+      <div style="display: none;">
+        <f:textbox field="robotId" value="${instance.getRobotId()}"/>
+      </div>
+    </f:invisibleEntry>
+    <f:invisibleEntry>
+      <div style="display: none;">
+        <f:textbox field="robotName" value="${instance.getRobotName()}"/>
+      </div>
+    </f:invisibleEntry>
+  </f:optionalBlock>
+</j:jelly>
