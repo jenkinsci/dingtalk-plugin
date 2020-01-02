@@ -3,7 +3,7 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
   xmlns:t="/lib/hudson" xmlns:f="/lib/form">
   <st:once>
-    <script type="text/javascript" src="${rootURL}/plugin/ding-talk/scripts/customValidate.js"/>
+    <script type="text/javascript" src="${rootURL}/plugin/dingding-notifications/scripts/customValidate.js"/>
   </st:once>
 
   <f:invisibleEntry>
