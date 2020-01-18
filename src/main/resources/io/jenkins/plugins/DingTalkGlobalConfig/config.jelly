@@ -9,15 +9,16 @@
   <j:set var="noticeOccasions"
     value="${descriptor.getNoticeOccasions()}"/>
 
-  <f:section title="钉钉机器人配置">
+  <f:section title="${%globalConfigTitle}">
 
-    <f:entry title="通知时机" field="noticeOccasions">
+    <f:entry title="${noticeOccasionTitle}" field="noticeOccasions">
       <table>
         <j:forEach var="noticeOccasionTypeItem"
           items="${noticeOccasionTypes}">
           <j:scope>
-            <j:set var="desc" value="${noticeOccasionTypeItem.getDesc()}"/>
+<!--            <j:set var="desc" value="${descriptor.getNoticeOccasionDesc(noticeOccasionTypeItem)}"/>-->
             <j:set var="name" value="${noticeOccasionTypeItem.name()}"/>
+            <j:set var="desc" value="${%${name}}"/>
             <f:entry
               title="${desc}">
               <f:checkbox
@@ -31,7 +32,7 @@
       </table>
     </f:entry>
 
-    <f:entry title="机器人">
+    <f:entry title="${%robotConfigTitle}">
       <j:scope>
         <j:set var="robotConfigDescriptor"
           value="${descriptor.getDingTalkRobotConfigDescriptor()}"/>

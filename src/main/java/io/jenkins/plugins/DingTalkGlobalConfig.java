@@ -53,6 +53,16 @@ public class DingTalkGlobalConfig extends GlobalDefaultViewConfiguration {
   }
 
   /**
+   * 获取每个通知时机对应的国际化描述
+   *
+   * @param type 通知时机
+   * @return 描述信息
+   */
+  public String getNoticeOccasionDesc(NoticeOccasionType type) {
+    return "";
+  }
+
+  /**
    * `机器人` 配置页面
    *
    * @return DingTalkRobotConfigDescriptor
@@ -85,8 +95,8 @@ public class DingTalkGlobalConfig extends GlobalDefaultViewConfiguration {
 
   @Override
   public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
-    System.out.println("============ old form data =============");
-    System.out.println(json.toString());
+//    System.out.println("============ old form data =============");
+//    System.out.println(json.toString());
     Object robotConfigObj = json.get("robotConfigs");
     if (robotConfigObj == null) {
       json.put("robotConfigs", new JSONArray());
@@ -98,8 +108,8 @@ public class DingTalkGlobalConfig extends GlobalDefaultViewConfiguration {
         return StringUtils.isEmpty(webhook);
       });
     }
-    System.out.println("============ new form data =============");
-    System.out.println(json.toString());
+//    System.out.println("============ new form data =============");
+//    System.out.println(json.toString());
     req.bindJSON(this, json);
     this.save();
     return super.configure(req, json);
@@ -107,6 +117,7 @@ public class DingTalkGlobalConfig extends GlobalDefaultViewConfiguration {
 
   /**
    * 获取全局配置信息
+   *
    * @return DingTalkGlobalConfig
    */
   public static DingTalkGlobalConfig getInstance() {
