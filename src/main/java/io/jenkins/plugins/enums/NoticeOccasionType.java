@@ -13,7 +13,11 @@ public enum NoticeOccasionType {
 
   CANCEL("构建中断时通知"),
 
-  FAIL("构建失败时通知"),
+  FAILURE("构建失败时通知"),
+
+  UNSTABLE("构建不稳定时通知"),
+
+  NOT_BUILT("在未构建时通知"),
 
   SUCCESS("构建成功时通知");
 

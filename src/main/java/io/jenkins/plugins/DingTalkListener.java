@@ -72,7 +72,7 @@ public class DingTalkListener extends RunListener<FreeStyleBuild> {
             NoticeOccasionType.START.name()
         )
     ) {
-      this.send(build, listener, BuildStatusType.DOING);
+      this.send(build, listener, BuildStatusType.START);
     }
   }
 
@@ -90,7 +90,7 @@ public class DingTalkListener extends RunListener<FreeStyleBuild> {
 
     } else if (Result.FAILURE.equals(result)) {
 
-      if (noticeOccasions.contains(NoticeOccasionType.FAIL.name())) {
+      if (noticeOccasions.contains(NoticeOccasionType.FAILURE.name())) {
         statusType = BuildStatusType.FAILURE;
       }
 
@@ -98,6 +98,18 @@ public class DingTalkListener extends RunListener<FreeStyleBuild> {
 
       if (noticeOccasions.contains(NoticeOccasionType.CANCEL.name())) {
         statusType = BuildStatusType.ABORTED;
+      }
+
+    } else if(Result.UNSTABLE.equals(result)){
+
+      if (noticeOccasions.contains(NoticeOccasionType.UNSTABLE.name())) {
+        statusType = BuildStatusType.UNSTABLE;
+      }
+
+    }else if(Result.NOT_BUILT.equals(result)){
+
+      if (noticeOccasions.contains(NoticeOccasionType.NOT_BUILT.name())) {
+        statusType = BuildStatusType.NOT_BUILT;
       }
 
     } else {

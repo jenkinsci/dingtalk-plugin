@@ -6,11 +6,13 @@ import lombok.Getter;
 @SuppressWarnings("all")
 public enum BuildStatusType {
 
+  START("blue_anime.gif", "开始构建"),
   ABORTED("grey.gif", "已取消"),
-  DOING("blue_anime.gif", "构建中"),
-  SUCCESS("green.gif", "成功"),
+  UNSTABLE("yellow.gif", "构建不稳定"),
   FAILURE("red.gif", "失败"),
-  UNKNOW("yellow.gif", "未知");
+  SUCCESS("green.gif", "成功"),
+  NOT_BUILT("nobuilt.gif", "未构建"),
+  UNKNOW("warning.gif", "未知");
 
   private String icon;
 
