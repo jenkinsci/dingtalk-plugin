@@ -1,0 +1,21 @@
+<?jelly escape-by-default='true'?>
+<j:jelly
+  xmlns:j="jelly:core"
+  xmlns:st="jelly:stapler"
+  xmlns:d="jelly:define"
+  xmlns:l="/lib/layout"
+  xmlns:t="/lib/hudson"
+  xmlns:f="/lib/form">
+  <j:set var="robots"
+    value="${instance != null ? instance.getRobots() : descriptor.getDefaultRobots()}"/>
+  <f:entry title="机器人" field="robots">
+    <j:forEach var="robotConfig" items="${descriptor.getRobotConfigs()}">
+      <j:scope>
+        <j:set var="value" value="${robotConfig.getId()}"/>
+        <j:set var="label" value="${robotConfig.getName()}"/>
+        <f:checkbox json="${value}" title="${label}" checked="${robots.contains(value)}"/>
+        <br/>
+      </j:scope>
+    </j:forEach>
+  </f:entry>
+</j:jelly>

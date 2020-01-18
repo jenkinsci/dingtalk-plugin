@@ -1,0 +1,56 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
+  xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+
+  <!-- 通知时机列表 -->
+  <j:set var="noticeOccasionTypes" value="${descriptor.getNoticeOccasionTypes()}"/>
+
+  <!-- 用户选择的通知时机-->
+  <j:set var="noticeOccasions"
+    value="${descriptor.getNoticeOccasions()}"/>
+
+  <f:section title="钉钉机器人配置">
+
+    <f:entry title="通知时机" field="noticeOccasions">
+      <table>
+        <j:forEach var="noticeOccasionTypeItem"
+          items="${noticeOccasionTypes}">
+          <j:scope>
+            <j:set var="desc" value="${noticeOccasionTypeItem.getDesc()}"/>
+            <j:set var="name" value="${noticeOccasionTypeItem.name()}"/>
+            <f:entry
+              title="${desc}">
+              <f:checkbox
+                json="${name}"
+                name="noticeOccasions"
+                checked="${noticeOccasions.contains(name)}"
+              />
+            </f:entry>
+          </j:scope>
+        </j:forEach>
+      </table>
+    </f:entry>
+
+    <f:entry title="机器人">
+      <j:scope>
+        <j:set var="robotConfigDescriptor"
+          value="${descriptor.getDingTalkRobotConfigDescriptor()}"/>
+        <f:repeatable field="robotConfigs"
+          items="${instance.getRobotConfigs()}"
+          header="配置项">
+          <table width="100%" class="ding-talk-robot-config">
+            <st:include page="config.jelly" class="${robotConfigDescriptor.clazz}"/>
+            <tr>
+              <td colspan="3">
+                <div align="right">
+                  <f:repeatableDeleteButton/>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </f:repeatable>
+      </j:scope>
+    </f:entry>
+  </f:section>
+
+</j:jelly>
