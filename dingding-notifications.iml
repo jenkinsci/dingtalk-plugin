@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
-    <facet type="Spring" name="Spring">
-      <configuration />
-    </facet>
     <facet type="JRebel" name="JRebel">
       <configuration>
         <option name="deleteUnindexed" value="false" />
@@ -26,6 +23,9 @@
         <option name="useRelativePathsInXml" value="false" />
         <option name="xmlDir" />
       </configuration>
+    </facet>
+    <facet type="Spring" name="Spring">
+      <configuration />
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">

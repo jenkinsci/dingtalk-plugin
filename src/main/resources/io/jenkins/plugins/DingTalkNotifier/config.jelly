@@ -8,7 +8,7 @@
   xmlns:f="/lib/form">
   <j:set var="robots"
     value="${instance != null ? instance.getRobots() : descriptor.getDefaultRobots()}"/>
-  <f:entry title="机器人" field="robots">
+  <f:entry title="${%title}" field="robots">
     <j:forEach var="robotConfig" items="${descriptor.getRobotConfigs()}">
       <j:scope>
         <j:set var="value" value="${robotConfig.getId()}"/>

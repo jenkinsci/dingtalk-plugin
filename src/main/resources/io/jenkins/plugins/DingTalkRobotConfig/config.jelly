@@ -9,7 +9,7 @@
   <f:invisibleEntry>
     <f:textbox field="id" default="${descriptor.getDefaultId()}"/>
   </f:invisibleEntry>
-  <f:entry title="名称" field="name">
+  <f:entry title="${%name}" field="name">
     <f:textbox/>
   </f:entry>
 
@@ -17,7 +17,7 @@
     <f:textbox/>
   </f:entry>
 
-  <f:entry title="安全策略">
+  <f:entry title="${%securityPolicy}">
     <j:scope>
       <j:set var="securityPolicyConfigDescriptor"
         value="${descriptor.getDingTalkSecurityPolicyConfigDescriptor()}"/>
@@ -43,7 +43,7 @@
 
   <f:entry>
     <div style="float:right">
-      <input type="button" value="测试" class="yui-button validate-button"
+      <input type="button" value="${%testBtnLabel}" class="yui-button validate-button"
         data-validate-button-descriptor-url="${descriptor.descriptorFullUrl}"
         data-validate-button-method="test"
         data-validate-button-with="${with}"

@@ -29,9 +29,6 @@ public class BuildMessage {
 
   private String datetime;
 
-  /**
-   * TODO: 添加 git 信息
-   */
   private String changeLog;
 
   private String detailUrl;

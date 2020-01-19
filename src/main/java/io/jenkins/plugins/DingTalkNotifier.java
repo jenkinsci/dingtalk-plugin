@@ -71,7 +71,7 @@ public class DingTalkNotifier extends Notifier {
     @Nonnull
     @Override
     public String getDisplayName() {
-      return "钉钉通知";
+      return Messages.displayName();
     }
 
 

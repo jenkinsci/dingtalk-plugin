@@ -96,7 +96,7 @@ public class DingTalkListener extends RunListener<FreeStyleBuild> {
 
     } else if (Result.ABORTED.equals(result)) {
 
-      if (noticeOccasions.contains(NoticeOccasionType.CANCEL.name())) {
+      if (noticeOccasions.contains(NoticeOccasionType.ABORTED.name())) {
         statusType = BuildStatusType.ABORTED;
       }
 
@@ -113,7 +113,7 @@ public class DingTalkListener extends RunListener<FreeStyleBuild> {
       }
 
     } else {
-      statusType = BuildStatusType.UNKNOW;
+      statusType = BuildStatusType.UNKNOWN;
     }
 
     if (statusType != null) {

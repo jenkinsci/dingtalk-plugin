@@ -124,14 +124,14 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
     }
 
     /**
-     * webhook 字段 1. 必填 2. 唯一
+     * name 字段必填
      *
      * @param value webhook
      * @return FormValidation
      */
     public FormValidation doCheckName(@QueryParameter String value) {
       if (StringUtils.isBlank(value)) {
-        return FormValidation.error("名称不能为空");
+        return FormValidation.error(Messages.RobotConfigFormValidation_name());
       }
       return FormValidation.ok();
     }
@@ -144,7 +144,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
      */
     public FormValidation doCheckWebhook(@QueryParameter String value) {
       if (StringUtils.isBlank(value)) {
-        return FormValidation.error("webhook 不能为空");
+        return FormValidation.error(Messages.RobotConfigFormValidation_webhook());
       }
       return FormValidation.ok();
     }

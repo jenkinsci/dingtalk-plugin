@@ -11,14 +11,13 @@
 
   <f:section title="${%globalConfigTitle}">
 
-    <f:entry title="${noticeOccasionTitle}" field="noticeOccasions">
+    <f:entry title="${%noticeOccasionTitle}" field="noticeOccasions">
       <table>
         <j:forEach var="noticeOccasionTypeItem"
           items="${noticeOccasionTypes}">
           <j:scope>
-<!--            <j:set var="desc" value="${descriptor.getNoticeOccasionDesc(noticeOccasionTypeItem)}"/>-->
             <j:set var="name" value="${noticeOccasionTypeItem.name()}"/>
-            <j:set var="desc" value="${%${name}}"/>
+            <j:set var="desc" value="${noticeOccasionTypeItem.getDesc()}"/>
             <f:entry
               title="${desc}">
               <f:checkbox
@@ -38,7 +37,7 @@
           value="${descriptor.getDingTalkRobotConfigDescriptor()}"/>
         <f:repeatable field="robotConfigs"
           items="${instance.getRobotConfigs()}"
-          header="配置项">
+          header="${%robotConfigHeader}">
           <table width="100%" class="ding-talk-robot-config">
             <st:include page="config.jelly" class="${robotConfigDescriptor.clazz}"/>
             <tr>
