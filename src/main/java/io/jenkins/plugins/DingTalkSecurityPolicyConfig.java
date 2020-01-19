@@ -1,5 +1,6 @@
 package io.jenkins.plugins;
 
+import hudson.util.Secret;
 import io.jenkins.plugins.enums.SecurityPolicyType;
 import hudson.Extension;
 import hudson.model.Describable;
@@ -27,7 +28,7 @@ public class DingTalkSecurityPolicyConfig implements Describable<DingTalkSecurit
 
   private String type;
 
-  private String value;
+  private Secret value;
 
   private String desc;
 
@@ -35,7 +36,7 @@ public class DingTalkSecurityPolicyConfig implements Describable<DingTalkSecurit
   public DingTalkSecurityPolicyConfig(boolean checked, String type, String value, String desc) {
     this.checked = checked;
     this.type = type;
-    this.value = value;
+    this.value = Secret.fromString(value);
     this.desc = desc;
   }
 
@@ -51,7 +52,7 @@ public class DingTalkSecurityPolicyConfig implements Describable<DingTalkSecurit
 
   @DataBoundSetter
   public void setValue(String value) {
-    this.value = value;
+    this.value = Secret.fromString(value);
   }
 
   @DataBoundSetter
@@ -59,11 +60,19 @@ public class DingTalkSecurityPolicyConfig implements Describable<DingTalkSecurit
     this.desc = desc;
   }
 
-  public Set<String> getValues() {
-    if (StringUtils.isEmpty(this.value)) {
+  public String getValue() {
+    if (value == null) {
       return null;
     }
-    return Arrays.stream(this.value.split("\n")).collect(Collectors.toSet());
+    return value.getPlainText();
+  }
+
+  public Set<String> getValues() {
+    String value = getValue();
+    if (StringUtils.isEmpty(value)) {
+      return null;
+    }
+    return Arrays.stream(value.split("\n")).collect(Collectors.toSet());
   }
 
   @Override
