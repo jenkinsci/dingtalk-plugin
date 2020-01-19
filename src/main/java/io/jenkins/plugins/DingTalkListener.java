@@ -18,6 +18,11 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import jenkins.model.Jenkins;
 
+/**
+ * @author liuwei
+ * @date 2020/1/19 17:06
+ * @desc 构建监听器
+ */
 @Extension
 public class DingTalkListener extends RunListener<FreeStyleBuild> {
 
@@ -58,6 +63,8 @@ public class DingTalkListener extends RunListener<FreeStyleBuild> {
             .build();
         Collection<String> result = service.send(notifier, message);
         if (listener != null && !result.isEmpty()) {
+          listener.getLogger()
+              .println("======================== DingTalk ========================");
           result.forEach(listener::error);
         }
       }
@@ -96,24 +103,24 @@ public class DingTalkListener extends RunListener<FreeStyleBuild> {
 
     } else if (Result.ABORTED.equals(result)) {
 
-      if (noticeOccasions.contains(NoticeOccasionType.CANCEL.name())) {
+      if (noticeOccasions.contains(NoticeOccasionType.ABORTED.name())) {
         statusType = BuildStatusType.ABORTED;
       }
 
-    } else if(Result.UNSTABLE.equals(result)){
+    } else if (Result.UNSTABLE.equals(result)) {
 
       if (noticeOccasions.contains(NoticeOccasionType.UNSTABLE.name())) {
         statusType = BuildStatusType.UNSTABLE;
       }
 
-    }else if(Result.NOT_BUILT.equals(result)){
+    } else if (Result.NOT_BUILT.equals(result)) {
 
       if (noticeOccasions.contains(NoticeOccasionType.NOT_BUILT.name())) {
         statusType = BuildStatusType.NOT_BUILT;
       }
 
     } else {
-      statusType = BuildStatusType.UNKNOW;
+      statusType = BuildStatusType.UNKNOWN;
     }
 
     if (statusType != null) {

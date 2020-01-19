@@ -1,5 +1,6 @@
 package io.jenkins.plugins;
 
+import hudson.util.Secret;
 import io.jenkins.plugins.DingTalkSecurityPolicyConfig.DingTalkSecurityPolicyConfigDescriptor;
 import io.jenkins.plugins.enums.BuildStatusType;
 import io.jenkins.plugins.enums.SecurityPolicyType;
@@ -13,6 +14,7 @@ import hudson.util.FormValidation;
 import hudson.util.FormValidation.Kind;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import jenkins.model.Jenkins;
@@ -48,7 +50,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
   /**
    * webhook 地址
    */
-  private String webhook;
+  private Secret webhook;
 
   /**
    * 安全策略配置
@@ -60,7 +62,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
       CopyOnWriteArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs) {
     this.id = id;
     this.name = name;
-    this.webhook = webhook;
+    this.webhook = Secret.fromString(webhook);
     this.securityPolicyConfigs = securityPolicyConfigs;
   }
 
@@ -76,7 +78,16 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
 
   @DataBoundSetter
   public void setWebhook(String webhook) {
-    this.webhook = webhook;
+    this.webhook = Secret.fromString(webhook);
+  }
+
+  /**
+   * 获取原始 webhook
+   *
+   * @return webhook
+   */
+  public String getWebhook() {
+    return webhook.getPlainText();
   }
 
   @DataBoundSetter
@@ -109,7 +120,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
      * @return String
      */
     public String getDefaultId() {
-      return System.currentTimeMillis() + "";
+      return UUID.randomUUID().toString();
     }
 
     /**
@@ -124,14 +135,14 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
     }
 
     /**
-     * webhook 字段 1. 必填 2. 唯一
+     * name 字段必填
      *
      * @param value webhook
      * @return FormValidation
      */
     public FormValidation doCheckName(@QueryParameter String value) {
       if (StringUtils.isBlank(value)) {
-        return FormValidation.error("名称不能为空");
+        return FormValidation.error(Messages.RobotConfigFormValidation_name());
       }
       return FormValidation.ok();
     }
@@ -144,7 +155,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
      */
     public FormValidation doCheckWebhook(@QueryParameter String value) {
       if (StringUtils.isBlank(value)) {
-        return FormValidation.error("webhook 不能为空");
+        return FormValidation.error(Messages.RobotConfigFormValidation_webhook());
       }
       return FormValidation.ok();
     }
