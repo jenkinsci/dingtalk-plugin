@@ -1,8 +1,6 @@
 package io.jenkins.plugins.service;
 
-import io.jenkins.plugins.DingTalkNotifier;
-import io.jenkins.plugins.model.BuildMessage;
-import java.util.Collection;
+import io.jenkins.plugins.model.BuildJobModel;
 
 /**
  * @author liuwei
@@ -11,5 +9,5 @@ import java.util.Collection;
  */
 public interface DingTalkService {
 
-  Collection<String> send(DingTalkNotifier notifier, BuildMessage message);
+  String send(String robot, BuildJobModel buildJobModel);
 }

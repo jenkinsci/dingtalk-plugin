@@ -9,39 +9,68 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Notifier;
 import hudson.tasks.Publisher;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Set;
+import io.jenkins.plugins.DingTalkNotifierConfig.DingTalkNotifierConfigDescriptor;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
-import jenkins.model.GlobalConfiguration;
-import lombok.Getter;
+import jenkins.model.Jenkins;
 import lombok.ToString;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.DataBoundSetter;
 
 /**
  * @author liuwei
  * @date 2019/12/19 09:40
  * @desc 钉钉机器人通知
  */
-@Getter
 @ToString
 @SuppressWarnings("unused")
 public class DingTalkNotifier extends Notifier {
 
-  private Set<String> robots;
+  private CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigs;
 
-  @DataBoundSetter
-  public void setRobots(Set<String> robots) {
-    this.robots = robots;
+  /**
+   * 需要跟 `全局配置` 同步机器人信息
+   *
+   * @return CopyOnWriteArrayList<DingTalkNotifierConfig>
+   */
+  public CopyOnWriteArrayList<DingTalkNotifierConfig> getNotifierConfigs() {
+
+    CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigsList = new CopyOnWriteArrayList<>();
+    CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs = DingTalkGlobalConfig.getInstance()
+        .getRobotConfigs();
+
+    for (DingTalkRobotConfig robotConfig : robotConfigs) {
+      String id = robotConfig.getId();
+      DingTalkNotifierConfig newNotifierConfig = new DingTalkNotifierConfig(robotConfig);
+      if (notifierConfigs != null && !notifierConfigs.isEmpty()) {
+        for (DingTalkNotifierConfig notifierConfig : notifierConfigs) {
+          String robotId = notifierConfig.getRobotId();
+          if (id.equals(robotId) && notifierConfig.isChecked()) {
+            newNotifierConfig.setChecked(true);
+            newNotifierConfig.setAtMobile(notifierConfig.getAtMobile());
+          }
+        }
+      }
+      notifierConfigsList.add(newNotifierConfig);
+    }
+
+    return notifierConfigsList;
+  }
+
+  public List<DingTalkNotifierConfig> getCheckedNotifierConfigs() {
+    CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigs = this.getNotifierConfigs();
+
+    return notifierConfigs.stream()
+        .filter(DingTalkNotifierConfig::isChecked)
+        .collect(Collectors.toList());
   }
 
   @DataBoundConstructor
-  public DingTalkNotifier(Set<String> robots) {
-    this.robots = robots;
+  public DingTalkNotifier(
+      CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigs) {
+    this.notifierConfigs = notifierConfigs;
   }
-
 
   @Override
   public BuildStepMonitor getRequiredMonitorService() {
@@ -74,25 +103,23 @@ public class DingTalkNotifier extends Notifier {
       return Messages.displayName();
     }
 
-
     /**
-     * 默认的机器人
-     *
-     * @return Set<String>
+     * 通知配置页面
      */
-    public Set<String> getDefaultRobots() {
-      return Collections.emptySet();
+    public DingTalkNotifierConfigDescriptor getDingTalkNotifierConfigDescriptor() {
+      return Jenkins.get().getDescriptorByType(DingTalkNotifierConfigDescriptor.class);
     }
 
     /**
-     * 选择 `机器人` 下拉框
-     *
-     * @return ListBoxModel
+     * 默认的配置项列表
      */
-    public CopyOnWriteArrayList<DingTalkRobotConfig> getRobotConfigs() {
-      return Objects.requireNonNull(
-          GlobalConfiguration.all().get(DingTalkGlobalConfig.class))
-          .getRobotConfigs();
+    public List<DingTalkNotifierConfig> getDefaultNotifierConfigs() {
+      return DingTalkGlobalConfig
+          .getInstance().getRobotConfigs()
+          .stream()
+          .map(DingTalkNotifierConfig::new)
+          .collect(Collectors.toList());
     }
+
   }
 }

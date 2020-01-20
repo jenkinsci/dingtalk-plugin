@@ -1,15 +1,17 @@
 package io.jenkins.plugins.model;
 
 import com.dingtalk.api.request.OapiRobotSendRequest.At;
-import io.jenkins.plugins.enums.BuildStatusType;
-import java.util.Collections;
+import io.jenkins.plugins.enums.BuildStatusEnum;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 
 @Data
 @Builder
-public class BuildMessage {
+public class BuildJobModel {
 
   private String projectName;
 
@@ -19,24 +21,33 @@ public class BuildMessage {
 
   private String jobUrl;
 
-  private BuildStatusType statusType;
+  private BuildStatusEnum statusType;
 
   private String duration;
 
+  private String datetime;
+
   private String executorName;
 
-  private String executorPhone;
+  private String executorMobile;
 
-  private String datetime;
+  private Set<String> atMobiles;
 
   private String changeLog;
 
-  private String detailUrl;
+  private String console;
 
 
   public At getAt() {
     At at = new At();
-    at.setAtMobiles(Collections.singletonList(this.executorPhone));
+    List<String> mobiles = new ArrayList<>();
+    if (StringUtils.isEmpty(executorMobile)) {
+      mobiles.add(executorMobile);
+    }
+    if (atMobiles != null && !atMobiles.isEmpty()) {
+      mobiles.addAll(atMobiles);
+    }
+    at.setAtMobiles(mobiles);
     return at;
   }
 
@@ -80,8 +91,14 @@ public class BuildMessage {
 
         + "- 执行人："
         + (
-        StringUtils.isEmpty(this.executorPhone) ? this.executorName : ("@" + this.executorPhone)
+        StringUtils.isEmpty(this.executorMobile) ? this.executorName : ("@" + this.executorMobile)
     )
-        + "\n";
+        + "\n"
+
+        + (
+        atMobiles != null && !atMobiles.isEmpty()
+            ? "- 通知人：" + "@" + StringUtils.join(atMobiles, "@ ") + "\n"
+            : ""
+    );
   }
 }

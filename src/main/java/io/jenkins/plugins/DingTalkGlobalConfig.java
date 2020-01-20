@@ -1,9 +1,9 @@
 package io.jenkins.plugins;
 
-import io.jenkins.plugins.DingTalkRobotConfig.DingTalkRobotConfigDescriptor;
-import io.jenkins.plugins.enums.NoticeOccasionType;
 import hudson.Extension;
 import hudson.views.GlobalDefaultViewConfiguration;
+import io.jenkins.plugins.DingTalkRobotConfig.DingTalkRobotConfigDescriptor;
+import io.jenkins.plugins.enums.NoticeOccasionEnum;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -34,7 +34,7 @@ public class DingTalkGlobalConfig extends GlobalDefaultViewConfiguration {
    * 通知时机
    */
   private Set<String> noticeOccasions = Arrays.stream(
-      NoticeOccasionType.values())
+      NoticeOccasionEnum.values())
       .map(Enum::name)
       .collect(Collectors.toSet());
 
@@ -48,18 +48,8 @@ public class DingTalkGlobalConfig extends GlobalDefaultViewConfiguration {
    *
    * @return NoticeOccasionType[]
    */
-  public NoticeOccasionType[] getNoticeOccasionTypes() {
-    return NoticeOccasionType.values();
-  }
-
-  /**
-   * 获取每个通知时机对应的国际化描述
-   *
-   * @param type 通知时机
-   * @return 描述信息
-   */
-  public String getNoticeOccasionDesc(NoticeOccasionType type) {
-    return "";
+  public NoticeOccasionEnum[] getNoticeOccasionTypes() {
+    return NoticeOccasionEnum.values();
   }
 
   /**

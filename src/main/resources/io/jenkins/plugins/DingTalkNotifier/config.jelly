@@ -6,16 +6,25 @@
   xmlns:l="/lib/layout"
   xmlns:t="/lib/hudson"
   xmlns:f="/lib/form">
-  <j:set var="robots"
-    value="${instance != null ? instance.getRobots() : descriptor.getDefaultRobots()}"/>
-  <f:entry title="${%title}" field="robots">
-    <j:forEach var="robotConfig" items="${descriptor.getRobotConfigs()}">
-      <j:scope>
-        <j:set var="value" value="${robotConfig.getId()}"/>
-        <j:set var="label" value="${robotConfig.getName()}"/>
-        <f:checkbox json="${value}" title="${label}" checked="${robots.contains(value)}"/>
-        <br/>
-      </j:scope>
-    </j:forEach>
+  <j:set var="notifierConfigDescriptor"
+    value="${descriptor.getDingTalkNotifierConfigDescriptor()}"/>
+  <j:set var="notifierConfigs"
+    value="${instance == null ? descriptor.getDefaultNotifierConfigs() : instance.getNotifierConfigs()}"/>
+
+  <f:entry
+    title="${%title}">
+    <f:repeatable
+      header=""
+      name="notifierConfigs"
+      noAddButton="true"
+      var="instance"
+      items="${notifierConfigs}">
+      <table width="100%">
+        <j:scope>
+          <j:set var="descriptor" value="${notifierConfigDescriptor}"/>
+          <st:include page="config.jelly" class="${descriptor.clazz}"/>
+        </j:scope>
+      </table>
+    </f:repeatable>
   </f:entry>
 </j:jelly>

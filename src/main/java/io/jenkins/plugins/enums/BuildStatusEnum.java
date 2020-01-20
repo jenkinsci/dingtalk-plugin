@@ -4,7 +4,7 @@ import io.jenkins.plugins.Messages;
 import lombok.Getter;
 
 @Getter
-public enum BuildStatusType {
+public enum BuildStatusEnum {
 
   /**
    * 开始构建
@@ -51,7 +51,7 @@ public enum BuildStatusType {
   private static final String IMAGE_SERVER = "http://q346bl12y.bkt.clouddn.com/";
 
 
-  BuildStatusType(String icon, String label) {
+  BuildStatusEnum(String icon, String label) {
     this.icon = IMAGE_SERVER + icon;
     this.label = label;
   }

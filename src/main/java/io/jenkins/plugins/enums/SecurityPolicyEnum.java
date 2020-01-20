@@ -11,7 +11,7 @@ import lombok.ToString;
  */
 
 @ToString
-public enum SecurityPolicyType {
+public enum SecurityPolicyEnum {
   /**
    * ip 地址/段
    */
@@ -30,7 +30,7 @@ public enum SecurityPolicyType {
   @Getter
   private String desc;
 
-  SecurityPolicyType(String desc) {
+  SecurityPolicyEnum(String desc) {
     this.desc = desc;
   }
 }

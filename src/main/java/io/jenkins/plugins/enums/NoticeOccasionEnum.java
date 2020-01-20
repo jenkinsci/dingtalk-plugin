@@ -8,7 +8,7 @@ import lombok.Getter;
  * @date 2019/12/19 11:28
  * @desc 通知时机
  */
-public enum NoticeOccasionType {
+public enum NoticeOccasionEnum {
   /**
    * 在启动构建时通知
    */
@@ -42,7 +42,7 @@ public enum NoticeOccasionType {
   @Getter
   private String desc;
 
-  NoticeOccasionType(String desc) {
+  NoticeOccasionEnum(String desc) {
     this.desc = desc;
   }
 }

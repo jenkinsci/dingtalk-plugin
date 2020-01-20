@@ -1,10 +1,10 @@
 package io.jenkins.plugins;
 
-import hudson.util.Secret;
-import io.jenkins.plugins.enums.SecurityPolicyType;
 import hudson.Extension;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
+import hudson.util.Secret;
+import io.jenkins.plugins.enums.SecurityPolicyEnum;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,7 +13,6 @@ import lombok.Getter;
 import lombok.ToString;
 import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.DataBoundSetter;
 
 /**
  * @author liuwei
@@ -40,26 +39,6 @@ public class DingTalkSecurityPolicyConfig implements Describable<DingTalkSecurit
     this.desc = desc;
   }
 
-  @DataBoundSetter
-  public void setChecked(boolean checked) {
-    this.checked = checked;
-  }
-
-  @DataBoundSetter
-  public void setType(String type) {
-    this.type = type;
-  }
-
-  @DataBoundSetter
-  public void setValue(String value) {
-    this.value = Secret.fromString(value);
-  }
-
-  @DataBoundSetter
-  public void setDesc(String desc) {
-    this.desc = desc;
-  }
-
   public String getValue() {
     if (value == null) {
       return null;
@@ -80,9 +59,9 @@ public class DingTalkSecurityPolicyConfig implements Describable<DingTalkSecurit
     return Jenkins.get().getDescriptorByType(DingTalkSecurityPolicyConfigDescriptor.class);
   }
 
-  public static DingTalkSecurityPolicyConfig of(SecurityPolicyType securityPolicyType) {
-    return new DingTalkSecurityPolicyConfig(false, securityPolicyType.name(), "",
-        securityPolicyType.getDesc());
+  public static DingTalkSecurityPolicyConfig of(SecurityPolicyEnum securityPolicyEnum) {
+    return new DingTalkSecurityPolicyConfig(false, securityPolicyEnum.name(), "",
+        securityPolicyEnum.getDesc());
   }
 
   @Extension

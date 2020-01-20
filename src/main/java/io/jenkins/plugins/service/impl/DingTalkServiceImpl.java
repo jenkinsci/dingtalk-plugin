@@ -1,17 +1,12 @@
 package io.jenkins.plugins.service.impl;
 
 import io.jenkins.plugins.DingTalkGlobalConfig;
-import io.jenkins.plugins.DingTalkNotifier;
 import io.jenkins.plugins.DingTalkRobotConfig;
-import io.jenkins.plugins.model.BuildMessage;
+import io.jenkins.plugins.model.BuildJobModel;
 import io.jenkins.plugins.service.DingTalkService;
 import io.jenkins.plugins.tools.DingTalkSender;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -26,32 +21,22 @@ public class DingTalkServiceImpl implements DingTalkService {
 
 
   @Override
-  public Collection<String> send(DingTalkNotifier notifier, BuildMessage message) {
-    List<String> result = new ArrayList<>();
-    Set<String> robots = notifier.getRobots();
-    if (robots == null || robots.isEmpty()) {
-      return result;
+  public String send(String robotId, BuildJobModel buildJobModel) {
+    DingTalkSender sender = senders.get(robotId);
+    if (sender == null) {
+      DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.getInstance();
+      CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs = globalConfig.getRobotConfigs();
+      Optional<DingTalkRobotConfig> robotConfigOptional = robotConfigs.stream()
+          .filter(item -> robotId.equals(item.getId())).findAny();
+      if (robotConfigOptional.isPresent()) {
+        DingTalkRobotConfig robotConfig = robotConfigOptional.get();
+        sender = new DingTalkSender(robotConfig);
+        senders.put(robotId, sender);
+      }
     }
-    robots.forEach(id -> {
-      DingTalkSender sender = senders.get(id);
-      if (sender == null) {
-        DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.getInstance();
-        CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs = globalConfig.getRobotConfigs();
-        Optional<DingTalkRobotConfig> robotConfigOptional = robotConfigs.stream()
-            .filter(item -> id.equals(item.getId())).findAny();
-        if (robotConfigOptional.isPresent()) {
-          DingTalkRobotConfig robotConfig = robotConfigOptional.get();
-          sender = new DingTalkSender(robotConfig);
-          senders.put(id, sender);
-        }
-      }
-      if (sender != null) {
-        String msg = sender.send(message);
-        if (msg != null) {
-          result.add(msg);
-        }
-      }
-    });
-    return result;
+    if (sender != null) {
+      return sender.send(buildJobModel);
+    }
+    return null;
   }
 }

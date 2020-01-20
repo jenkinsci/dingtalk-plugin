@@ -2,7 +2,7 @@ package io.jenkins.plugins.model;
 
 import io.jenkins.plugins.DingTalkRobotConfig;
 import io.jenkins.plugins.DingTalkSecurityPolicyConfig;
-import io.jenkins.plugins.enums.SecurityPolicyType;
+import io.jenkins.plugins.enums.SecurityPolicyEnum;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -12,7 +12,6 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import lombok.Builder;
 import lombok.Data;
 import lombok.extern.log4j.Log4j;
 import org.apache.commons.codec.binary.Base64;
@@ -20,12 +19,11 @@ import org.apache.commons.codec.binary.Base64;
 /**
  * @author liuwei
  * @date 2019/12/23 14:08
- * @desc 安全策略元信息
+ * @desc 机器人配置信息
  */
 @Data
-@Builder
 @Log4j
-public class RobotConfigMeta {
+public class RobotConfigModel {
 
   /**
    * 关键字
@@ -38,9 +36,27 @@ public class RobotConfigMeta {
   private Set<String> ips;
 
   /**
+   * 签名
+   */
+  private String sign;
+
+  /**
+   * api 接口
+   */
+  private String webhook;
+
+  /**
    * 请求地址
    */
   private String server;
+
+
+  public String getServer() {
+    long timestamp = System.currentTimeMillis();
+    return webhook +
+        "&timestamp=" + timestamp +
+        "&sign=" + RobotConfigModel.createSign(timestamp, sign);
+  }
 
   /**
    * 签名方法
@@ -67,39 +83,33 @@ public class RobotConfigMeta {
    * @param robotConfig 配置
    * @return RobotConfigMeta
    */
-  public static RobotConfigMeta of(DingTalkRobotConfig robotConfig) {
+  public static RobotConfigModel of(DingTalkRobotConfig robotConfig) {
     CopyOnWriteArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs = robotConfig
         .getSecurityPolicyConfigs();
-    String webhook = robotConfig.getWebhook();
-    RobotConfigMetaBuilder builder = RobotConfigMeta.builder();
-    builder.server(webhook);
+    RobotConfigModel meta = new RobotConfigModel();
+    meta.setWebhook(robotConfig.getWebhook());
     // 解析安全策略
     securityPolicyConfigs.forEach(config -> {
       if (!config.isChecked()) {
         return;
       }
       String type = config.getType();
-      long timestamp = System.currentTimeMillis();
-      SecurityPolicyType securityPolicyType = SecurityPolicyType.valueOf(type);
-      switch (securityPolicyType) {
+      SecurityPolicyEnum securityPolicyEnum = SecurityPolicyEnum.valueOf(type);
+      switch (securityPolicyEnum) {
         case KEY:
-          builder.keys(config.getValue());
+          meta.setKeys(config.getValue());
           break;
         case SECRET:
-          builder.server(
-              webhook +
-                  "&timestamp=" + timestamp +
-                  "&sign=" + RobotConfigMeta.createSign(timestamp, config.getValue())
-          );
+          meta.setSign(config.getValue());
           break;
         case IP:
-          builder.ips(config.getValues());
+          meta.setIps(config.getValues());
           break;
         default:
           log.error("对应的安全策略不存在：" + type);
       }
     });
-    return builder.build();
+    return meta;
   }
 
 }

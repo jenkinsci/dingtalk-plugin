@@ -1,17 +1,17 @@
 package io.jenkins.plugins;
 
-import hudson.util.Secret;
-import io.jenkins.plugins.DingTalkSecurityPolicyConfig.DingTalkSecurityPolicyConfigDescriptor;
-import io.jenkins.plugins.enums.BuildStatusType;
-import io.jenkins.plugins.enums.SecurityPolicyType;
-import io.jenkins.plugins.model.BuildMessage;
-import io.jenkins.plugins.tools.DingTalkSender;
 import hudson.Extension;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
 import hudson.model.User;
 import hudson.util.FormValidation;
 import hudson.util.FormValidation.Kind;
+import hudson.util.Secret;
+import io.jenkins.plugins.DingTalkSecurityPolicyConfig.DingTalkSecurityPolicyConfigDescriptor;
+import io.jenkins.plugins.enums.BuildStatusEnum;
+import io.jenkins.plugins.enums.SecurityPolicyEnum;
+import io.jenkins.plugins.model.BuildJobModel;
+import io.jenkins.plugins.tools.DingTalkSender;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.UUID;
@@ -20,13 +20,13 @@ import java.util.stream.Collectors;
 import jenkins.model.Jenkins;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 
 /**
@@ -35,6 +35,7 @@ import org.kohsuke.stapler.QueryParameter;
  * @desc 机器人配置页面
  */
 @Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @SuppressWarnings("unused")
@@ -66,34 +67,11 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
     this.securityPolicyConfigs = securityPolicyConfigs;
   }
 
-  @DataBoundSetter
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  @DataBoundSetter
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  @DataBoundSetter
-  public void setWebhook(String webhook) {
-    this.webhook = Secret.fromString(webhook);
-  }
-
-  /**
-   * 获取原始 webhook
-   *
-   * @return webhook
-   */
   public String getWebhook() {
+    if (webhook == null) {
+      return null;
+    }
     return webhook.getPlainText();
-  }
-
-  @DataBoundSetter
-  public void setSecurityPolicyConfigs(
-      CopyOnWriteArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs) {
-    this.securityPolicyConfigs = securityPolicyConfigs;
   }
 
   @Override
@@ -130,7 +108,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
      */
     public CopyOnWriteArrayList<DingTalkSecurityPolicyConfig> getDefaultSecurityPolicyConfigs() {
       return Arrays
-          .stream(SecurityPolicyType.values()).map(DingTalkSecurityPolicyConfig::of)
+          .stream(SecurityPolicyEnum.values()).map(DingTalkSecurityPolicyConfig::of)
           .collect(Collectors.toCollection(CopyOnWriteArrayList::new));
     }
 
@@ -142,7 +120,9 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
      */
     public FormValidation doCheckName(@QueryParameter String value) {
       if (StringUtils.isBlank(value)) {
-        return FormValidation.error(Messages.RobotConfigFormValidation_name());
+        return FormValidation.error(
+            Messages.RobotConfigFormValidation_name()
+        );
       }
       return FormValidation.ok();
     }
@@ -155,7 +135,9 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
      */
     public FormValidation doCheckWebhook(@QueryParameter String value) {
       if (StringUtils.isBlank(value)) {
-        return FormValidation.error(Messages.RobotConfigFormValidation_webhook());
+        return FormValidation.error(
+            Messages.RobotConfigFormValidation_webhook()
+        );
       }
       return FormValidation.ok();
     }
@@ -180,7 +162,6 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
       JSONArray array = (JSONArray) JSONSerializer.toJSON(securityPolicyConfigStr);
       for (Object item : array) {
         JSONObject json = (JSONObject) item;
-        System.out.println(json.toString());
         securityPolicyConfigs.add(
             new DingTalkSecurityPolicyConfig(
                 (Boolean) json.get("checked"),
@@ -204,18 +185,17 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
         user = User.getUnknown();
       }
       String message = sender.send(
-          BuildMessage
+          BuildJobModel
               .builder()
               .projectName("欢迎使用钉钉机器人插件~")
               .projectUrl(rootUrl)
               .jobName("系统配置")
               .jobUrl(rootUrl + "/configure")
-              .statusType(BuildStatusType.SUCCESS)
+              .statusType(BuildStatusEnum.SUCCESS)
               .duration("-")
               .executorName(user.getDisplayName())
-              .executorPhone(user.getDescription())
+              .executorMobile(user.getDescription())
               .datetime(formatter.format(System.currentTimeMillis()))
-              .detailUrl(rootUrl + "/configure")
               .build()
       );
       if (message == null) {

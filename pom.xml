@@ -87,6 +87,10 @@
       <artifactId>structs</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.dingtalk.open</groupId>
       <artifactId>taobao-sdk-java-auto</artifactId>
       <version>1.0</version>

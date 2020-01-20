@@ -3,11 +3,12 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
   xmlns:t="/lib/hudson" xmlns:f="/lib/form">
   <st:once>
-    <script type="text/javascript" src="${rootURL}/plugin/dingding-notifications/scripts/customValidate.js"/>
+    <script type="text/javascript"
+      src="${rootURL}/plugin/dingding-notifications/scripts/customValidate.js"/>
   </st:once>
 
   <f:entry title="${%id}" field="id">
-    <f:readOnlyTextbox field="id" default="${descriptor.getDefaultId()}"/>
+    <f:readOnlyTextbox default="${descriptor.getDefaultId()}"/>
   </f:entry>
   <f:entry title="${%name}" field="name">
     <f:textbox/>
@@ -17,7 +18,7 @@
     <f:textbox/>
   </f:entry>
 
-  <f:entry title="${%securityPolicy}" field="securityPolicy" />
+  <f:entry title="${%securityPolicy}" field="securityPolicy"/>
   <f:entry>
     <j:scope>
       <j:set var="securityPolicyConfigDescriptor"
@@ -33,7 +34,7 @@
           items="${securityPolicyConfigs}">
           <table width="100%">
             <j:scope>
-              <j:set var="descriptor" value="${securityPolicyConfigDescriptor}" />
+              <j:set var="descriptor" value="${securityPolicyConfigDescriptor}"/>
               <st:include page="config.jelly" class="${descriptor.clazz}"/>
             </j:scope>
           </table>
