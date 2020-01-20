@@ -3,34 +3,31 @@ package io.jenkins.plugins;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
-import hudson.tasks.BuildStepDescriptor;
+import hudson.model.Job;
+import hudson.model.JobProperty;
+import hudson.model.JobPropertyDescriptor;
 import hudson.tasks.BuildStepMonitor;
-import hudson.tasks.Notifier;
-import hudson.tasks.Publisher;
 import io.jenkins.plugins.DingTalkNotifierConfig.DingTalkNotifierConfigDescriptor;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
-import javax.annotation.Nonnull;
 import jenkins.model.Jenkins;
 import lombok.ToString;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 /**
  * @author liuwei
- * @date 2019/12/19 09:40
- * @desc 钉钉机器人通知
+ * @date 2020/1/20 16:56
+ * @desc 任务配置页面添加钉钉配置
  */
 @ToString
-@SuppressWarnings("unused")
-public class DingTalkNotifier extends Notifier {
+public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
 
   private CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigs;
 
   /**
-   * 需要跟 `全局配置` 同步机器人信息
+   * 在配置页面展示的列表，需要跟 `全局配置` 同步机器人信息
    *
    * @return CopyOnWriteArrayList<DingTalkNotifierConfig>
    */
@@ -58,6 +55,11 @@ public class DingTalkNotifier extends Notifier {
     return notifierConfigsList;
   }
 
+  /**
+   * 获取用户设置的通知配置
+   *
+   * @return List<DingTalkNotifierConfig>
+   */
   public List<DingTalkNotifierConfig> getCheckedNotifierConfigs() {
     CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigs = this.getNotifierConfigs();
 
@@ -67,7 +69,7 @@ public class DingTalkNotifier extends Notifier {
   }
 
   @DataBoundConstructor
-  public DingTalkNotifier(
+  public DingTalkJobProperty(
       CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigs) {
     this.notifierConfigs = notifierConfigs;
   }
@@ -82,25 +84,17 @@ public class DingTalkNotifier extends Notifier {
     return true;
   }
 
-
   @Override
-  public DingTalkNotifierDescriptor getDescriptor() {
-    return (DingTalkNotifierDescriptor) super.getDescriptor();
+  public JobPropertyDescriptor getDescriptor() {
+    return super.getDescriptor();
   }
 
-
-  @Extension
-  public static class DingTalkNotifierDescriptor extends BuildStepDescriptor<Publisher> {
+  @Extension(ordinal = -1)
+  public static class DingTalkJobPropertyDescriptor extends JobPropertyDescriptor {
 
     @Override
-    public boolean isApplicable(Class<? extends AbstractProject> aClass) {
+    public boolean isApplicable(Class<? extends Job> jobType) {
       return true;
-    }
-
-    @Nonnull
-    @Override
-    public String getDisplayName() {
-      return Messages.displayName();
     }
 
     /**
@@ -120,6 +114,5 @@ public class DingTalkNotifier extends Notifier {
           .map(DingTalkNotifierConfig::new)
           .collect(Collectors.toList());
     }
-
   }
 }

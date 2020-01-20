@@ -48,7 +48,7 @@ public enum BuildStatusEnum {
   /**
    * TODO: 可配置
    */
-  private static final String IMAGE_SERVER = "http://q346bl12y.bkt.clouddn.com/";
+  private static final String IMAGE_SERVER = "http://qiniu.liuweigl.cn/";
 
 
   BuildStatusEnum(String icon, String label) {

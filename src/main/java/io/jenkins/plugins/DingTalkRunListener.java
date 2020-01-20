@@ -1,13 +1,12 @@
 package io.jenkins.plugins;
 
 import hudson.Extension;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
 import hudson.model.Cause.UserIdCause;
+import hudson.model.Job;
 import hudson.model.Result;
+import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.model.listeners.RunListener;
-import hudson.tasks.Publisher;
 import io.jenkins.plugins.enums.BuildStatusEnum;
 import io.jenkins.plugins.enums.NoticeOccasionEnum;
 import io.jenkins.plugins.model.BuildJobModel;
@@ -22,11 +21,11 @@ import jenkins.model.Jenkins;
 /**
  * @author liuwei
  * @date 2019/12/28 15:31
- * @desc freeStyle 项目构建
+ * @desc freeStyle project、matrix project 触发
  */
+
 @Extension
-@SuppressWarnings("unused")
-public class DingTalkRunListener extends RunListener<AbstractBuild<?, ?>> {
+public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
   private DingTalkServiceImpl service = new DingTalkServiceImpl();
 
@@ -34,66 +33,60 @@ public class DingTalkRunListener extends RunListener<AbstractBuild<?, ?>> {
 
   private final String rootPath = Jenkins.get().getRootUrl();
 
-  public void send(AbstractBuild<?, ?> build, TaskListener listener, BuildStatusEnum statusType) {
-    AbstractProject<?, ?> project = build.getProject();
-    UserIdCause user = build.getCause(UserIdCause.class);
+  public void send(Run<?, ?> run, TaskListener listener, BuildStatusEnum statusType) {
+    Job<?, ?> job = run.getParent();
+    UserIdCause user = run.getCause(UserIdCause.class);
 
     if (user == null) {
       user = new UserIdCause();
     }
 
     // 项目信息
-    String projectName = project.getFullDisplayName();
-    String projectUrl = project.getAbsoluteUrl();
+    String projectName = job.getFullDisplayName();
+    String projectUrl = job.getAbsoluteUrl();
 
     // 构建信息
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-    String jobName = build.getDisplayName();
-    String jobUrl = rootPath + build.getUrl();
-    String duration = build.getDurationString();
+    String jobName = run.getDisplayName();
+    String jobUrl = rootPath + run.getUrl();
+    String duration = run.getDurationString();
     String executorName = user.getUserName();
     String executorPhone = user.getShortDescription();
-    String datetime = formatter.format(build.getTimestamp().getTime());
+    String datetime = formatter.format(run.getTimestamp().getTime());
     String changeLog = jobUrl + "/changes";
     String console = jobUrl + "/console";
 
     List<String> result = new ArrayList<>();
-
-    for (Publisher publisher : project.getPublishersList()) {
-      if (publisher instanceof DingTalkNotifier) {
-        DingTalkNotifier notifier = (DingTalkNotifier) publisher;
-        List<DingTalkNotifierConfig> notifierConfigs = notifier.getCheckedNotifierConfigs();
-        notifierConfigs.forEach(notifierConfig -> {
-          String robotId = notifierConfig.getRobotId();
-          Set<String> atMobiles = notifierConfig.getAtMobiles();
-          BuildJobModel buildJobModel = BuildJobModel.builder()
-              .projectName(projectName)
-              .projectUrl(projectUrl)
-              .jobName(jobName)
-              .jobUrl(jobUrl)
-              .statusType(statusType)
-              .duration(duration)
-              .datetime(datetime)
-              .executorName(executorName)
-              .executorMobile(executorPhone)
-              .atMobiles(atMobiles)
-              .changeLog(changeLog)
-              .console(console)
-              .build();
-          String msg = service.send(robotId, buildJobModel);
-          if (msg != null) {
-            result.add(msg);
-          }
-        });
-        if (listener != null && !result.isEmpty()) {
-          result.forEach(msg -> listener.error("钉钉机器人消息发送失败：%s", msg));
-        }
+    DingTalkJobProperty property = job.getProperty(DingTalkJobProperty.class);
+    property.getCheckedNotifierConfigs().forEach(notifierConfig -> {
+      String robotId = notifierConfig.getRobotId();
+      Set<String> atMobiles = notifierConfig.getAtMobiles();
+      BuildJobModel buildJobModel = BuildJobModel.builder()
+          .projectName(projectName)
+          .projectUrl(projectUrl)
+          .jobName(jobName)
+          .jobUrl(jobUrl)
+          .statusType(statusType)
+          .duration(duration)
+          .datetime(datetime)
+          .executorName(executorName)
+          .executorMobile(executorPhone)
+          .atMobiles(atMobiles)
+          .changeLog(changeLog)
+          .console(console)
+          .build();
+      String msg = service.send(robotId, buildJobModel);
+      if (msg != null) {
+        result.add(msg);
       }
+    });
+    if (listener != null && !result.isEmpty()) {
+      result.forEach(msg -> listener.error("钉钉机器人消息发送失败：%s", msg));
     }
   }
 
   @Override
-  public void onStarted(AbstractBuild<?, ?> build, TaskListener listener) {
+  public void onStarted(Run<?, ?> build, TaskListener listener) {
     if (
         globalConfig.getNoticeOccasions().contains(
             NoticeOccasionEnum.START.name()
@@ -104,7 +97,7 @@ public class DingTalkRunListener extends RunListener<AbstractBuild<?, ?>> {
   }
 
   @Override
-  public void onCompleted(AbstractBuild<?, ?> build, @Nonnull TaskListener listener) {
+  public void onCompleted(Run<?, ?> build, @Nonnull TaskListener listener) {
     BuildStatusEnum statusType = null;
     Set<String> noticeOccasions = globalConfig.getNoticeOccasions();
     Result result = build.getResult();

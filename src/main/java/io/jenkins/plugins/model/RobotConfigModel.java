@@ -15,6 +15,7 @@ import javax.crypto.spec.SecretKeySpec;
 import lombok.Data;
 import lombok.extern.log4j.Log4j;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * @author liuwei
@@ -52,6 +53,9 @@ public class RobotConfigModel {
 
 
   public String getServer() {
+    if (StringUtils.isEmpty(sign)) {
+      return webhook;
+    }
     long timestamp = System.currentTimeMillis();
     return webhook +
         "&timestamp=" + timestamp +
