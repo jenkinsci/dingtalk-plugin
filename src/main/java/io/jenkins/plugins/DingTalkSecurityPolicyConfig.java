@@ -15,9 +15,10 @@ import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 /**
+ * 安全策略配置页面
+ *
  * @author liuwei
  * @date 2019/12/25 17:09
- * @desc 安全策略配置页面
  */
 @Getter
 @ToString

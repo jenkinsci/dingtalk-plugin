@@ -4,9 +4,10 @@ import io.jenkins.plugins.Messages;
 import lombok.Getter;
 
 /**
+ * 通知时机
+ *
  * @author liuwei
  * @date 2019/12/19 11:28
- * @desc 通知时机
  */
 public enum NoticeOccasionEnum {
   /**

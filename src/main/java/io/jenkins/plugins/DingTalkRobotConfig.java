@@ -30,9 +30,10 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
 /**
+ * 机器人配置页面
+ *
  * @author liuwei
  * @date 2019/12/25 17:09
- * @desc 机器人配置页面
  */
 @Getter
 @Setter

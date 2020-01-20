@@ -3,26 +3,28 @@ package io.jenkins.plugins;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
 import hudson.model.Job;
 import hudson.model.JobProperty;
 import hudson.model.JobPropertyDescriptor;
-import hudson.tasks.BuildStepMonitor;
 import io.jenkins.plugins.DingTalkNotifierConfig.DingTalkNotifierConfigDescriptor;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
+import jenkins.YesNoMaybe;
 import jenkins.model.Jenkins;
 import lombok.ToString;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 /**
+ * 任务配置页面添加钉钉配置
+ *
  * @author liuwei
  * @date 2020/1/20 16:56
- * @desc 任务配置页面添加钉钉配置
  */
 @ToString
-public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
+public class DingTalkJobProperty extends JobProperty<Job<?,?>> {
 
   private CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigs;
 
@@ -75,21 +77,11 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
   }
 
   @Override
-  public BuildStepMonitor getRequiredMonitorService() {
-    return BuildStepMonitor.NONE;
-  }
-
-  @Override
   public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) {
     return true;
   }
 
-  @Override
-  public JobPropertyDescriptor getDescriptor() {
-    return super.getDescriptor();
-  }
-
-  @Extension(ordinal = -1)
+  @Extension(ordinal = -99999)
   public static class DingTalkJobPropertyDescriptor extends JobPropertyDescriptor {
 
     @Override

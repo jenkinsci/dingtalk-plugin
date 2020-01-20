@@ -11,9 +11,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
+ * service
+ *
  * @author liuwei
  * @date 2019/12/26 10:45
- * @desc service
  */
 public class DingTalkServiceImpl implements DingTalkService {
 

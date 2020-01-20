@@ -16,7 +16,7 @@
   <packaging>hpi</packaging>
   <properties>
     <!--    除了 jdk 版本，其他的在 org.jenkins-ci.plugins.plugin 中都定义了   -->
-    <jenkins.version>2.176.3</jenkins.version>
+    <jenkins.version>2.176.4</jenkins.version>
     <java.level>8</java.level>
     <hpi.compatibleSinceVersion>2.0.0</hpi.compatibleSinceVersion>
     <!-- Other properties you may want to use:
@@ -82,14 +82,6 @@
   </dependencyManagement>
 
   <dependencies>
-    <dependency>
-      <groupId>org.jenkins-ci.plugins</groupId>
-      <artifactId>structs</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jenkins-ci.plugins.workflow</groupId>
-      <artifactId>workflow-job</artifactId>
-    </dependency>
     <dependency>
       <groupId>com.dingtalk.open</groupId>
       <artifactId>taobao-sdk-java-auto</artifactId>

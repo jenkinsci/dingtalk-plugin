@@ -14,9 +14,10 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 /**
+ * 消息发送器
+ *
  * @author liuwei
  * @date 2019/12/26 10:07
- * @desc 消息发送器
  */
 public class DingTalkSender {
 

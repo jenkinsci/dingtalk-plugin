@@ -6,6 +6,7 @@ import hudson.model.Job;
 import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
+import hudson.model.User;
 import hudson.model.listeners.RunListener;
 import io.jenkins.plugins.enums.BuildStatusEnum;
 import io.jenkins.plugins.enums.NoticeOccasionEnum;
@@ -19,9 +20,10 @@ import javax.annotation.Nonnull;
 import jenkins.model.Jenkins;
 
 /**
+ * 监听 job 任务，使用钉钉机器人发送消息
+ *
  * @author liuwei
  * @date 2019/12/28 15:31
- * @desc freeStyle project、matrix project 触发
  */
 
 @Extension
@@ -35,10 +37,10 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
   public void send(Run<?, ?> run, TaskListener listener, BuildStatusEnum statusType) {
     Job<?, ?> job = run.getParent();
-    UserIdCause user = run.getCause(UserIdCause.class);
+    User user = User.current();
 
     if (user == null) {
-      user = new UserIdCause();
+      user = User.getUnknown();
     }
 
     // 项目信息
@@ -50,8 +52,8 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     String jobName = run.getDisplayName();
     String jobUrl = rootPath + run.getUrl();
     String duration = run.getDurationString();
-    String executorName = user.getUserName();
-    String executorPhone = user.getShortDescription();
+    String executorName = user.getDisplayName();
+    String executorPhone = user.getProperty(DingTalkUserProperty.class).getMobile();
     String datetime = formatter.format(run.getTimestamp().getTime());
     String changeLog = jobUrl + "/changes";
     String console = jobUrl + "/console";
