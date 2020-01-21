@@ -71,13 +71,12 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <!-- Pick up common dependencies for 2.164.x: https://github.com/jenkinsci/bom#usage -->
         <groupId>io.jenkins.tools.bom</groupId>
-        <artifactId>bom-2.164.x</artifactId>
-        <version>3</version>
-        <scope>import</scope>
+        <artifactId>bom-2.176.x</artifactId>
+        <version>5</version>
         <type>pom</type>
       </dependency>
+
     </dependencies>
   </dependencyManagement>
 

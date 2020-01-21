@@ -14,6 +14,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import jenkins.YesNoMaybe;
 import jenkins.model.Jenkins;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.kohsuke.stapler.DataBoundConstructor;
 
@@ -24,7 +25,8 @@ import org.kohsuke.stapler.DataBoundConstructor;
  * @date 2020/1/20 16:56
  */
 @ToString
-public class DingTalkJobProperty extends JobProperty<Job<?,?>> {
+@NoArgsConstructor
+public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
 
   private CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigs;
 
@@ -81,7 +83,7 @@ public class DingTalkJobProperty extends JobProperty<Job<?,?>> {
     return true;
   }
 
-  @Extension(ordinal = -99999)
+  @Extension
   public static class DingTalkJobPropertyDescriptor extends JobPropertyDescriptor {
 
     @Override
