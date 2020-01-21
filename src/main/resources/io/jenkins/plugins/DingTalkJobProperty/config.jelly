@@ -1,0 +1,39 @@
+<?jelly escape-by-default='true'?>
+<j:jelly
+  xmlns:j="jelly:core"
+  xmlns:st="jelly:stapler"
+  xmlns:d="jelly:define"
+  xmlns:l="/lib/layout"
+  xmlns:t="/lib/hudson"
+  xmlns:f="/lib/form">
+  <j:set var="notifierConfigDescriptor"
+    value="${descriptor.getDingTalkNotifierConfigDescriptor()}"/>
+  <j:set var="notifierConfigs"
+    value="${instance == null ? descriptor.getDefaultNotifierConfigs() : instance.getNotifierConfigs()}"/>
+
+  <f:entry title="${%sectionTitle}">
+    <f:nested>
+      <table width="100%">
+        <tr>
+          <td class="setting-name">${%robotTitle}</td>
+          <td class="setting-main">
+            <f:repeatable
+              header=""
+              name="notifierConfigs"
+              noAddButton="true"
+              var="instance"
+              items="${notifierConfigs}">
+              <table width="100%">
+                <j:scope>
+                  <j:set var="descriptor" value="${notifierConfigDescriptor}"/>
+                  <st:include page="config.jelly" class="${descriptor.clazz}"/>
+                </j:scope>
+              </table>
+            </f:repeatable>
+          </td>
+        </tr>
+      </table>
+    </f:nested>
+  </f:entry>
+
+</j:jelly>

@@ -1,7 +1,4 @@
 <?jelly escape-by-default='true'?>
-<!--
-  This view is used to render the installed plugins page.
--->
 <div>
-  钉钉Jenkins通知器
+  Use DingTalk robot to send notifications when projects are built.
 </div>
