@@ -62,7 +62,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
   @DataBoundConstructor
   public DingTalkRobotConfig(String id, String name, String webhook,
       CopyOnWriteArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs) {
-    this.id = id;
+    this.id = StringUtils.isEmpty(id) ? UUID.randomUUID().toString() : id;
     this.name = name;
     this.webhook = Secret.fromString(webhook);
     this.securityPolicyConfigs = securityPolicyConfigs;
@@ -91,15 +91,6 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
      */
     public DingTalkSecurityPolicyConfigDescriptor getDingTalkSecurityPolicyConfigDescriptor() {
       return Jenkins.get().getDescriptorByType(DingTalkSecurityPolicyConfigDescriptor.class);
-    }
-
-    /**
-     * 默认 id
-     *
-     * @return String
-     */
-    public String getDefaultId() {
-      return UUID.randomUUID().toString();
     }
 
     /**

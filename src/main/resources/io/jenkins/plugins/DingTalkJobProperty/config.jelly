@@ -11,19 +11,29 @@
   <j:set var="notifierConfigs"
     value="${instance == null ? descriptor.getDefaultNotifierConfigs() : instance.getNotifierConfigs()}"/>
 
-  <f:entry title="${%robotTitle}">
-    <f:repeatable
-      header=""
-      name="notifierConfigs"
-      noAddButton="true"
-      var="instance"
-      items="${notifierConfigs}">
+  <f:entry title="${%sectionTitle}">
+    <f:nested>
       <table width="100%">
-        <j:scope>
-          <j:set var="descriptor" value="${notifierConfigDescriptor}"/>
-          <st:include page="config.jelly" class="${descriptor.clazz}"/>
-        </j:scope>
+        <tr>
+          <td class="setting-name">${%robotTitle}</td>
+          <td class="setting-main">
+            <f:repeatable
+              header=""
+              name="notifierConfigs"
+              noAddButton="true"
+              var="instance"
+              items="${notifierConfigs}">
+              <table width="100%">
+                <j:scope>
+                  <j:set var="descriptor" value="${notifierConfigDescriptor}"/>
+                  <st:include page="config.jelly" class="${descriptor.clazz}"/>
+                </j:scope>
+              </table>
+            </f:repeatable>
+          </td>
+        </tr>
       </table>
-    </f:repeatable>
+    </f:nested>
   </f:entry>
+
 </j:jelly>

@@ -7,8 +7,8 @@
       src="${rootURL}/plugin/dingding-notifications/scripts/customValidate.js"/>
   </st:once>
 
-  <f:entry title="${%id}" field="id">
-    <f:readOnlyTextbox default="${descriptor.getDefaultId()}"/>
+  <f:entry title="${%id}" field="id" description="${%idDesc}">
+    <f:readOnlyTextbox />
   </f:entry>
   <f:entry title="${%name}" field="name">
     <f:textbox/>
