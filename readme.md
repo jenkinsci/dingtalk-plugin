@@ -1,5 +1,4 @@
-DingTalk 机器人通知
-====================
+# DingTalk 机器人通知
 
 [![Jenkins Plugin](https://img.shields.io/jenkins/plugin/v/dingding-notifications.svg)](https://plugins.jenkins.io/dingding-notifications)
 [![GitHub release](https://img.shields.io/github/release/jenkinsci/dingding-notifications.svg?label=version)](https://github.com/jenkinsci/dingding-notifications-plugin/releases/latest)
@@ -7,24 +6,19 @@ DingTalk 机器人通知
 
 ## 使用
 
-1. 在 `系统管理` > `系统设置` > `钉钉机器人配置` 中选择 **通知时机** 并添加机器人信息。
-2. 在任务配置中选择需要触发的机器人。
-
-> 目前仅支持在 `freeStyle` 项目中使用。
-
-## 相关截图
-
+1. 在 `系统管理` > `系统设置` > `钉钉配置` 中添加机器人
 ![全局配置](doc/images/globalConfig.png)
-
-![项目配置](doc/images/projectConfig.png)
-
-## 注意
-
-经测试，钉钉机器人的安全策略配置的选项属于`与` 关系，即如果勾选了多个策略，则需要同时满足。
+![测试](doc/images/globalConfigTest.png)
+> 经测试，钉钉机器人的安全策略配置的选项属于`与` 关系，即如果勾选了多个策略，则需要同时满足。
 所以，插件的配置最好与钉钉机器人上保持一致。
 
-## TODO
+2. 在项目配置页面中勾选机器人
+![项目配置](doc/images/projectConfig.png)
+![测试](doc/images/projectBuildTest.png)
 
-1. 控制台日志输出
-2. 推送信息添加 git changelog
-3. 插件开发的一些总结
+## 特性
+理论上支持所有类型的项目，并且不需要特别的设置。
+
+## TODO
+1. 扩展钉钉消息类型
+2. 支持脚本调用
