@@ -22,3 +22,6 @@
 ## TODO
 1. 扩展钉钉消息类型
 2. 支持脚本调用
+
+## Contributing
+请参考 [Contributing](./CONTRIBUTING.md)
