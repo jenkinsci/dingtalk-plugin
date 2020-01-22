@@ -1,7 +1,7 @@
 # DingTalk 机器人通知
 
 [![Jenkins Plugin](https://img.shields.io/jenkins/plugin/v/dingding-notifications.svg)](https://plugins.jenkins.io/dingding-notifications)
-[![GitHub release](https://img.shields.io/github/release/jenkinsci/dingding-notifications.svg?label=version)](https://github.com/jenkinsci/dingding-notifications-plugin/releases/latest)
+[![GitHub release](https://img.shields.io/github/release/jenkinsci/dingding-notifications-plugin.svg?label=release)](https://github.com/jenkinsci/dingding-notifications-plugin/releases/latest)
 [![Jenkins Plugin Installs](https://img.shields.io/jenkins/plugin/i/dingding-notifications.svg?color=green)](https://plugins.jenkins.io/dingding-notifications)
 
 ## 使用
