@@ -36,7 +36,11 @@ public class DingTalkSender {
 
   public DingTalkSender(DingTalkRobotConfig robot) {
     RobotConfigModel robotConfigModel = RobotConfigModel.of(robot);
-    this.title = "Jenkins 通知：" + robotConfigModel.getKeys();
+    String keys = robotConfigModel.getKeys();
+    this.title = "Jenkins 构建通知";
+    if (keys != null) {
+      this.title += "关键字：" + keys;
+    }
     this.client = new DefaultDingTalkClient(robotConfigModel.getServer());
   }
 
