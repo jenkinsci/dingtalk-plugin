@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 
-
 @Data
 @Builder
 public class BuildJobModel {
@@ -98,9 +97,7 @@ public class BuildJobModel {
 
         + (
         atMobiles != null && !atMobiles.isEmpty()
-            ? "---" +
-            "\n" +
-            "@" + StringUtils.join(atMobiles, "@ ")
+            ? "- 通知人：" + "@" + StringUtils.join(atMobiles, "@ ") + "\n"
             : ""
     );
   }
