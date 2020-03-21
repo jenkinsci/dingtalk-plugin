@@ -26,28 +26,26 @@ public class DingTalkSender {
    */
   public static final String MSG_TYPE = "actionCard";
 
+  private RobotConfigModel robotConfigModel;
+
   /**
    * 在标题里包含关键字验证
    */
   private String title;
 
-  private TaobaoClient client;
-
-
   public DingTalkSender(DingTalkRobotConfig robot) {
-    RobotConfigModel robotConfigModel = RobotConfigModel.of(robot);
+    this.robotConfigModel = RobotConfigModel.of(robot);
     String keys = robotConfigModel.getKeys();
     this.title = "Jenkins 构建通知";
     if (keys != null) {
       this.title += "关键字：" + keys;
     }
-    this.client = new DefaultDingTalkClient(robotConfigModel.getServer());
   }
 
 
   public String send(BuildJobModel buildJobModel) {
 
-    List<Btns> btnsList = new ArrayList<>();
+    List<Btns> btnList = new ArrayList<>();
     String changeLog = buildJobModel.getChangeLog();
     String console = buildJobModel.getConsole();
 
@@ -55,21 +53,21 @@ public class DingTalkSender {
       Btns changeLogBtn = new Btns();
       changeLogBtn.setTitle("更改记录");
       changeLogBtn.setActionURL(changeLog);
-      btnsList.add(changeLogBtn);
+      btnList.add(changeLogBtn);
     }
 
     if (!StringUtils.isEmpty(console)) {
       Btns consoleBtn = new Btns();
       consoleBtn.setTitle("控制台");
       consoleBtn.setActionURL(console);
-      btnsList.add(consoleBtn);
+      btnList.add(consoleBtn);
     }
 
     OapiRobotSendRequest.Actioncard actionCard = new OapiRobotSendRequest.Actioncard();
-    actionCard.setTitle(this.title);
+    actionCard.setTitle(title);
     actionCard.setText(buildJobModel.getText());
     actionCard.setBtnOrientation("1");
-    actionCard.setBtns(btnsList);
+    actionCard.setBtns(btnList);
 
     OapiRobotSendRequest request = new OapiRobotSendRequest();
     request.setMsgtype(MSG_TYPE);
@@ -77,7 +75,8 @@ public class DingTalkSender {
     request.setAt(buildJobModel.getAt());
 
     try {
-      OapiRobotSendResponse response = this.client.execute(request);
+      OapiRobotSendResponse response = new DefaultDingTalkClient(robotConfigModel.getServer())
+          .execute(request);
       if (!response.isSuccess()) {
         return response.getErrmsg();
       }
