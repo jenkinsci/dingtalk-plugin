@@ -6,10 +6,10 @@ import hudson.model.Job;
 import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
-import hudson.model.User;
 import hudson.model.listeners.RunListener;
 import io.jenkins.plugins.enums.BuildStatusEnum;
 import io.jenkins.plugins.enums.NoticeOccasionEnum;
+import io.jenkins.plugins.model.ActionCardMsg;
 import io.jenkins.plugins.model.BuildJobModel;
 import io.jenkins.plugins.service.impl.DingTalkServiceImpl;
 import java.text.SimpleDateFormat;
@@ -20,12 +20,10 @@ import javax.annotation.Nonnull;
 import jenkins.model.Jenkins;
 
 /**
- * 监听 job 任务，使用钉钉机器人发送消息
- *
  * @author liuwei
  * @date 2019/12/28 15:31
+ * @desc freeStyle project、matrix project 触发
  */
-
 @Extension
 public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
@@ -37,10 +35,10 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
   public void send(Run<?, ?> run, TaskListener listener, BuildStatusEnum statusType) {
     Job<?, ?> job = run.getParent();
-    User user = User.current();
+    UserIdCause user = run.getCause(UserIdCause.class);
 
     if (user == null) {
-      user = User.getUnknown();
+      user = new UserIdCause();
     }
 
     // 项目信息
@@ -52,8 +50,8 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     String jobName = run.getDisplayName();
     String jobUrl = rootPath + run.getUrl();
     String duration = run.getDurationString();
-    String executorName = user.getDisplayName();
-    String executorPhone = user.getProperty(DingTalkUserProperty.class).getMobile();
+    String executorName = user.getUserName();
+    String executorPhone = user.getShortDescription();
     String datetime = formatter.format(run.getTimestamp().getTime());
     String changeLog = jobUrl + "/changes";
     String console = jobUrl + "/console";
@@ -63,7 +61,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     property.getCheckedNotifierConfigs().forEach(notifierConfig -> {
       String robotId = notifierConfig.getRobotId();
       Set<String> atMobiles = notifierConfig.getAtMobiles();
-      BuildJobModel buildJobModel = BuildJobModel.builder()
+      BuildJobModel model = BuildJobModel.builder()
           .projectName(projectName)
           .projectUrl(projectUrl)
           .jobName(jobName)
@@ -73,11 +71,14 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
           .datetime(datetime)
           .executorName(executorName)
           .executorMobile(executorPhone)
-          .atMobiles(atMobiles)
+          .build();
+      ActionCardMsg message = ActionCardMsg.builder()
           .changeLog(changeLog)
           .console(console)
+          .atMobiles(atMobiles)
+          .text(model.toMarkdown())
           .build();
-      String msg = service.send(robotId, buildJobModel);
+      String msg = service.send(robotId, message);
       if (msg != null) {
         result.add(msg);
       }

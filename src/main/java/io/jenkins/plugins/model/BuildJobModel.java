@@ -31,27 +31,7 @@ public class BuildJobModel {
 
   private String executorMobile;
 
-  private Set<String> atMobiles;
-
-  private String changeLog;
-
-  private String console;
-
-
-  public At getAt() {
-    At at = new At();
-    List<String> mobiles = new ArrayList<>();
-    if (StringUtils.isEmpty(executorMobile)) {
-      mobiles.add(executorMobile);
-    }
-    if (atMobiles != null && !atMobiles.isEmpty()) {
-      mobiles.addAll(atMobiles);
-    }
-    at.setAtMobiles(mobiles);
-    return at;
-  }
-
-  public String getText() {
+  public String toMarkdown() {
 
     return "# "
         + "["
@@ -94,11 +74,6 @@ public class BuildJobModel {
         StringUtils.isEmpty(this.executorMobile) ? this.executorName : ("@" + this.executorMobile)
     )
         + "\n"
-
-        + (
-        atMobiles != null && !atMobiles.isEmpty()
-            ? "- 通知人：" + "@" + StringUtils.join(atMobiles, "@ ") + "\n"
-            : ""
-    );
+        ;
   }
 }
