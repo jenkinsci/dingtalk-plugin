@@ -3,6 +3,8 @@ package io.jenkins.plugins.model;
 import java.util.Set;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @author liuwei
@@ -10,8 +12,9 @@ import lombok.Data;
  * @desc 链接消息
  */
 @Data
-@Builder
-public class LinkMsg {
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+public class LinkMsg extends BaseMsg{
 
   /**
    * 点击消息跳转的URL

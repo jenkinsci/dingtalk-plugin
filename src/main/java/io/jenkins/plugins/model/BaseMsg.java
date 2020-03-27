@@ -4,6 +4,8 @@ import com.dingtalk.api.request.OapiRobotSendRequest.At;
 import java.util.ArrayList;
 import java.util.Set;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @author liuwei
@@ -11,7 +13,11 @@ import lombok.Data;
  * @desc 消息的通用信息
  */
 @Data
+@SuperBuilder
+@NoArgsConstructor
 public class BaseMsg {
+
+  protected  String type;
 
   private String title;
 
@@ -23,6 +29,7 @@ public class BaseMsg {
 
   public At getAt() {
     At at = new At();
+    at.setIsAtAll(String.valueOf(isAtAll));
     at.setAtMobiles(new ArrayList<>(atMobiles));
     return at;
   }

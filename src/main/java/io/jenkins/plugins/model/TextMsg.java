@@ -3,6 +3,8 @@ package io.jenkins.plugins.model;
 import java.util.Set;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @author liuwei
@@ -11,7 +13,8 @@ import lombok.Data;
  */
 
 @Data
-@Builder
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 public class TextMsg extends BaseMsg{
 
 }

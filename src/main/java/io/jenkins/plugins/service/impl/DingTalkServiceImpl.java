@@ -2,7 +2,8 @@ package io.jenkins.plugins.service.impl;
 
 import io.jenkins.plugins.DingTalkGlobalConfig;
 import io.jenkins.plugins.DingTalkRobotConfig;
-import io.jenkins.plugins.model.BuildJobModel;
+import io.jenkins.plugins.model.BaseMsg;
+import io.jenkins.plugins.model.MarkdownMsg;
 import io.jenkins.plugins.service.DingTalkService;
 import io.jenkins.plugins.tools.DingTalkSender;
 import java.util.Map;
@@ -20,9 +21,7 @@ public class DingTalkServiceImpl implements DingTalkService {
 
   private Map<String, DingTalkSender> senders = new ConcurrentHashMap<>();
 
-
-  @Override
-  public String send(String robotId, BuildJobModel buildJobModel) {
+  private DingTalkSender getSender(String robotId) {
     DingTalkSender sender = senders.get(robotId);
     if (sender == null) {
       DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.getInstance();
@@ -35,8 +34,14 @@ public class DingTalkServiceImpl implements DingTalkService {
         senders.put(robotId, sender);
       }
     }
+    return sender;
+  }
+
+  @Override
+  public String send(String robotId, BaseMsg msg) {
+    DingTalkSender sender = getSender(robotId);
     if (sender != null) {
-      return sender.send(buildJobModel);
+      return sender.send((MarkdownMsg) msg);
     }
     return null;
   }

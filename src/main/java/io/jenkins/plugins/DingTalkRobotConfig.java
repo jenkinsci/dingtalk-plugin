@@ -10,7 +10,8 @@ import hudson.util.Secret;
 import io.jenkins.plugins.DingTalkSecurityPolicyConfig.DingTalkSecurityPolicyConfigDescriptor;
 import io.jenkins.plugins.enums.BuildStatusEnum;
 import io.jenkins.plugins.enums.SecurityPolicyEnum;
-import io.jenkins.plugins.model.BuildJobModel;
+import io.jenkins.plugins.model.BuildJobInfo;
+import io.jenkins.plugins.model.MarkdownMsg;
 import io.jenkins.plugins.tools.DingTalkSender;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -176,19 +177,27 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
       if (user == null) {
         user = User.getUnknown();
       }
+      String text = BuildJobInfo
+          .builder()
+          .projectName("欢迎使用钉钉机器人插件~")
+          .projectUrl(rootUrl)
+          .jobName("系统配置")
+          .jobUrl(rootUrl + "/configure")
+          .statusType(BuildStatusEnum.SUCCESS)
+          .duration("-")
+          .executorName(user.getDisplayName())
+          .executorMobile(user.getDescription())
+          .datetime(formatter.format(System.currentTimeMillis()))
+          .build()
+          .toMarkdown();
+      MarkdownMsg msg = MarkdownMsg
+          .builder()
+          .title("钉钉机器人测试成功")
+          .text(text)
+          .isAtAll(true)
+          .build();
       String message = sender.send(
-          BuildJobModel
-              .builder()
-              .projectName("欢迎使用钉钉机器人插件~")
-              .projectUrl(rootUrl)
-              .jobName("系统配置")
-              .jobUrl(rootUrl + "/configure")
-              .statusType(BuildStatusEnum.SUCCESS)
-              .duration("-")
-              .executorName(user.getDisplayName())
-              .executorMobile(user.getDescription())
-              .datetime(formatter.format(System.currentTimeMillis()))
-              .build()
+          msg
       );
       if (message == null) {
         return FormValidation

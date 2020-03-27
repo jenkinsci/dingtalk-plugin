@@ -4,6 +4,8 @@ import com.dingtalk.api.request.OapiRobotSendRequest.Btns;
 import java.util.List;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @author liuwei
@@ -11,7 +13,8 @@ import lombok.Data;
  * @desc ActionCard 消息
  */
 @Data
-@Builder
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
 public class ActionCardMsg extends BaseMsg {
 
   /**

@@ -115,7 +115,6 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
     String duration = run.getDurationString();
     String changeLog = jobUrl + "/changes";
     String console = jobUrl + "/console";
-    service.send(robot)
     System.out.println(this.toString());
   }
 

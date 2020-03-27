@@ -10,7 +10,7 @@ import hudson.model.listeners.RunListener;
 import io.jenkins.plugins.enums.BuildStatusEnum;
 import io.jenkins.plugins.enums.NoticeOccasionEnum;
 import io.jenkins.plugins.model.ActionCardMsg;
-import io.jenkins.plugins.model.BuildJobModel;
+import io.jenkins.plugins.model.BuildJobInfo;
 import io.jenkins.plugins.service.impl.DingTalkServiceImpl;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     property.getCheckedNotifierConfigs().forEach(notifierConfig -> {
       String robotId = notifierConfig.getRobotId();
       Set<String> atMobiles = notifierConfig.getAtMobiles();
-      BuildJobModel model = BuildJobModel.builder()
+      BuildJobInfo model = BuildJobInfo.builder()
           .projectName(projectName)
           .projectUrl(projectUrl)
           .jobName(jobName)
@@ -73,8 +73,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
           .executorMobile(executorPhone)
           .build();
       ActionCardMsg message = ActionCardMsg.builder()
-          .changeLog(changeLog)
-          .console(console)
+          .title("Jenkins 构建通知")
           .atMobiles(atMobiles)
           .text(model.toMarkdown())
           .build();
