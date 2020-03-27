@@ -1,12 +1,8 @@
 package io.jenkins.plugins;
 
 import hudson.Extension;
+import hudson.model.*;
 import hudson.model.Cause.UserIdCause;
-import hudson.model.Job;
-import hudson.model.Result;
-import hudson.model.Run;
-import hudson.model.TaskListener;
-import hudson.model.User;
 import hudson.model.listeners.RunListener;
 import io.jenkins.plugins.enums.BuildStatusEnum;
 import io.jenkins.plugins.enums.NoticeOccasionEnum;
@@ -46,13 +42,15 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     // 项目信息
     String projectName = job.getFullDisplayName();
     String projectUrl = job.getAbsoluteUrl();
+    UserIdCause cause = job.getLastBuild().getCause(Cause.UserIdCause.class);
 
     // 构建信息
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     String jobName = run.getDisplayName();
     String jobUrl = rootPath + run.getUrl();
     String duration = run.getDurationString();
-    String executorName = user.getDisplayName();
+//    String executorName = user.getDisplayName();
+    String executorName = cause != null ? cause.getUserName() : user.getDisplayName();
     String executorPhone = user.getProperty(DingTalkUserProperty.class).getMobile();
     String datetime = formatter.format(run.getTimestamp().getTime());
     String changeLog = jobUrl + "/changes";
