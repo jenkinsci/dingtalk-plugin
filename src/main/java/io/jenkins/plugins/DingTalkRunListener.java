@@ -8,10 +8,13 @@ import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.model.listeners.RunListener;
 import io.jenkins.plugins.enums.BuildStatusEnum;
+import io.jenkins.plugins.enums.MsgTypeEnum;
 import io.jenkins.plugins.enums.NoticeOccasionEnum;
-import io.jenkins.plugins.model.ActionCardMsg;
-import io.jenkins.plugins.model.BuildJobInfo;
+import io.jenkins.plugins.model.BuildJobModel;
+import io.jenkins.plugins.model.ButtonModel;
+import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.service.impl.DingTalkServiceImpl;
+import io.jenkins.plugins.tools.Utils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,15 +56,14 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     String executorName = user.getUserName();
     String executorPhone = user.getShortDescription();
     String datetime = formatter.format(run.getTimestamp().getTime());
-    String changeLog = jobUrl + "/changes";
-    String console = jobUrl + "/console";
+    List<ButtonModel> btns = Utils.createDefaultBtns(jobUrl);
 
     List<String> result = new ArrayList<>();
     DingTalkJobProperty property = job.getProperty(DingTalkJobProperty.class);
     property.getCheckedNotifierConfigs().forEach(notifierConfig -> {
       String robotId = notifierConfig.getRobotId();
       Set<String> atMobiles = notifierConfig.getAtMobiles();
-      BuildJobInfo model = BuildJobInfo.builder()
+      BuildJobModel model = BuildJobModel.builder()
           .projectName(projectName)
           .projectUrl(projectUrl)
           .jobName(jobName)
@@ -72,10 +74,12 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
           .executorName(executorName)
           .executorMobile(executorPhone)
           .build();
-      ActionCardMsg message = ActionCardMsg.builder()
+      MessageModel message = MessageModel.builder()
+          .type(MsgTypeEnum.ACTION_CARD)
           .title("Jenkins 构建通知")
           .atMobiles(atMobiles)
           .text(model.toMarkdown())
+          .btns(btns)
           .build();
       String msg = service.send(robotId, message);
       if (msg != null) {
@@ -83,7 +87,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
       }
     });
     if (listener != null && !result.isEmpty()) {
-      result.forEach(msg -> listener.error("钉钉机器人消息发送失败：%s", msg));
+      result.forEach(msg -> Utils.log(listener, msg));
     }
   }
 

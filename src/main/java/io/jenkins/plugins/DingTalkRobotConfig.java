@@ -9,9 +9,10 @@ import hudson.util.FormValidation.Kind;
 import hudson.util.Secret;
 import io.jenkins.plugins.DingTalkSecurityPolicyConfig.DingTalkSecurityPolicyConfigDescriptor;
 import io.jenkins.plugins.enums.BuildStatusEnum;
+import io.jenkins.plugins.enums.MsgTypeEnum;
 import io.jenkins.plugins.enums.SecurityPolicyEnum;
-import io.jenkins.plugins.model.BuildJobInfo;
-import io.jenkins.plugins.model.MarkdownMsg;
+import io.jenkins.plugins.model.BuildJobModel;
+import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.tools.DingTalkSender;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -177,7 +178,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
       if (user == null) {
         user = User.getUnknown();
       }
-      String text = BuildJobInfo
+      String text = BuildJobModel
           .builder()
           .projectName("欢迎使用钉钉机器人插件~")
           .projectUrl(rootUrl)
@@ -190,15 +191,14 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
           .datetime(formatter.format(System.currentTimeMillis()))
           .build()
           .toMarkdown();
-      MarkdownMsg msg = MarkdownMsg
+      MessageModel msg = MessageModel
           .builder()
+          .type(MsgTypeEnum.MARKDOWN)
           .title("钉钉机器人测试成功")
           .text(text)
-          .isAtAll(true)
+          .atAll(true)
           .build();
-      String message = sender.send(
-          msg
-      );
+      String message = sender.sendMarkdown(msg);
       if (message == null) {
         return FormValidation
             .respond(

@@ -1,6 +1,6 @@
 package io.jenkins.plugins.service;
 
-import io.jenkins.plugins.model.BaseMsg;
+import io.jenkins.plugins.model.MessageModel;
 
 /**
  * 发送消息
@@ -10,5 +10,5 @@ import io.jenkins.plugins.model.BaseMsg;
  */
 public interface DingTalkService {
 
-  String send(String robot, BaseMsg msg);
+  String send(String robot, MessageModel msg);
 }

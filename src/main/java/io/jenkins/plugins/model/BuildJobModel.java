@@ -11,7 +11,7 @@ import org.apache.commons.lang.StringUtils;
 
 @Data
 @Builder
-public class BuildJobInfo {
+public class BuildJobModel {
 
   private String projectName;
 

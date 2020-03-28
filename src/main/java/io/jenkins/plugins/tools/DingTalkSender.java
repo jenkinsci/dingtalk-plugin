@@ -10,11 +10,8 @@ import com.dingtalk.api.request.OapiRobotSendRequest.Text;
 import com.dingtalk.api.response.OapiRobotSendResponse;
 import com.taobao.api.ApiException;
 import io.jenkins.plugins.DingTalkRobotConfig;
-import io.jenkins.plugins.model.ActionCardMsg;
-import io.jenkins.plugins.model.LinkMsg;
-import io.jenkins.plugins.model.MarkdownMsg;
+import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.model.RobotConfigModel;
-import io.jenkins.plugins.model.TextMsg;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
@@ -38,7 +35,7 @@ public class DingTalkSender {
    * @param msg 消息
    * @return 异常信息
    */
-  public String send(TextMsg msg) {
+  public String sendText(MessageModel msg) {
     At at = msg.getAt();
     Text text = new Text();
     text.setContent(
@@ -55,7 +52,7 @@ public class DingTalkSender {
     request.setMsgtype("text");
     request.setAt(at);
     request.setText(text);
-    return send(request);
+    return call(request);
   }
 
   /**
@@ -64,7 +61,7 @@ public class DingTalkSender {
    * @param msg 消息
    * @return 异常信息
    */
-  public String send(LinkMsg msg) {
+  public String sendLink(MessageModel msg) {
     At at = msg.getAt();
     Link link = new Link();
     link.setTitle(
@@ -90,10 +87,10 @@ public class DingTalkSender {
     request.setMsgtype("link");
     request.setLink(link);
     request.setAt(at);
-    return send(request);
+    return call(request);
   }
 
-  public String send(MarkdownMsg msg) {
+  public String sendMarkdown(MessageModel msg) {
     At at = msg.getAt();
     Markdown markdown = new Markdown();
     markdown.setTitle(
@@ -113,10 +110,10 @@ public class DingTalkSender {
     request.setMsgtype("markdown");
     request.setAt(at);
     request.setMarkdown(markdown);
-    return send(request);
+    return call(request);
   }
 
-  public String send(ActionCardMsg msg) {
+  public String sendActionCard(MessageModel msg) {
     At at = msg.getAt();
     Actioncard actioncard = new Actioncard();
     actioncard.setTitle(
@@ -133,11 +130,11 @@ public class DingTalkSender {
     );
     String singleTitle = msg.getSingleTitle();
     if (StringUtils.isEmpty(singleTitle)) {
-      // TODO
+      actioncard.setBtns(msg.getBtns());
     } else {
       actioncard.setSingleTitle(singleTitle);
       actioncard.setSingleURL(
-          msg.getSingleURL()
+          msg.getSingleUrl()
       );
     }
     actioncard.setBtnOrientation(
@@ -151,7 +148,7 @@ public class DingTalkSender {
     request.setMsgtype("actionCard");
     request.setAt(at);
     request.setActionCard(actioncard);
-    return send(request);
+    return call(request);
   }
 
 
@@ -161,7 +158,7 @@ public class DingTalkSender {
    * @param request 请求
    * @return 异常信息
    */
-  private String send(OapiRobotSendRequest request) {
+  private String call(OapiRobotSendRequest request) {
     try {
       OapiRobotSendResponse response = new DefaultDingTalkClient(
           robotConfigModel.getServer()
@@ -200,12 +197,12 @@ public class DingTalkSender {
    */
   private String addAtInfo(String content, At at, boolean markdown) {
     List<String> atMobiles = at.getAtMobiles();
-    if (atMobiles.isEmpty()) {
+    if (atMobiles == null || atMobiles.isEmpty()) {
       return content;
     }
     String atContent = "@" + StringUtils.join(atMobiles, "@ ");
     if (markdown) {
-      return content + "\n" + "---" + atContent + "\n";
+      return content + "\n" + "---" + "\n" + atContent + "\n";
     }
     return content + atContent;
   }

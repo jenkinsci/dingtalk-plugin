@@ -9,113 +9,174 @@ import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import io.jenkins.plugins.enums.MsgTypeEnum;
+import io.jenkins.plugins.model.ButtonModel;
+import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.service.impl.DingTalkServiceImpl;
+import io.jenkins.plugins.tools.Utils;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
 
 /**
  * @author liuwei
  * @date 2020/3/27 16:36
  * @desc 支持 pipeline 中使用
  */
-@Getter
-@ToString
+
+@Data
+@EqualsAndHashCode(callSuper = false)
+@SuppressWarnings("unused")
 public class DingTalkPipeline extends Builder implements SimpleBuildStep {
 
   /**
    * 机器人 id
    */
-  private final String robot;
+  private String robot;
 
-  /**
-   * 消息类型
-   */
   private MsgTypeEnum type;
 
-  /**
-   * at 的手机号码
-   */
-  private final Set<String> at;
+  private Set<String> at;
 
-  /**
-   * 发送的消息
-   */
-  private final String text;
+  private boolean atAll;
 
-  /**
-   * link 标题
-   */
-  private final String title;
+  private String title;
 
-  /**
-   * link 点击消息跳转的 URL
-   */
-  private final String messageUrl;
+  private String text;
 
-  /**
-   * link 图片 URL
-   */
-  private final String picUrl;
+  private String messageUrl;
 
-  /**
-   * ActionCard 单个按钮的方案
-   */
-  private final String singleTitle;
+  private String picUrl;
 
-  /**
-   * ActionCard 单个按钮的方案
-   */
-  private final String singleURL;
+  private String singleTitle;
 
-  /**
-   * ActionCard 0-按钮竖直排列，1-按钮横向排列
-   */
-  private final String btnOrientation;
+  private String singleUrl;
 
-  /**
-   * ActionCard 0-正常发消息者头像，1-隐藏发消息者头像
-   */
-  private final String hideAvatar;
+  private List<ButtonModel> btns;
 
-  private final String rootPath = Jenkins.get().getRootUrl();
+  private String btnOrientation;
+
+  private String hideAvatar;
+
+  private String rootPath = Jenkins.get().getRootUrl();
 
   private DingTalkServiceImpl service = new DingTalkServiceImpl();
 
-
-  public DingTalkPipeline(String robot, MsgTypeEnum type, Set<String> at, String text,
-      String title, String messageUrl, String picUrl, String singleTitle, String singleURL,
-      String btnOrientation, String hideAvatar,
-      DingTalkServiceImpl service) {
+  @DataBoundConstructor
+  public DingTalkPipeline(String robot, String text) {
     this.robot = robot;
-    this.type = type;
-    this.at = at;
     this.text = text;
+  }
+
+  @DataBoundSetter
+  public void setType(MsgTypeEnum type) {
+    if (type == null) {
+      type = MsgTypeEnum.MARKDOWN;
+    }
+    this.type = type;
+  }
+
+  @DataBoundSetter
+  public void setAt(List<String> at) {
+    if (!(at == null || at.isEmpty())) {
+      this.at = new HashSet<>(at);
+    }
+  }
+
+  @DataBoundSetter
+  public void setAtAll(boolean atAll) {
+    this.atAll = atAll;
+  }
+
+  @DataBoundSetter
+  public void setTitle(String title) {
     this.title = title;
+  }
+
+  @DataBoundSetter
+  public void setMessageUrl(String messageUrl) {
     this.messageUrl = messageUrl;
+  }
+
+  @DataBoundSetter
+  public void setPicUrl(String picUrl) {
     this.picUrl = picUrl;
+  }
+
+  @DataBoundSetter
+  public void setSingleTitle(String singleTitle) {
     this.singleTitle = singleTitle;
-    this.singleURL = singleURL;
+  }
+
+  @DataBoundSetter
+  public void setSingleUrl(String singleUrl) {
+    this.singleUrl = singleUrl;
+  }
+
+  @DataBoundSetter
+  public void setBtns(List<ButtonModel> btns) {
+    this.btns = btns;
+  }
+
+  @DataBoundSetter
+  public void setBtnOrientation(String btnOrientation) {
     this.btnOrientation = btnOrientation;
+  }
+
+  @DataBoundSetter
+  public void setHideAvatar(String hideAvatar) {
     this.hideAvatar = hideAvatar;
-    this.service = service;
   }
 
   @Override
   public void perform(@Nonnull Run<?, ?> run, @Nonnull FilePath workspace,
       @Nonnull Launcher launcher, @Nonnull TaskListener listener)
       throws InterruptedException, IOException {
-    String jobUrl = rootPath + run.getUrl();
-    String duration = run.getDurationString();
-    String changeLog = jobUrl + "/changes";
-    String console = jobUrl + "/console";
+    if (
+        MsgTypeEnum.ACTION_CARD.equals(type) &&
+            StringUtils.isEmpty(singleTitle) &&
+            (btns == null || btns.isEmpty())
+    ) {
+      String jobUrl = rootPath + run.getUrl();
+      this.btns = Utils.createDefaultBtns(jobUrl);
+    }
+
+    System.out.println("=========================== 接收到的参数 ===========================");
     System.out.println(this.toString());
+
+    System.out.println("=========================== 钉钉返回信息 ===========================");
+    String result = service.send(
+        robot,
+        MessageModel.builder()
+            .type(type)
+            .atMobiles(at)
+            .atAll(atAll)
+            .title(title)
+            .text(text)
+            .messageUrl(messageUrl)
+            .picUrl(picUrl)
+            .singleTitle(singleTitle)
+            .singleUrl(singleUrl)
+            .btns(btns)
+            .btnOrientation(btnOrientation)
+            .hideAvatar(hideAvatar)
+            .build()
+    );
+    if (!StringUtils.isEmpty(result)) {
+      Utils.log(listener, result);
+    }
+
+    System.out.println(result);
+
   }
 
   @Symbol("dingTalk")
