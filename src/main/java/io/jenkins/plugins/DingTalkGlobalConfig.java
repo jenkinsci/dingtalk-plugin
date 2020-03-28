@@ -6,7 +6,6 @@ import io.jenkins.plugins.DingTalkRobotConfig.DingTalkRobotConfigDescriptor;
 import io.jenkins.plugins.enums.NoticeOccasionEnum;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import jenkins.model.GlobalConfiguration;
@@ -29,6 +28,7 @@ import org.kohsuke.stapler.StaplerRequest;
 @Getter
 @ToString
 @Extension
+@SuppressWarnings("unused")
 public class DingTalkGlobalConfig extends GlobalDefaultViewConfiguration {
 
   /**

@@ -44,6 +44,7 @@ public class BuildJobModel {
         + "---"
         + "\n"
 
+        + "<font>"
         + "- 任务："
         + "["
         + this.jobName

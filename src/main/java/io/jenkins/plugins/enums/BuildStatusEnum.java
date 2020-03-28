@@ -3,56 +3,55 @@ package io.jenkins.plugins.enums;
 import io.jenkins.plugins.Messages;
 import lombok.Getter;
 
+/**
+ * @author liuwei
+ * @date 2020-03-28 22:48
+ * @desc 构建状态
+ */
 @Getter
 public enum BuildStatusEnum {
 
   /**
    * 开始构建
    */
-  START("start.gif", Messages.BuildStatusType_start()),
+  START("\uD83D\uDE09", Messages.BuildStatusType_start()),
 
   /**
    * 已取消
    */
-  ABORTED("aborted.gif", Messages.NoticeOccasion_aborted()),
+  ABORTED("\uD83D\uDE1C", Messages.BuildStatusType_aborted()),
 
   /**
    * 失败
    */
-  FAILURE("failure.gif", Messages.BuildStatusType_failure()),
+  FAILURE("\uD83D\uDE2D", Messages.BuildStatusType_failure()),
 
   /**
    * 成功
    */
-  SUCCESS("success.gif", Messages.BuildStatusType_success()),
+  SUCCESS("\uD83D\uDE18", Messages.BuildStatusType_success()),
 
   /**
    * 构建不稳定
    */
-  UNSTABLE("unstable.gif", Messages.BuildStatusType_unstable()),
+  UNSTABLE("\uD83D\uDE2A", Messages.BuildStatusType_unstable()),
 
   /**
    * 未构建
    */
-  NOT_BUILT("not_built.gif", Messages.BuildStatusType_not_built()),
+  NOT_BUILT("\uD83D\uDE34", Messages.BuildStatusType_not_built()),
 
   /**
    * 未知
    */
-  UNKNOWN("unknown.gif", Messages.BuildStatusType_unknown());
+  UNKNOWN("\uD83D\uDE35", Messages.BuildStatusType_unknown());
 
   private String icon;
 
   private String label;
 
-  /**
-   * TODO: 可配置
-   */
-  private static final String IMAGE_SERVER = "http://qiniu.liuweigl.cn/";
-
-
   BuildStatusEnum(String icon, String label) {
-    this.icon = IMAGE_SERVER + icon;
+    this.icon = icon;
     this.label = label;
   }
 }

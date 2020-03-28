@@ -1,13 +1,20 @@
+package io.jenkins.plugins;
+
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiRobotSendRequest;
+import com.dingtalk.api.request.OapiRobotSendRequest.At;
 import com.dingtalk.api.response.OapiRobotSendResponse;
 import com.taobao.api.ApiException;
+import io.jenkins.plugins.enums.BuildStatusEnum;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.stream.Collectors;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.codec.binary.Base64;
@@ -21,7 +28,7 @@ public class SdkTest {
   public static void main(String[] args)
       throws ApiException, UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
     Long timestamp = System.currentTimeMillis();
-    String secret = "this is secret";
+    String secret = "SEC34778ce7a08f78577a2d11f8436d9ba67060e64acc8f0095afb61babaa31683b";
 
     String stringToSign = timestamp + "\n" + secret;
     Mac mac = Mac.getInstance("HmacSHA256");
@@ -32,23 +39,40 @@ public class SdkTest {
         "https://oapi.dingtalk.com/robot/send?access_token=d3e797903a606e7a19f510dc22863b87112e6783556bdbd264e9267d445b4e81&timestamp="
             + timestamp + "&sign=" + sign);
     OapiRobotSendRequest request = new OapiRobotSendRequest();
-    request.setMsgtype("text");
-    OapiRobotSendRequest.Text text = new OapiRobotSendRequest.Text();
-    text.setContent("测试文本消息");
-    request.setText(text);
-    OapiRobotSendRequest.At at = new OapiRobotSendRequest.At();
-    at.setAtMobiles(Arrays.asList("132xxxxxxxx"));
+    request.setMsgtype("actionCard");
+    OapiRobotSendRequest.Actioncard msg = new OapiRobotSendRequest.Actioncard();
+    msg.setTitle("杭州天气");
+    msg.setText("### 杭州天气" +
+        "\n\n" +
+        "9度，西北风1级，空气良89，相对温度73%" +
+        "\n" +
+        "---" +
+        "\n" +
+        "---" +
+        "\n" +
+        "<font color=#000000>" +
+        "\n- " +
+        Arrays.stream(BuildStatusEnum.values())
+            .map(item -> item.getLabel() + item.getIcon())
+            .collect(
+                Collectors.joining("\n- ")
+            ) +
+        "\n" +
+        "</font>" +
+        "\n" +
+        "---" +
+        "\n" +
+        "<font color=#1890ff>" +
+        "@18516600940" +
+        "</font>" +
+        "\n" +
+        "---" +
+        "\n" +
+        "10点20分发布 [天气](http://www.thinkpage.cn/)");
+    At at = new At();
+    at.setAtMobiles(Collections.singletonList("18516600940"));
     request.setAt(at);
-
-    request.setMsgtype("link");
-    OapiRobotSendRequest.Link link = new OapiRobotSendRequest.Link();
-    link.setMessageUrl("https://www.dingtalk.com/");
-    link.setPicUrl("");
-    link.setTitle("时代的火车向前开");
-    link.setText("这个即将发布的新版本，创始人xx称它为“红树林”。\n" +
-        "而在此之前，每当面临重大升级，产品经理们都会取一个应景的代号，这一次，为什么是“红树林");
-    request.setLink(link);
-
+    request.setActionCard(msg);
     OapiRobotSendResponse response = client.execute(request);
     System.out.println(response.getErrmsg());
   }
