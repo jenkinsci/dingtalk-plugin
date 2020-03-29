@@ -6,8 +6,10 @@ import io.jenkins.plugins.enums.MsgTypeEnum;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Data;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * @author liuwei
@@ -100,7 +102,18 @@ public class MessageModel {
   public At getAt() {
     At at = new At();
     if (atMobiles != null) {
-      at.setAtMobiles(new ArrayList<>(atMobiles));
+      at.setAtMobiles(
+          atMobiles.stream()
+              .map(
+                  String::trim
+              )
+              .filter(
+                  item -> !StringUtils.isEmpty(item)
+              )
+              .collect(
+                  Collectors.toList()
+              )
+      );
     }
     at.setIsAtAll(String.valueOf(atAll));
     return at;

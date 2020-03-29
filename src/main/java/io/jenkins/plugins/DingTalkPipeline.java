@@ -72,9 +72,8 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
   private DingTalkServiceImpl service = new DingTalkServiceImpl();
 
   @DataBoundConstructor
-  public DingTalkPipeline(String robot, String text) {
+  public DingTalkPipeline(String robot) {
     this.robot = robot;
-    this.text = text;
   }
 
   @DataBoundSetter
@@ -100,6 +99,13 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
   @DataBoundSetter
   public void setTitle(String title) {
     this.title = title;
+  }
+
+  @DataBoundSetter
+  public void setText(List<String> text) {
+    if (text != null) {
+      this.text = Utils.join(text);
+    }
   }
 
   @DataBoundSetter
@@ -141,19 +147,16 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
   public void perform(@Nonnull Run<?, ?> run, @Nonnull FilePath workspace,
       @Nonnull Launcher launcher, @Nonnull TaskListener listener)
       throws InterruptedException, IOException {
-    if (
-        MsgTypeEnum.ACTION_CARD.equals(type) &&
-            StringUtils.isEmpty(singleTitle) &&
-            (btns == null || btns.isEmpty())
-    ) {
+
+    boolean defaultBtns = MsgTypeEnum.ACTION_CARD.equals(type) &&
+        StringUtils.isEmpty(singleTitle) &&
+        (btns == null || btns.isEmpty());
+
+    if (defaultBtns) {
       String jobUrl = rootPath + run.getUrl();
       this.btns = Utils.createDefaultBtns(jobUrl);
     }
 
-    System.out.println("=========================== 接收到的参数 ===========================");
-    System.out.println(this.toString());
-
-    System.out.println("=========================== 钉钉返回信息 ===========================");
     String result = service.send(
         robot,
         MessageModel.builder()
@@ -174,9 +177,6 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
     if (!StringUtils.isEmpty(result)) {
       Utils.log(listener, result);
     }
-
-    System.out.println(result);
-
   }
 
   @Symbol("dingTalk")

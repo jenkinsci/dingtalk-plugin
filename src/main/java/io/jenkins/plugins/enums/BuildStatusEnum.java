@@ -15,7 +15,7 @@ public enum BuildStatusEnum {
   /**
    * 开始
    */
-  START(Messages.BuildStatusType_start(), AntdColor.BLUE.toString()),
+  START(Messages.BuildStatusType_start(), AntdColor.GEEK_BLUE.toString()),
 
   /**
    * 失败

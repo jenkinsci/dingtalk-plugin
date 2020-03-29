@@ -24,6 +24,7 @@ public class SdkTest {
 
   public static void main(String[] args) {
     testDingTalk();
+//    AntdColor.GEEK_BLUE.show();
   }
 
   static void testColor() {
@@ -63,7 +64,7 @@ public class SdkTest {
           "\n" +
           "---" +
           "\n" +
-          "<font color=#1890ff>" +
+          "<font color=#2f54eb>" +
           "@18516600940" +
           "</font>" +
           "\n" +

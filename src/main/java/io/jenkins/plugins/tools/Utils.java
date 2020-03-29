@@ -55,4 +55,13 @@ public class Utils {
     return "<font color=" + color + ">" + content + "</font>";
   }
 
+  /**
+   * markdown 数组转字符串
+   * @param markdown 数组
+   * @return 字符串
+   */
+  public static String join(Iterable<? extends CharSequence>  markdown){
+    return String.join("\n\r", markdown);
+  }
+
 }

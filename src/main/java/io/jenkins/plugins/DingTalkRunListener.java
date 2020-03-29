@@ -63,7 +63,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     property.getCheckedNotifierConfigs().forEach(notifierConfig -> {
       String robotId = notifierConfig.getRobotId();
       Set<String> atMobiles = notifierConfig.getAtMobiles();
-      BuildJobModel model = BuildJobModel.builder()
+      String text = BuildJobModel.builder()
           .projectName(projectName)
           .projectUrl(projectUrl)
           .jobName(jobName)
@@ -73,12 +73,14 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
           .datetime(datetime)
           .executorName(executorName)
           .executorMobile(executorPhone)
-          .build();
+          .build()
+          .toMarkdown();
+      System.out.println(text);
       MessageModel message = MessageModel.builder()
           .type(MsgTypeEnum.ACTION_CARD)
           .title("Jenkins 构建通知")
           .atMobiles(atMobiles)
-          .text(model.toMarkdown())
+          .text(text)
           .btns(btns)
           .build();
       String msg = service.send(robotId, message);

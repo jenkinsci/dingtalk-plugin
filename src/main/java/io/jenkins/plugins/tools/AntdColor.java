@@ -1,8 +1,7 @@
 package io.jenkins.plugins.tools;
 
+import java.awt.Color;
 import java.util.ArrayList;
-import javafx.scene.paint.Color;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -25,7 +24,7 @@ public class AntdColor {
   }
 
   public String get(Level level) {
-    return pattens.get(level.value);
+    return pattens.get(level.value - 1);
   }
 
   @Override
@@ -152,54 +151,61 @@ public class AntdColor {
   /**
    * 色相阶梯
    */
-  private static final int hueStep = 2;
+  private static final int HUE_STEP = 2;
 
   /**
    * 饱和度阶梯，浅色部分
    */
-  private static final int saturationStep = 16;
+  private static final int LIGHT_SATURATION_STEP = 16;
 
   /**
    * 饱和度阶梯，深色部分
    */
-  private static final int saturationStep2 = 5;
+  private static final int DARK_SATURATION_STEP = 5;
 
   /**
    * 亮度阶梯，浅色部分
    */
-  private static final int brightnessStep1 = 5;
+  private static final int LIGHT_BRIGHTNESS_STEP = 5;
 
   /**
    * 亮度阶梯，深色部分
    */
-  private static final int brightnessStep2 = 15;
+  private static final int DARK_BRIGHTNESS_STEP = 15;
 
   /**
    * 浅色数量，主色上
    */
-  private static final int lightColorCount = 5;
+  private static final int LIGHT_COLOR_COUNT = 5;
 
   /**
    * 深色数量，主色下
    */
-  private static final int darkColorCount = 4;
+  private static final int DARK_COLOR_COUNT = 4;
 
   @Data
-  @AllArgsConstructor
   private static final class Hsv {
 
-    private double h;
-    private double s;
-    private double v;
+    private float h;
+    private float s;
+    private float v;
+
+    public Hsv(Color color) {
+      //  hsb 跟 hsv 是同一个概念
+      float[] hsb = JavaFxColor.getHsb(color);
+      this.h = hsb[0];
+      this.s = hsb[1];
+      this.v = hsb[2];
+    }
   }
 
-  private static double getHue(Hsv hsv, int i, boolean light) {
-    double hue;
+  private static float getHue(Hsv hsv, int i, boolean light) {
+    float hue;
     // 根据色相不同，色相转向不同
     if (Math.round(hsv.h) >= 60 && Math.round(hsv.h) <= 240) {
-      hue = light ? Math.round(hsv.h) - hueStep * i : Math.round(hsv.h) + hueStep * i;
+      hue = light ? Math.round(hsv.h) - HUE_STEP * i : Math.round(hsv.h) + HUE_STEP * i;
     } else {
-      hue = light ? Math.round(hsv.h) + hueStep * i : Math.round(hsv.h) - hueStep * i;
+      hue = light ? Math.round(hsv.h) + HUE_STEP * i : Math.round(hsv.h) - HUE_STEP * i;
     }
     if (hue < 0) {
       hue += 360;
@@ -209,25 +215,25 @@ public class AntdColor {
     return hue;
   }
 
-  private static double getSaturation(Hsv hsv, int i, boolean light) {
+  private static float getSaturation(Hsv hsv, int i, boolean light) {
     // grey color don't change saturation
     if (hsv.h == 0 && hsv.s == 0) {
       return hsv.s;
     }
-    double saturation;
+    float saturation;
     if (light) {
-      saturation = Math.round(hsv.s * 100) - saturationStep * i;
-    } else if (i == darkColorCount) {
-      saturation = Math.round(hsv.s * 100) + saturationStep;
+      saturation = Math.round(hsv.s * 100) - LIGHT_SATURATION_STEP * i;
+    } else if (i == DARK_COLOR_COUNT) {
+      saturation = Math.round(hsv.s * 100) + LIGHT_SATURATION_STEP;
     } else {
-      saturation = Math.round(hsv.s * 100) + saturationStep2 * i;
+      saturation = Math.round(hsv.s * 100) + DARK_SATURATION_STEP * i;
     }
     // 边界值修正
     if (saturation > 100) {
       saturation = 100;
     }
     // 第一格的 s 限制在 6-10 之间
-    if (light && i == lightColorCount && saturation > 10) {
+    if (light && i == LIGHT_COLOR_COUNT && saturation > 10) {
       saturation = 10;
     }
     if (saturation < 6) {
@@ -236,28 +242,24 @@ public class AntdColor {
     return Math.max(0, Math.min(saturation / 100, 1));
   }
 
-  private static double getValue(Hsv hsv, int i, boolean light) {
-    double value;
+  private static float getValue(Hsv hsv, int i, boolean light) {
+    float value;
     if (light) {
-      value = Math.round(hsv.v * 100) + brightnessStep1 * i;
+      value = Math.round(hsv.v * 100) + LIGHT_BRIGHTNESS_STEP * i;
     } else {
-      value = Math.round(hsv.v * 100) - brightnessStep2 * i;
+      value = Math.round(hsv.v * 100) - DARK_BRIGHTNESS_STEP * i;
     }
     return Math.max(0, Math.min(value / 100, 1));
   }
 
-  private static String getHexColor(Color color) {
-    return "#" + color.toString().substring(2, 8);
-  }
-
   public static ArrayList<String> generate(String colorString) {
     ArrayList<String> patterns = new ArrayList<>();
-    Color color = Color.web(colorString);
-    Hsv hsv = new Hsv(color.getHue(), color.getSaturation(), color.getBrightness());
-    for (int i = lightColorCount; i > 0; i -= 1) {
+    Color color = JavaFxColor.web(colorString);
+    Hsv hsv = new Hsv(color);
+    for (int i = LIGHT_COLOR_COUNT; i > 0; i -= 1) {
       patterns.add(
-          getHexColor(
-              Color.hsb(
+          JavaFxColor.getHex(
+              JavaFxColor.hsb(
                   getHue(hsv, i, true),
                   getSaturation(hsv, i, true),
                   getValue(hsv, i, true)
@@ -267,13 +269,13 @@ public class AntdColor {
     }
 
     patterns.add(
-        getHexColor(color)
+        JavaFxColor.getHex(color)
     );
 
-    for (int i = 1; i <= darkColorCount; i += 1) {
+    for (int i = 1; i <= DARK_COLOR_COUNT; i += 1) {
       patterns.add(
-          getHexColor(
-              Color.hsb(
+          JavaFxColor.getHex(
+              JavaFxColor.hsb(
                   getHue(hsv, i, false),
                   getSaturation(hsv, i, false),
                   getValue(hsv, i, false)
