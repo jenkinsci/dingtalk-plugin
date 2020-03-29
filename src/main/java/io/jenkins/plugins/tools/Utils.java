@@ -15,8 +15,9 @@ public class Utils {
 
   /**
    * 统一输出日志
+   *
    * @param listener 任务监听器
-   * @param msg 消息
+   * @param msg      消息
    */
   public static void log(TaskListener listener, String msg) {
     listener.error("钉钉机器人消息发送失败：%s", msg);
@@ -24,6 +25,7 @@ public class Utils {
 
   /**
    * 创建默认的按钮列表
+   *
    * @param jobUrl 任务地址
    * @return 按钮列表
    */
@@ -40,6 +42,17 @@ public class Utils {
     );
 
     return btns;
+  }
+
+  /**
+   * markdown 染色
+   *
+   * @param content 内容
+   * @param color   颜色
+   * @return 带颜色的内容
+   */
+  public static String dye(String content, String color) {
+    return "<font color=" + color + ">" + content + "</font>";
   }
 
 }

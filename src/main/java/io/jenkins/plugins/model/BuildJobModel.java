@@ -1,10 +1,9 @@
 package io.jenkins.plugins.model;
 
-import com.dingtalk.api.request.OapiRobotSendRequest.At;
 import io.jenkins.plugins.enums.BuildStatusEnum;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import io.jenkins.plugins.tools.AntdColor;
+import io.jenkins.plugins.tools.Markdown;
+import io.jenkins.plugins.tools.Utils;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang.StringUtils;
@@ -33,48 +32,25 @@ public class BuildJobModel {
 
   public String toMarkdown() {
 
-    return "# "
-        + "["
-        + this.projectName
-        + "]"
-        + "("
-        + this.projectUrl
-        + ")"
-        + "\n"
-        + "---"
-        + "\n"
-
-        + "<font>"
-        + "- 任务："
-        + "["
-        + this.jobName
-        + "]"
-        + "("
-        + this.jobUrl
-        + ")"
-        + "\n"
-
-        + "- 状态："
-        + this.statusType.getLabel()
-        + "![]"
-        + "("
-        + this.statusType.getIcon()
-        + ")"
-        + "\n"
-
-        + "- 持续时间："
-        + this.duration
-        + "\n"
-
-        + "- 执行时间："
-        + this.datetime
-        + "\n"
-
-        + "- 执行人："
-        + (
-        StringUtils.isEmpty(this.executorMobile) ? this.executorName : ("@" + this.executorMobile)
-    )
-        + "\n"
-        ;
+    return new Markdown(
+        String.format("# 项目： [%s](%s)", projectName, projectUrl),
+        "---",
+        String.format("- 任务：[%s](%s)", jobName, jobUrl),
+        String.format("- 状态：%s",
+            Utils.dye(
+                statusType.getLabel(),
+                statusType.getColor()
+            )
+        ),
+        String.format("- 持续时间：%s", datetime),
+        String.format("- 执行人：%s",
+            StringUtils.isEmpty(executorMobile) ?
+                executorName :
+                Utils.dye(
+                    ("@" + executorMobile),
+                    AntdColor.BLUE.toString()
+                )
+        )
+    ).value();
   }
 }

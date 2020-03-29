@@ -1,6 +1,7 @@
 package io.jenkins.plugins.enums;
 
 import io.jenkins.plugins.Messages;
+import io.jenkins.plugins.tools.AntdColor;
 import lombok.Getter;
 
 /**
@@ -12,46 +13,48 @@ import lombok.Getter;
 public enum BuildStatusEnum {
 
   /**
-   * 开始构建
+   * 开始
    */
-  START("\uD83D\uDE09", Messages.BuildStatusType_start()),
-
-  /**
-   * 已取消
-   */
-  ABORTED("\uD83D\uDE1C", Messages.BuildStatusType_aborted()),
+  START(Messages.BuildStatusType_start(), AntdColor.BLUE.toString()),
 
   /**
    * 失败
    */
-  FAILURE("\uD83D\uDE2D", Messages.BuildStatusType_failure()),
+  FAILURE(Messages.BuildStatusType_failure(), AntdColor.RED.toString()),
 
   /**
    * 成功
    */
-  SUCCESS("\uD83D\uDE18", Messages.BuildStatusType_success()),
+  SUCCESS(Messages.BuildStatusType_success(), AntdColor.GREEN.toString()),
 
   /**
-   * 构建不稳定
+   * 取消
    */
-  UNSTABLE("\uD83D\uDE2A", Messages.BuildStatusType_unstable()),
+  ABORTED(Messages.BuildStatusType_aborted(), AntdColor.CYAN.toString()),
+
+  /**
+   * 不稳定
+   */
+  UNSTABLE(Messages.BuildStatusType_unstable(), AntdColor.CYAN.toString()),
 
   /**
    * 未构建
    */
-  NOT_BUILT("\uD83D\uDE34", Messages.BuildStatusType_not_built()),
+  NOT_BUILT(Messages.BuildStatusType_not_built(), AntdColor.CYAN.toString()),
 
   /**
    * 未知
    */
-  UNKNOWN("\uD83D\uDE35", Messages.BuildStatusType_unknown());
+  UNKNOWN(Messages.BuildStatusType_unknown(), AntdColor.PURPLE.toString());
 
-  private String icon;
 
   private String label;
 
-  BuildStatusEnum(String icon, String label) {
-    this.icon = icon;
+
+  private String color;
+
+  BuildStatusEnum(String label, String color) {
     this.label = label;
+    this.color = color;
   }
 }
