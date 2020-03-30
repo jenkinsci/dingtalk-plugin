@@ -6,7 +6,6 @@ import com.dingtalk.api.request.OapiRobotSendRequest;
 import com.dingtalk.api.request.OapiRobotSendRequest.At;
 import com.dingtalk.api.response.OapiRobotSendResponse;
 import io.jenkins.plugins.enums.BuildStatusEnum;
-import io.jenkins.plugins.tools.AntdColor;
 import io.jenkins.plugins.tools.Utils;
 import java.net.URLEncoder;
 import java.util.Arrays;
@@ -25,10 +24,6 @@ public class SdkTest {
   public static void main(String[] args) {
     testDingTalk();
 //    AntdColor.GEEK_BLUE.show();
-  }
-
-  static void testColor() {
-    AntdColor.RED.show();
   }
 
   static void testDingTalk() {

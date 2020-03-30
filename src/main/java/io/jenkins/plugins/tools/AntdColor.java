@@ -23,6 +23,12 @@ public class AntdColor {
     this.pattens = generate(color);
   }
 
+  public String[] values() {
+    return pattens.toArray(
+        new String[LIGHT_COLOR_COUNT + DARK_COLOR_COUNT + 1]
+    );
+  }
+
   public String get(Level level) {
     return pattens.get(level.value - 1);
   }
@@ -30,10 +36,6 @@ public class AntdColor {
   @Override
   public String toString() {
     return get(Level.PRIMARY);
-  }
-
-  public void show() {
-    System.out.println(pattens.toString());
   }
 
   public static enum Level {

@@ -34,7 +34,7 @@ public class BuildJobModel {
 
     return Utils.join(
         Arrays.asList(
-            String.format("# 项目： [%s](%s)", projectName, projectUrl),
+            String.format("# [%s](%s)", projectName, projectUrl),
             "---",
             String.format("- 任务：[%s](%s)", jobName, jobUrl),
             String.format("- 状态：%s",

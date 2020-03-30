@@ -61,7 +61,7 @@ public class Utils {
    * @return 字符串
    */
   public static String join(Iterable<? extends CharSequence>  markdown){
-    return String.join("\n\r", markdown);
+    return String.join("\n", markdown);
   }
 
 }
