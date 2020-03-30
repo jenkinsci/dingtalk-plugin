@@ -6,4 +6,4 @@
 
 ## Contributing
 
-请参考 [Contributing](./CONTRIBUTING.md)
+🍻 [Contributing](./CONTRIBUTING.md)
