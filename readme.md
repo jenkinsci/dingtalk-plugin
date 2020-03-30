@@ -2,7 +2,7 @@
 
 ## 文档
 
-💯 [查看文档](https://liuweigl.github.io/dingding-notifications-plugin/)
+💯 [查看文档](https://jenkinsci.github.io/dingding-notifications-plugin/)
 
 ## Contributing
 
