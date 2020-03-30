@@ -7,9 +7,9 @@ import lombok.Data;
 /**
  * antd 颜色工具
  * <p>
- * {@link <a href="https://3x.ant.design/docs/spec/colors-cn">色彩</a>}
+ * https://3x.ant.design/docs/spec/colors-cn
  * <p>
- * {@see <a href="https://github.com/ant-design/ant-design-colors">ant-design-colors</a>}
+ * https://github.com/ant-design/ant-design-colors
  *
  * @author liuwei
  * @date 2020/3/29 15:01

@@ -5,9 +5,10 @@ import io.jenkins.plugins.tools.AntdColor;
 import lombok.Getter;
 
 /**
+ * 构建状态
+ *
  * @author liuwei
  * @date 2020-03-28 22:48
- * @desc 构建状态
  */
 @Getter
 public enum BuildStatusEnum {

@@ -12,9 +12,10 @@ import lombok.Data;
 import org.apache.commons.lang.StringUtils;
 
 /**
+ * 消息
+ *
  * @author liuwei
  * @date 2020/3/27 17:05
- * @desc 消息的通用信息
  */
 @Data
 @Builder

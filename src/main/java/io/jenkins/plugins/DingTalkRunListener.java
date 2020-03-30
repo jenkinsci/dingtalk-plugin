@@ -25,9 +25,10 @@ import jenkins.model.Jenkins;
 import org.apache.commons.lang.StringUtils;
 
 /**
+ * 所有项目触发
+ *
  * @author liuwei
  * @date 2019/12/28 15:31
- * @desc freeStyle project、matrix project 触发
  */
 @Extension
 public class DingTalkRunListener extends RunListener<Run<?, ?>> {

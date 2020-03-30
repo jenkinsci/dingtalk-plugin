@@ -1,8 +1,9 @@
 package io.jenkins.plugins.enums;
 
 /**
+ * 消息类型
+ *
  * @author liuwei
- * @desc 消息类型
  */
 public enum MsgTypeEnum {
   /**

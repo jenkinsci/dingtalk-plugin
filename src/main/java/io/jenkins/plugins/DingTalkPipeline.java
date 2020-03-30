@@ -29,9 +29,10 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 
 /**
+ * 支持 pipeline 中使用
+ *
  * @author liuwei
  * @date 2020/3/27 16:36
- * @desc 支持 pipeline 中使用
  */
 
 @Data
