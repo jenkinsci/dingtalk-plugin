@@ -38,6 +38,12 @@ module.exports = {
         children: ['/guide/getting-started', '/guide/simple','/guide/pipeline']
       },
       {
+        title: '进阶',
+        path: '/advance/getting-started',
+        collapsable: false,
+        children: ['/advance/user-property', '/advance/markdown']
+      },
+      {
         title: '示例',
         path: '/examples/text',
         collapsable: false,
