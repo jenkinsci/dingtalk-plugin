@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import jenkins.model.Jenkins;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * @author liuwei
@@ -40,7 +41,16 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
   public void send(Run<?, ?> run, TaskListener listener, BuildStatusEnum statusType) {
     Job<?, ?> job = run.getParent();
     UserIdCause userIdCause = run.getCause(UserIdCause.class);
-    User user = userIdCause == null?User.getUnknown():User.getById(userIdCause.getUserId(),true);
+    User user =
+        userIdCause == null ||
+            StringUtils.isEmpty(
+                userIdCause.getUserId()
+            ) ?
+            User.getUnknown() :
+            User.getById(
+                userIdCause.getUserId(),
+                true
+            );
 
     // 项目信息
     String projectName = job.getFullDisplayName();
