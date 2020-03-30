@@ -9,12 +9,12 @@ module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '../'),
+        '@': path.resolve(__dirname, '../')
       }
     }
   },
   markdown: {
-    anchor: {permalink: true}
+    anchor: { permalink: true }
   },
   themeConfig: {
     docsDir: 'docs',
@@ -27,28 +27,21 @@ module.exports = {
       {
         text: '发布记录',
         link:
-            'https://github.com/jenkinsci/dingding-notifications-plugin/releases'
+          'https://github.com/jenkinsci/dingding-notifications-plugin/releases'
       }
     ],
     sidebar: [
       {
         title: '指南',
-        path: '',
+        path: '/guide/getting-started',
         collapsable: false,
-        children: [
-          '/guide/',
-          '/guide/getting-started',
-          '/guide/pipeline',
-        ]
+        children: ['/guide/getting-started', '/guide/pipeline']
       },
       {
         title: '示例',
-        path: '',
+        path: '/examples/text',
         collapsable: false,
-        children: [
-          '/examples/text',
-          '/examples/link'
-        ]
+        children: ['/examples/text', '/examples/link']
       }
     ]
   }

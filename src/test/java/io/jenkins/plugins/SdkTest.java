@@ -22,7 +22,7 @@ import org.apache.commons.codec.binary.Base64;
 public class SdkTest {
 
   public static void main(String[] args) {
-    testDingTalk();
+//    testDingTalk();
 //    AntdColor.GEEK_BLUE.show();
   }
 

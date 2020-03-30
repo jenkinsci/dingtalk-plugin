@@ -8,6 +8,7 @@ import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
+import io.jenkins.plugins.enums.BtnLayoutEnum;
 import io.jenkins.plugins.enums.MsgTypeEnum;
 import io.jenkins.plugins.model.ButtonModel;
 import io.jenkins.plugins.model.MessageModel;
@@ -63,9 +64,9 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
 
   private List<ButtonModel> btns;
 
-  private String btnOrientation;
+  private BtnLayoutEnum btnLayout;
 
-  private String hideAvatar;
+  private boolean hideAvatar;
 
   private String rootPath = Jenkins.get().getRootUrl();
 
@@ -134,13 +135,26 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
   }
 
   @DataBoundSetter
-  public void setBtnOrientation(String btnOrientation) {
-    this.btnOrientation = btnOrientation;
+  public void setBtnLayout(BtnLayoutEnum btnLayout) {
+    this.btnLayout = btnLayout;
   }
 
   @DataBoundSetter
-  public void setHideAvatar(String hideAvatar) {
+  public void setHideAvatar(boolean hideAvatar) {
     this.hideAvatar = hideAvatar;
+  }
+
+  /**
+   * 获取按钮排列方向
+   *
+   * @return 水平或则垂直
+   */
+  public String getBtnLayout() {
+    return BtnLayoutEnum.V.equals(btnLayout) ? "0" : "1";
+  }
+
+  public String isHideAvatar() {
+    return hideAvatar ? "1" : "0";
   }
 
   @Override
@@ -170,8 +184,8 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
             .singleTitle(singleTitle)
             .singleUrl(singleUrl)
             .btns(btns)
-            .btnOrientation(btnOrientation)
-            .hideAvatar(hideAvatar)
+            .btnOrientation(getBtnLayout())
+            .hideAvatar(isHideAvatar())
             .build()
     );
     if (!StringUtils.isEmpty(result)) {

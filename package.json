@@ -4,6 +4,7 @@
     "docs:build": "vuepress build docs"
   },
   "devDependencies": {
+    "element-ui": "^2.13.0",
     "vuepress": "^1.4.0"
   }
 }
