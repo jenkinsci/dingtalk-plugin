@@ -49,7 +49,7 @@
     <developerConnection>scm:git:git@github.com:jenkinsci/dingding-notifications-plugin.git
     </developerConnection>
     <url>https://github.com/jenkinsci/dingding-notifications-plugin</url>
-    <tag>HEAD</tag>
+    <tag>dingding-notifications-2.1.0</tag>
   </scm>
 
   <repositories>

@@ -30,3 +30,7 @@ work
 .idea
 *.iml
 rebel.xml
+
+# vuepress
+docs-dist/
+node_modules/

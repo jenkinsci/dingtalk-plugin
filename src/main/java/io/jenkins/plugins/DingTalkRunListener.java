@@ -9,23 +9,27 @@ import hudson.model.TaskListener;
 import hudson.model.User;
 import hudson.model.listeners.RunListener;
 import io.jenkins.plugins.enums.BuildStatusEnum;
+import io.jenkins.plugins.enums.MsgTypeEnum;
 import io.jenkins.plugins.enums.NoticeOccasionEnum;
 import io.jenkins.plugins.model.BuildJobModel;
+import io.jenkins.plugins.model.ButtonModel;
+import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.service.impl.DingTalkServiceImpl;
+import io.jenkins.plugins.tools.Utils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import jenkins.model.Jenkins;
+import org.apache.commons.lang.StringUtils;
 
 /**
- * 监听 job 任务，使用钉钉机器人发送消息
+ * 所有项目触发
  *
  * @author liuwei
  * @date 2019/12/28 15:31
  */
-
 @Extension
 public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
@@ -37,11 +41,17 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
   public void send(Run<?, ?> run, TaskListener listener, BuildStatusEnum statusType) {
     Job<?, ?> job = run.getParent();
-    User user = User.current();
-
-    if (user == null) {
-      user = User.getUnknown();
-    }
+    UserIdCause userIdCause = run.getCause(UserIdCause.class);
+    User user =
+        userIdCause == null ||
+            StringUtils.isEmpty(
+                userIdCause.getUserId()
+            ) ?
+            User.getUnknown() :
+            User.getById(
+                userIdCause.getUserId(),
+                true
+            );
 
     // 项目信息
     String projectName = job.getFullDisplayName();
@@ -53,17 +63,16 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     String jobUrl = rootPath + run.getUrl();
     String duration = run.getDurationString();
     String executorName = user.getDisplayName();
-    String executorPhone = user.getProperty(DingTalkUserProperty.class).getMobile();
+    String executorMobile = user.getProperty(DingTalkUserProperty.class).getMobile();
     String datetime = formatter.format(run.getTimestamp().getTime());
-    String changeLog = jobUrl + "/changes";
-    String console = jobUrl + "/console";
+    List<ButtonModel> btns = Utils.createDefaultBtns(jobUrl);
 
     List<String> result = new ArrayList<>();
     DingTalkJobProperty property = job.getProperty(DingTalkJobProperty.class);
     property.getCheckedNotifierConfigs().forEach(notifierConfig -> {
       String robotId = notifierConfig.getRobotId();
       Set<String> atMobiles = notifierConfig.getAtMobiles();
-      BuildJobModel buildJobModel = BuildJobModel.builder()
+      String text = BuildJobModel.builder()
           .projectName(projectName)
           .projectUrl(projectUrl)
           .jobName(jobName)
@@ -72,18 +81,24 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
           .duration(duration)
           .datetime(datetime)
           .executorName(executorName)
-          .executorMobile(executorPhone)
+          .executorMobile(executorMobile)
+          .build()
+          .toMarkdown();
+      System.out.println(text);
+      MessageModel message = MessageModel.builder()
+          .type(MsgTypeEnum.ACTION_CARD)
+          .title("Jenkins 构建通知")
           .atMobiles(atMobiles)
-          .changeLog(changeLog)
-          .console(console)
+          .text(text)
+          .btns(btns)
           .build();
-      String msg = service.send(robotId, buildJobModel);
+      String msg = service.send(robotId, message);
       if (msg != null) {
         result.add(msg);
       }
     });
     if (listener != null && !result.isEmpty()) {
-      result.forEach(msg -> listener.error("钉钉机器人消息发送失败：%s", msg));
+      result.forEach(msg -> Utils.log(listener, msg));
     }
   }
 

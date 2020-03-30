@@ -1,4 +1,4 @@
 <?jelly escape-by-default='true'?>
 <div>
-  Use DingTalk robot to send notifications when projects are built.
+  Use DingTalk Robot to send notifications when project is built.
 </div>
