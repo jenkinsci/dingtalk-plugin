@@ -9,8 +9,10 @@ import hudson.util.FormValidation.Kind;
 import hudson.util.Secret;
 import io.jenkins.plugins.DingTalkSecurityPolicyConfig.DingTalkSecurityPolicyConfigDescriptor;
 import io.jenkins.plugins.enums.BuildStatusEnum;
+import io.jenkins.plugins.enums.MsgTypeEnum;
 import io.jenkins.plugins.enums.SecurityPolicyEnum;
 import io.jenkins.plugins.model.BuildJobModel;
+import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.tools.DingTalkSender;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -176,20 +178,27 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
       if (user == null) {
         user = User.getUnknown();
       }
-      String message = sender.send(
-          BuildJobModel
-              .builder()
-              .projectName("欢迎使用钉钉机器人插件~")
-              .projectUrl(rootUrl)
-              .jobName("系统配置")
-              .jobUrl(rootUrl + "/configure")
-              .statusType(BuildStatusEnum.SUCCESS)
-              .duration("-")
-              .executorName(user.getDisplayName())
-              .executorMobile(user.getDescription())
-              .datetime(formatter.format(System.currentTimeMillis()))
-              .build()
-      );
+      String text = BuildJobModel
+          .builder()
+          .projectName("欢迎使用钉钉机器人插件~")
+          .projectUrl(rootUrl)
+          .jobName("系统配置")
+          .jobUrl(rootUrl + "/configure")
+          .statusType(BuildStatusEnum.SUCCESS)
+          .duration("-")
+          .executorName(user.getDisplayName())
+          .executorMobile(user.getDescription())
+          .datetime(formatter.format(System.currentTimeMillis()))
+          .build()
+          .toMarkdown();
+      MessageModel msg = MessageModel
+          .builder()
+          .type(MsgTypeEnum.MARKDOWN)
+          .title("钉钉机器人测试成功")
+          .text(text)
+          .atAll(true)
+          .build();
+      String message = sender.sendMarkdown(msg);
       if (message == null) {
         return FormValidation
             .respond(
