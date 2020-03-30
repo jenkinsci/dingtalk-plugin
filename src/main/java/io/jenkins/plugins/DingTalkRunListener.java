@@ -6,6 +6,7 @@ import hudson.model.Job;
 import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
+import hudson.model.User;
 import hudson.model.listeners.RunListener;
 import io.jenkins.plugins.enums.BuildStatusEnum;
 import io.jenkins.plugins.enums.MsgTypeEnum;
@@ -38,11 +39,8 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
   public void send(Run<?, ?> run, TaskListener listener, BuildStatusEnum statusType) {
     Job<?, ?> job = run.getParent();
-    UserIdCause user = run.getCause(UserIdCause.class);
-
-    if (user == null) {
-      user = new UserIdCause();
-    }
+    UserIdCause userIdCause = run.getCause(UserIdCause.class);
+    User user = userIdCause == null?User.getUnknown():User.getById(userIdCause.getUserId(),true);
 
     // 项目信息
     String projectName = job.getFullDisplayName();
@@ -53,8 +51,8 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     String jobName = run.getDisplayName();
     String jobUrl = rootPath + run.getUrl();
     String duration = run.getDurationString();
-    String executorName = user.getUserName();
-    String executorPhone = user.getShortDescription();
+    String executorName = user.getDisplayName();
+    String executorMobile = user.getProperty(DingTalkUserProperty.class).getMobile();
     String datetime = formatter.format(run.getTimestamp().getTime());
     List<ButtonModel> btns = Utils.createDefaultBtns(jobUrl);
 
@@ -72,7 +70,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
           .duration(duration)
           .datetime(datetime)
           .executorName(executorName)
-          .executorMobile(executorPhone)
+          .executorMobile(executorMobile)
           .build()
           .toMarkdown();
       System.out.println(text);

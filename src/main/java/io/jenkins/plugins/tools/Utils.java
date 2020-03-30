@@ -57,10 +57,14 @@ public class Utils {
 
   /**
    * markdown 数组转字符串
+   *
    * @param markdown 数组
    * @return 字符串
    */
-  public static String join(Iterable<? extends CharSequence>  markdown){
+  public static String join(Iterable<? extends CharSequence> markdown) {
+    if (markdown == null) {
+      return "";
+    }
     return String.join("\n", markdown);
   }
 

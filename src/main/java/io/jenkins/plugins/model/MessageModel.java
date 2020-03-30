@@ -33,7 +33,7 @@ public class MessageModel {
   /**
    * 是否 at 全部
    */
-  private Boolean atAll;
+  private boolean atAll;
 
   /**
    * 标题，首屏会话透出的展示内容
@@ -115,7 +115,7 @@ public class MessageModel {
               )
       );
     }
-    at.setIsAtAll(String.valueOf(atAll));
+    at.setIsAtAll(atAll ? "true" : "false");
     return at;
   }
 

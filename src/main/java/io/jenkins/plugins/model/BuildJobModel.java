@@ -1,7 +1,6 @@
 package io.jenkins.plugins.model;
 
 import io.jenkins.plugins.enums.BuildStatusEnum;
-import io.jenkins.plugins.tools.AntdColor;
 import io.jenkins.plugins.tools.Utils;
 import java.util.Arrays;
 import lombok.Builder;
@@ -47,10 +46,7 @@ public class BuildJobModel {
             String.format("- 执行人：%s",
                 StringUtils.isEmpty(executorMobile) ?
                     executorName :
-                    Utils.dye(
-                        ("@" + executorMobile),
-                        AntdColor.BLUE.toString()
-                    )
+                    ("@" + executorMobile)
             )
         )
     );

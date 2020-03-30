@@ -52,7 +52,7 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
 
   private String title;
 
-  private String text;
+  private List<String> text;
 
   private String messageUrl;
 
@@ -104,9 +104,7 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
 
   @DataBoundSetter
   public void setText(List<String> text) {
-    if (text != null) {
-      this.text = Utils.join(text);
-    }
+    this.text = text;
   }
 
   @DataBoundSetter
@@ -178,7 +176,7 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
             .atMobiles(at)
             .atAll(atAll)
             .title(title)
-            .text(text)
+            .text(Utils.join(text))
             .messageUrl(messageUrl)
             .picUrl(picUrl)
             .singleTitle(singleTitle)

@@ -6,9 +6,9 @@
 
 :::
 
-### 语法
+## 语法
 
-```jenkins
+```groovy
 
 dingTalk (
     robot: '',
@@ -27,9 +27,9 @@ dingTalk (
 
 ```
 
-### 参数说明
+## 参数说明
 
-#### 通用的参数
+### 通用的参数
 
 | 参数  |            类型             | 说明              |
 | ----- | :-------------------------: | ----------------- |
@@ -50,7 +50,7 @@ dingTalk (
 
 :::
 
-#### MsgTypeEnum
+### MsgTypeEnum
 
 ```java
 
@@ -66,13 +66,13 @@ public enum MsgTypeEnum {
 
 ```
 
-#### TEXT 类型的消息
+### TEXT 类型的消息
 
 | 参数 |      类型      | 说明         |
 | ---- | :------------: | ------------ |
 | text | List\<String\> | 发送文本消息 |
 
-#### LINK 类型的消息
+### LINK 类型的消息
 
 | 参数                                         |      类型      | 说明                           |
 | -------------------------------------------- | :------------: | ------------------------------ |
@@ -81,14 +81,20 @@ public enum MsgTypeEnum {
 | messageUrl <Badge type="error" text="必填"/> |     String     | 点击消息跳转的 URL             |
 | picUrl                                       |     String     | 图片 URL                       |
 
-#### MARKDOWN 类型的消息
+::: warning
+
+该类型的消息不支持 At 功能。
+
+:::
+
+### MARKDOWN 类型的消息
 
 | 参数  |      类型      | 说明                                                    |
 | ----- | :------------: | ------------------------------------------------------- |
 | title |     String     | [首屏会话](#首屏会话) 透出的展示内容                    |
 | text  | List\<String\> | 消息内容，支持 [受限的 markdonw](#受限的 markdonw) 语法 |
 
-#### ACTION_CARD 类型的消息
+### ACTION_CARD 类型的消息
 
 | 参数       |              类型               | 说明                                                    |
 | ---------- | :-----------------------------: | ------------------------------------------------------- |
@@ -97,7 +103,7 @@ public enum MsgTypeEnum {
 | btnLayout  | [BtnLayoutEnum](#BtnLayoutEnum) | 按钮的排列方式                                          |
 | hideAvatar |             boolean             | 是否隐藏发消息者头像                                    |
 
-#### BtnLayoutEnum
+### BtnLayoutEnum
 
 ```java
 
@@ -117,20 +123,20 @@ public enum BtnLayoutEnum {
 
 ```
 
-##### 整体跳转
+#### 整体跳转
 
 | 参数        |  类型  | 说明                                                    |
 | ----------- | :----: | ------------------------------------------------------- |
 | singleTitle | String | 单个按钮的方案（设置此项和 `singleUrl` 后 `btns` 无效） |
 | singleUrl   | String | 点击 `singleTitle` 按钮触发的 URL                       |
 
-##### 独立跳转
+#### 独立跳转
 
 | 参数 |               类型                | 说明         |
 | ---- | :-------------------------------: | ------------ |
 | btns | List<[ButtonModel](#ButtonModel)> | 自定义按钮组 |
 
-#### ButtonModel
+### ButtonModel
 
 ```java
 
@@ -149,19 +155,19 @@ public class ButtonModel{
 }
 ```
 
-### 默认设置
+## 默认设置
 
-#### title 参数
+### title 参数
 
 当参数为空时，默认会使用 _Jenkins 通知_。
 
-#### ACTION_CARD 类型的消息
+### ACTION_CARD 类型的消息
 
 当 `singleTitle` 与 `btns` 都为空时，默认会创建 『更改记录』『控制台』 2 个按钮。
 
-### 效果展示
+## 效果展示
 
-#### TEXT 消息
+### TEXT 消息
 
 :::details 点击查看
 
@@ -169,7 +175,7 @@ public class ButtonModel{
 
 :::
 
-#### LINK 消息
+### LINK 消息
 
 :::details 点击查看
 
@@ -177,7 +183,7 @@ public class ButtonModel{
 
 :::
 
-#### MARKDOWN 消息
+### MARKDOWN 消息
 
 :::details 点击查看
 
@@ -185,7 +191,7 @@ public class ButtonModel{
 
 :::
 
-#### ACTION_CARD 整体跳转
+### ACTION_CARD 整体跳转
 
 :::details 点击查看
 
@@ -193,7 +199,7 @@ public class ButtonModel{
 
 :::
 
-#### ACTION_CARD 独立跳转
+### ACTION_CARD 独立跳转
 
 :::details 点击查看
 
@@ -201,7 +207,7 @@ public class ButtonModel{
 
 :::
 
-#### 首屏会话
+### 首屏会话
 
 :::details 点击查看
 

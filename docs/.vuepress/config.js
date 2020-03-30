@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  base: '/dingding-notifications/',
+  base: '/dingding-notifications-plugin/',
   port: 8888,
   dest: 'docs-dist',
   title: '钉钉机器人插件',
@@ -35,13 +35,19 @@ module.exports = {
         title: '指南',
         path: '/guide/getting-started',
         collapsable: false,
-        children: ['/guide/getting-started', '/guide/pipeline']
+        children: ['/guide/getting-started', '/guide/simple','/guide/pipeline']
       },
       {
         title: '示例',
         path: '/examples/text',
         collapsable: false,
-        children: ['/examples/text', '/examples/link']
+        children: [
+          '/examples/text',
+          '/examples/link',
+          '/examples/markdown',
+          '/examples/actionCardSingle',
+          '/examples/actionCardMultiple'
+        ]
       }
     ]
   }

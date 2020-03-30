@@ -26,21 +26,3 @@
 推荐使用 `加密` 模式的安全策略，并测试配置是否正确。
 
 :::
-
-## 简单使用
-
-在项目配置的 `General` 选项卡中找到 `钉钉配置`，勾选需要的机器人，`通知人` 填写同事的手机号。
-
-示例截图：
-
-::: details
-
-![freestyle-project-config](@/assets/freestyle-project-config.jpg)
-
-:::
-
-::: tip
-
-多个手机号码需要 `换行` 填写。
-
-:::
