@@ -274,6 +274,7 @@ class JavaFxColor {
           g = p;
           b = q;
           break;
+        default:
       }
     }
     float[] f = new float[3];

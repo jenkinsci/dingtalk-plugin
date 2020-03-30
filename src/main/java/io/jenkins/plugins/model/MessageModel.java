@@ -8,16 +8,25 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.commons.lang.StringUtils;
 
 /**
  * 消息
+ * <p>
+ * 不要使用 @Data 注解，spotbugs 会报错
+ * <p>
+ * Redundant nullcheck of this$title, which is known to be non-null in
+ * io.jenkins.plugins.model.MessageModel.equals(Object)
  *
  * @author liuwei
  * @date 2020/3/27 17:05
  */
-@Data
+@Getter
+@Setter
+@ToString
 @Builder
 public class MessageModel {
 

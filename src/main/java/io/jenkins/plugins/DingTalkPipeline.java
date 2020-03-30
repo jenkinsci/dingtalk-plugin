@@ -21,8 +21,8 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -30,13 +30,16 @@ import org.kohsuke.stapler.DataBoundSetter;
 
 /**
  * 支持 pipeline 中使用
+ * <p>
+ * * 不要使用 @Data 注解，spotbugs 会报错 * <p> * Redundant nullcheck of this$title, which is known to be
+ * non-null in * io.jenkins.plugins.model.MessageModel.equals(Object)
  *
  * @author liuwei
  * @date 2020/3/27 16:36
  */
 
-@Data
-@EqualsAndHashCode(callSuper = false)
+@Getter
+@Setter
 @SuppressWarnings("unused")
 public class DingTalkPipeline extends Builder implements SimpleBuildStep {
 
