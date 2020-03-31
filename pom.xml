@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <!--  该插件决定了可以使用的 jenkins 版本 -->
   <parent>
@@ -9,7 +10,7 @@
     <relativePath />
   </parent>
   <groupId>io.jenkins.plugins</groupId>
-  <artifactId>dingding-notifications</artifactId>
+  <artifactId>dingTalk</artifactId>
   <version>2.1.1-SNAPSHOT</version>
   <packaging>hpi</packaging>
   <properties>
@@ -25,8 +26,8 @@
   </properties>
 
   <name>DingTalk</name>
-  <description>Use DingTalk robot to send notifications when projects are built.</description>
-  <url>https://github.com/jenkinsci/dingding-notifications-plugin</url>
+  <description>钉钉 Jenkins 插件</description>
+  <url>https://github.com/jenkinsci/dingTalk-plugin</url>
 
   <!-- The default licence for Jenkins OSS Plugins is MIT. Substitute for the applicable one if needed. -->
   <licenses>
@@ -45,11 +46,11 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git://github.com/jenkinsci/dingding-notifications-plugin.git</connection>
-    <developerConnection>scm:git:git@github.com:jenkinsci/dingding-notifications-plugin.git
+    <connection>scm:git:git://github.com/jenkinsci/dingTalk-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:jenkinsci/dingTalk-plugin.git
     </developerConnection>
-    <url>https://github.com/jenkinsci/dingding-notifications-plugin</url>
-    <tag>dingding-notifications-2.1.0</tag>
+    <url>https://github.com/jenkinsci/dingTalk-plugin</url>
+    <tag>dingTalk-2.1.0</tag>
   </scm>
 
   <repositories>

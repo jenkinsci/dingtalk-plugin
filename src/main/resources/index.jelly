@@ -1,4 +1,4 @@
 <?jelly escape-by-default='true'?>
 <div>
-  Use DingTalk Robot to send notifications when project is built.
+  钉钉 Jenkins 插件
 </div>

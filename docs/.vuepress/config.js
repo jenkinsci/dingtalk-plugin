@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  base: '/dingding-notifications-plugin/',
+  base: '/dingTalk-plugin/',
   port: 8888,
   dest: 'docs-dist',
   title: '钉钉机器人插件',
@@ -18,7 +18,7 @@ module.exports = {
   },
   themeConfig: {
     docsDir: 'docs',
-    repo: 'jenkinsci/dingding-notifications-plugin',
+    repo: 'jenkinsci/dingTalk-plugin',
     sidebarDepth: 1,
     editLinks: true,
     editLinkText: '在 GitHub 上编辑此页',
@@ -26,8 +26,7 @@ module.exports = {
     nav: [
       {
         text: '发布记录',
-        link:
-          'https://github.com/jenkinsci/dingding-notifications-plugin/releases'
+        link: 'https://github.com/jenkinsci/dingTalk-plugin/releases'
       }
     ],
     sidebar: [
@@ -35,7 +34,7 @@ module.exports = {
         title: '指南',
         path: '/guide/getting-started',
         collapsable: false,
-        children: ['/guide/getting-started', '/guide/simple','/guide/pipeline']
+        children: ['/guide/getting-started', '/guide/simple', '/guide/pipeline']
       },
       {
         title: '进阶',
