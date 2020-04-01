@@ -1,5 +1,6 @@
 package io.jenkins.plugins;
 
+import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -161,12 +162,14 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
 
   @Override
   public void perform(@Nonnull Run<?, ?> run, @Nonnull FilePath workspace,
-      @Nonnull Launcher launcher, @Nonnull TaskListener listener)
-      throws InterruptedException, IOException {
+                      @Nonnull Launcher launcher, @Nonnull TaskListener listener)
+          throws InterruptedException, IOException {
+
+    EnvVars envVars=run.getEnvironment(listener);
 
     boolean defaultBtns = MsgTypeEnum.ACTION_CARD.equals(type) &&
-        StringUtils.isEmpty(singleTitle) &&
-        (btns == null || btns.isEmpty());
+            StringUtils.isEmpty(singleTitle) &&
+            (btns == null || btns.isEmpty());
 
     if (defaultBtns) {
       String jobUrl = rootPath + run.getUrl();
@@ -174,21 +177,21 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
     }
 
     String result = service.send(
-        robot,
-        MessageModel.builder()
-            .type(type)
-            .atMobiles(at)
-            .atAll(atAll)
-            .title(title)
-            .text(Utils.join(text))
-            .messageUrl(messageUrl)
-            .picUrl(picUrl)
-            .singleTitle(singleTitle)
-            .singleUrl(singleUrl)
-            .btns(btns)
-            .btnOrientation(getBtnLayout())
-            .hideAvatar(isHideAvatar())
-            .build()
+            robot,
+            MessageModel.builder()
+                    .type(type)
+                    .atMobiles(at)
+                    .atAll(atAll)
+                    .title(envVars.expand(title))
+                    .text(envVars.expand(Utils.join(text)))
+                    .messageUrl(envVars.expand(messageUrl))
+                    .picUrl(envVars.expand(picUrl))
+                    .singleTitle(envVars.expand(singleTitle))
+                    .singleUrl(envVars.expand(singleUrl))
+                    .btns(btns)
+                    .btnOrientation(getBtnLayout())
+                    .hideAvatar(isHideAvatar())
+                    .build()
     );
     if (!StringUtils.isEmpty(result)) {
       Utils.log(listener, result);
