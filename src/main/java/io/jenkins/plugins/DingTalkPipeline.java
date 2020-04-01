@@ -1,5 +1,6 @@
 package io.jenkins.plugins;
 
+import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -15,6 +16,7 @@ import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.service.impl.DingTalkServiceImpl;
 import io.jenkins.plugins.tools.Utils;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -164,6 +166,8 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
       @Nonnull Launcher launcher, @Nonnull TaskListener listener)
       throws InterruptedException, IOException {
 
+    EnvVars envVars = run.getEnvironment(listener);
+
     boolean defaultBtns = MsgTypeEnum.ACTION_CARD.equals(type) &&
         StringUtils.isEmpty(singleTitle) &&
         (btns == null || btns.isEmpty());
@@ -171,6 +175,31 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
     if (defaultBtns) {
       String jobUrl = rootPath + run.getUrl();
       this.btns = Utils.createDefaultBtns(jobUrl);
+    } else if (btns != null) {
+      btns.forEach(item -> {
+        item.setTitle(
+            envVars.expand(
+                item.getTitle()
+            )
+        );
+        item.setActionUrl(
+            envVars.expand(
+                item.getActionUrl()
+            )
+        );
+      });
+    }
+
+    if (at != null) {
+      String atStr = envVars.expand(
+          Utils.join(at)
+      );
+
+      this.at = new HashSet<>(
+          Arrays.asList(
+              Utils.split(atStr)
+          )
+      );
     }
 
     String result = service.send(
@@ -179,14 +208,30 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
             .type(type)
             .atMobiles(at)
             .atAll(atAll)
-            .title(title)
-            .text(Utils.join(text))
-            .messageUrl(messageUrl)
-            .picUrl(picUrl)
-            .singleTitle(singleTitle)
-            .singleUrl(singleUrl)
+            .title(
+                envVars.expand(title)
+            )
+            .text(
+                envVars.expand(
+                    Utils.join(text)
+                )
+            )
+            .messageUrl(
+                envVars.expand(messageUrl)
+            )
+            .picUrl(
+                envVars.expand(picUrl)
+            )
+            .singleTitle(
+                envVars.expand(singleTitle)
+            )
+            .singleUrl(
+                envVars.expand(singleUrl)
+            )
             .btns(btns)
-            .btnOrientation(getBtnLayout())
+            .btnOrientation(
+                getBtnLayout()
+            )
             .hideAvatar(isHideAvatar())
             .build()
     );
@@ -195,7 +240,7 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
     }
   }
 
-  @Symbol("dingTalk")
+  @Symbol({"dingtalk", "dingTalk"})
   @Extension
   public static class DescriptorImpl extends BuildStepDescriptor<Builder> {
 

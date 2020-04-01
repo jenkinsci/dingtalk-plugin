@@ -14,6 +14,11 @@ import java.util.List;
 public class Utils {
 
   /**
+   * 字符串分隔符
+   */
+  public static final String DELIMITER = "\n";
+
+  /**
    * 统一输出日志
    *
    * @param listener 任务监听器
@@ -58,14 +63,18 @@ public class Utils {
   /**
    * markdown 数组转字符串
    *
-   * @param markdown 数组
+   * @param list 数组
    * @return 字符串
    */
-  public static String join(Iterable<? extends CharSequence> markdown) {
-    if (markdown == null) {
+  public static String join(Iterable<? extends CharSequence> list) {
+    if (list == null) {
       return "";
     }
-    return String.join("\n", markdown);
+    return String.join(DELIMITER, list);
+  }
+
+  public static String[] split(String str){
+    return str.split(DELIMITER);
   }
 
 }
