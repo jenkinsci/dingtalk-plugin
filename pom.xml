@@ -10,7 +10,7 @@
     <relativePath />
   </parent>
   <groupId>io.jenkins.plugins</groupId>
-  <artifactId>dingtalk</artifactId>
+  <artifactId>dingding-notifications</artifactId>
   <version>2.1.1-SNAPSHOT</version>
   <packaging>hpi</packaging>
   <properties>
