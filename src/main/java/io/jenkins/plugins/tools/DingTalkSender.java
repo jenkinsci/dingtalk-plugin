@@ -25,9 +25,6 @@ public class DingTalkSender {
 
   private RobotConfigModel robotConfigModel;
 
-  public final static String AT_COLOR = "#1890ff";
-
-
   public DingTalkSender(DingTalkRobotConfig robot) {
     this.robotConfigModel = RobotConfigModel.of(robot);
   }
@@ -205,7 +202,7 @@ public class DingTalkSender {
     }
     String atContent = "@" + StringUtils.join(atMobiles, "@ ");
     if (markdown) {
-      return content + "\n" + "---" + "\n" + Utils.dye(atContent, AT_COLOR) + "\n";
+      return content + "\n" + "---" + "\n" + Utils.dye(atContent, AntdColor.BLUE.toString()) + "\n";
     }
     return content + atContent;
   }

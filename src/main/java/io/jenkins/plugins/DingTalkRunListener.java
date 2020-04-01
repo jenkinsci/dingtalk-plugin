@@ -84,10 +84,8 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
           .executorMobile(executorMobile)
           .build()
           .toMarkdown();
-      System.out.println(text);
       MessageModel message = MessageModel.builder()
           .type(MsgTypeEnum.ACTION_CARD)
-          .title("Jenkins 构建通知")
           .atMobiles(atMobiles)
           .text(text)
           .btns(btns)

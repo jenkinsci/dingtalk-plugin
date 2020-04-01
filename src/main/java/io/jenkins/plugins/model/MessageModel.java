@@ -30,6 +30,8 @@ import org.apache.commons.lang.StringUtils;
 @Builder
 public class MessageModel {
 
+  public static final String DEFAULT_TITLE = "Jenkins 构建通知";
+
   /**
    * 消息类型
    */
@@ -99,7 +101,7 @@ public class MessageModel {
    */
   public String getTitle() {
     if (title == null) {
-      return "Jenkins 构建通知";
+      return DEFAULT_TITLE;
     }
     return title;
   }
