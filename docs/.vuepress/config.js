@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  base: '/dingTalk-plugin/',
+  base: '/dingtalk-plugin/',
   port: 8888,
   dest: 'docs-dist',
   title: '钉钉机器人插件',
@@ -18,7 +18,7 @@ module.exports = {
   },
   themeConfig: {
     docsDir: 'docs',
-    repo: 'jenkinsci/dingTalk-plugin',
+    repo: 'jenkinsci/dingtalk-plugin',
     sidebarDepth: 1,
     editLinks: true,
     editLinkText: '在 GitHub 上编辑此页',
@@ -26,7 +26,7 @@ module.exports = {
     nav: [
       {
         text: '发布记录',
-        link: 'https://github.com/jenkinsci/dingTalk-plugin/releases'
+        link: 'https://github.com/jenkinsci/dingtalk-plugin/releases'
       }
     ],
     sidebar: [

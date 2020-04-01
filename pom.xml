@@ -10,7 +10,7 @@
     <relativePath />
   </parent>
   <groupId>io.jenkins.plugins</groupId>
-  <artifactId>dingTalk</artifactId>
+  <artifactId>dingtalk</artifactId>
   <version>2.1.1-SNAPSHOT</version>
   <packaging>hpi</packaging>
   <properties>
@@ -27,7 +27,7 @@
 
   <name>DingTalk</name>
   <description>钉钉 Jenkins 插件</description>
-  <url>https://github.com/jenkinsci/dingTalk-plugin</url>
+  <url>https://github.com/jenkinsci/dingtalk-plugin</url>
 
   <!-- The default licence for Jenkins OSS Plugins is MIT. Substitute for the applicable one if needed. -->
   <licenses>
@@ -46,11 +46,11 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git://github.com/jenkinsci/dingTalk-plugin.git</connection>
-    <developerConnection>scm:git:git@github.com:jenkinsci/dingTalk-plugin.git
+    <connection>scm:git:git://github.com/jenkinsci/dingtalk-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:jenkinsci/dingtalk-plugin.git
     </developerConnection>
-    <url>https://github.com/jenkinsci/dingTalk-plugin</url>
-    <tag>dingTalk-2.1.0</tag>
+    <url>https://github.com/jenkinsci/dingtalk-plugin</url>
+    <tag>dingtalk-2.1.0</tag>
   </scm>
 
   <repositories>

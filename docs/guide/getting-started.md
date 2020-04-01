@@ -8,7 +8,7 @@
 
 ## 安装插件
 
-在 `Manage Plugins` 安装 [DingTalk](https://plugins.jenkins.io/dingTalk/)。
+在 `Manage Plugins` 安装 [DingTalk](https://plugins.jenkins.io/dingtalk/)。
 
 ## 机器人配置
 

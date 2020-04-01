@@ -12,7 +12,7 @@
 
 ```groovy
 
-dingTalk (
+dingtalk (
     robot: '',
     type: '',
     at:[],

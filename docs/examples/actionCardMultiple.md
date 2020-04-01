@@ -13,7 +13,7 @@ pipeline {
             }
             post {
                 success {
-                    dingTalk (
+                    dingtalk (
                         robot: '58f10219-2cd3-4de7-a1af-f85f4010c10a',
                         type: 'ACTION_CARD',
                         title: '你有新的消息，请注意查收',

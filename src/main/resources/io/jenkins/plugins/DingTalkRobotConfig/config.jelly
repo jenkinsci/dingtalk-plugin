@@ -4,7 +4,7 @@
   xmlns:t="/lib/hudson" xmlns:f="/lib/form">
   <st:once>
     <script type="text/javascript"
-      src="${rootURL}/plugin/dingTalk/scripts/customValidate.js"/>
+      src="${rootURL}/plugin/dingtalk/scripts/customValidate.js"/>
   </st:once>
 
   <f:entry title="${%id}" field="id" description="${%idDesc}">

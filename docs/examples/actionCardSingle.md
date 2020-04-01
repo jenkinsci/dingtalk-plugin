@@ -11,7 +11,7 @@ pipeline {
             }
             post {
                 success {
-                    dingTalk (
+                    dingtalk (
                         robot: '58f10219-2cd3-4de7-a1af-f85f4010c10a',
                         type: 'ACTION_CARD',
                         title: '你有新的消息，请注意查收',
@@ -21,7 +21,7 @@ pipeline {
                             'Apple Store 的设计正从原来满满的科技感走向生活化，而其生活化的走向其实可以追溯到 20 年前苹果一个建立咖啡馆的计划'
                         ],
                         singleTitle: '查看更多',
-                        singleUrl: 'https://liuweigl.github.io/dingTalk-plugin/'
+                        singleUrl: 'https://liuweigl.github.io/dingtalk-plugin/'
                     )
                 }
             }
