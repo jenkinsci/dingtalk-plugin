@@ -26,7 +26,7 @@ import org.kohsuke.stapler.StaplerRequest;
  */
 @Getter
 @ToString
-@Extension
+@Extension(ordinal = 100)
 @SuppressWarnings("unused")
 public class DingTalkGlobalConfig extends GlobalConfiguration {
 

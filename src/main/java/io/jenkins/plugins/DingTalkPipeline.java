@@ -252,7 +252,7 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
 
     @Override
     public boolean isApplicable(Class<? extends AbstractProject> t) {
-      return true;
+      return false;
     }
   }
 }
