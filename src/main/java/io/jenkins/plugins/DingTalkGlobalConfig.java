@@ -1,7 +1,6 @@
 package io.jenkins.plugins;
 
 import hudson.Extension;
-import hudson.views.GlobalDefaultViewConfiguration;
 import io.jenkins.plugins.DingTalkRobotConfig.DingTalkRobotConfigDescriptor;
 import io.jenkins.plugins.enums.NoticeOccasionEnum;
 import java.util.Arrays;
@@ -27,9 +26,9 @@ import org.kohsuke.stapler.StaplerRequest;
  */
 @Getter
 @ToString
-@Extension
+@Extension(ordinal = 100)
 @SuppressWarnings("unused")
-public class DingTalkGlobalConfig extends GlobalDefaultViewConfiguration {
+public class DingTalkGlobalConfig extends GlobalConfiguration {
 
   /**
    * 通知时机

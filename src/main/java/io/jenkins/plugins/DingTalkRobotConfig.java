@@ -14,7 +14,6 @@ import io.jenkins.plugins.enums.SecurityPolicyEnum;
 import io.jenkins.plugins.model.BuildJobModel;
 import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.tools.DingTalkSender;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -171,7 +170,6 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
           webhook,
           securityPolicyConfigs
       );
-      SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
       DingTalkSender sender = new DingTalkSender(robotConfig);
       String rootUrl = Jenkins.get().getRootUrl();
       User user = User.current();
@@ -188,7 +186,6 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
           .duration("-")
           .executorName(user.getDisplayName())
           .executorMobile(user.getDescription())
-          .datetime(formatter.format(System.currentTimeMillis()))
           .build()
           .toMarkdown();
       MessageModel msg = MessageModel

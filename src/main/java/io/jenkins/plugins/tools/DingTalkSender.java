@@ -200,9 +200,9 @@ public class DingTalkSender {
     if (atMobiles == null || atMobiles.isEmpty()) {
       return content;
     }
-    String atContent = "@" + StringUtils.join(atMobiles, "@ ");
+    String atContent = "@" + StringUtils.join(atMobiles, " @");
     if (markdown) {
-      return content + "\n" + "---" + "\n" + Utils.dye(atContent, AntdColor.BLUE.toString()) + "\n";
+      return content + "\n\n" + Utils.dye(atContent, AntdColor.BLUE.toString()) + "\n";
     }
     return content + atContent;
   }

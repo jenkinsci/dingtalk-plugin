@@ -16,13 +16,12 @@ import io.jenkins.plugins.model.ButtonModel;
 import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.service.impl.DingTalkServiceImpl;
 import io.jenkins.plugins.tools.Utils;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import jenkins.model.Jenkins;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * 所有项目触发
@@ -30,6 +29,7 @@ import org.apache.commons.lang.StringUtils;
  * @author liuwei
  * @date 2019/12/28 15:31
  */
+@SuppressWarnings("unused")
 @Extension
 public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
@@ -42,36 +42,44 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
   public void send(Run<?, ?> run, TaskListener listener, BuildStatusEnum statusType) {
     Job<?, ?> job = run.getParent();
     UserIdCause userIdCause = run.getCause(UserIdCause.class);
-    User user =
-        userIdCause == null ||
-            StringUtils.isEmpty(
-                userIdCause.getUserId()
-            ) ?
-            User.getUnknown() :
-            User.getById(
-                userIdCause.getUserId(),
-                true
-            );
+    // 执行人信息
+    User user = null;
+    String executorName;
+    String executorMobile = null;
+    // 执行人不存在
+    if (userIdCause != null && userIdCause.getUserId() != null) {
+      user = User.getById(userIdCause.getUserId(), false);
+    }
+    if (user != null) {
+      executorName = user.getDisplayName();
+      executorMobile = user.getProperty(DingTalkUserProperty.class).getMobile();
+    } else {
+      executorName = run.getCauses()
+          .stream()
+          .map(
+              item -> item.getShortDescription().replace(
+                  "Started by remote host",
+                  "Host"
+              )
+          )
+          .collect(Collectors.joining());
+    }
 
     // 项目信息
     String projectName = job.getFullDisplayName();
     String projectUrl = job.getAbsoluteUrl();
 
     // 构建信息
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     String jobName = run.getDisplayName();
     String jobUrl = rootPath + run.getUrl();
     String duration = run.getDurationString();
-    String executorName = user.getDisplayName();
-    String executorMobile = user.getProperty(DingTalkUserProperty.class).getMobile();
-    String datetime = formatter.format(run.getTimestamp().getTime());
     List<ButtonModel> btns = Utils.createDefaultBtns(jobUrl);
-
     List<String> result = new ArrayList<>();
     DingTalkJobProperty property = job.getProperty(DingTalkJobProperty.class);
-    property.getCheckedNotifierConfigs().forEach(notifierConfig -> {
-      String robotId = notifierConfig.getRobotId();
-      Set<String> atMobiles = notifierConfig.getAtMobiles();
+    List<DingTalkNotifierConfig> notifierConfigs = property.getCheckedNotifierConfigs();
+    for (DingTalkNotifierConfig item : notifierConfigs) {
+      String robotId = item.getRobotId();
+      Set<String> atMobiles = item.getAtMobiles();
       String text = BuildJobModel.builder()
           .projectName(projectName)
           .projectUrl(projectUrl)
@@ -79,7 +87,6 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
           .jobUrl(jobUrl)
           .statusType(statusType)
           .duration(duration)
-          .datetime(datetime)
           .executorName(executorName)
           .executorMobile(executorMobile)
           .build()
@@ -94,7 +101,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
       if (msg != null) {
         result.add(msg);
       }
-    });
+    }
     if (listener != null && !result.isEmpty()) {
       result.forEach(msg -> Utils.log(listener, msg));
     }

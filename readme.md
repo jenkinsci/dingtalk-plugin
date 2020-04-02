@@ -11,3 +11,7 @@
 ## Contributing
 
 🍻 [Contributing](./CONTRIBUTING.md)
+
+## TODO
+
+支持 Outgoing 模式的机器人。

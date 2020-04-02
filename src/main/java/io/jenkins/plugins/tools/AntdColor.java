@@ -146,6 +146,11 @@ public class AntdColor {
   public static final AntdColor MAGENTA = new AntdColor("#EB2F96");
 
   /**
+   * 黑色
+   */
+  public static final AntdColor BLACK = new AntdColor("#333");
+
+  /**
    * 灰色
    */
   public static final AntdColor GREY = new AntdColor("#666666");

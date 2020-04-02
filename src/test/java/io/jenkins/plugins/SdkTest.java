@@ -19,6 +19,7 @@ import org.apache.commons.codec.binary.Base64;
  * @author liuwei
  * @date 2020/3/28 17:40
  */
+
 public class SdkTest {
 
   public static void main(String[] args) {
