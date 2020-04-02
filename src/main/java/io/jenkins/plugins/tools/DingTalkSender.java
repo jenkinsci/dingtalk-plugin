@@ -202,7 +202,7 @@ public class DingTalkSender {
     }
     String atContent = "@" + StringUtils.join(atMobiles, " @");
     if (markdown) {
-      return content + "\n" + "---" + "\n" + Utils.dye(atContent, AntdColor.BLUE.toString()) + "\n";
+      return content + "\n\n" + Utils.dye(atContent, AntdColor.BLUE.toString()) + "\n";
     }
     return content + atContent;
   }

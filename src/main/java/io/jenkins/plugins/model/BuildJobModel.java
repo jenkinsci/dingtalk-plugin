@@ -33,9 +33,8 @@ public class BuildJobModel {
 
     return Utils.join(
         Arrays.asList(
-            String.format("# [%s](%s)", projectName, projectUrl),
-            "---",
-            String.format("- 任务：[%s](%s)", jobName, jobUrl),
+            String.format("- 项目：%s", projectName),
+            String.format("- 任务：%s", jobName),
             String.format("- 状态：%s",
                 Utils.dye(
                     statusType.getLabel(),

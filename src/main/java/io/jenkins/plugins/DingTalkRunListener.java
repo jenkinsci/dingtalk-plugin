@@ -42,16 +42,18 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
   public void send(Run<?, ?> run, TaskListener listener, BuildStatusEnum statusType) {
     Job<?, ?> job = run.getParent();
     UserIdCause userIdCause = run.getCause(UserIdCause.class);
-    User user =
-        userIdCause == null ||
-            StringUtils.isEmpty(
-                userIdCause.getUserId()
-            ) ?
-            User.getUnknown() :
-            User.getById(
-                userIdCause.getUserId(),
-                true
-            );
+    User user = null;
+    try {
+      user = User.getById(
+          userIdCause.getUserId(),
+          true
+      );
+    } catch (Exception ignored) {
+    } finally {
+      if (user == null) {
+        user = User.getUnknown();
+      }
+    }
 
     // 项目信息
     String projectName = job.getFullDisplayName();
@@ -64,7 +66,6 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     String duration = run.getDurationString();
     String executorName = user.getDisplayName();
     String executorMobile = user.getProperty(DingTalkUserProperty.class).getMobile();
-    String datetime = formatter.format(run.getTimestamp().getTime());
     List<ButtonModel> btns = Utils.createDefaultBtns(jobUrl);
 
     List<String> result = new ArrayList<>();
@@ -79,7 +80,6 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
           .jobUrl(jobUrl)
           .statusType(statusType)
           .duration(duration)
-          .datetime(datetime)
           .executorName(executorName)
           .executorMobile(executorMobile)
           .build()
