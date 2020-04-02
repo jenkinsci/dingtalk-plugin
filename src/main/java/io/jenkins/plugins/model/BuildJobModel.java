@@ -23,8 +23,6 @@ public class BuildJobModel {
 
   private String duration;
 
-  private String datetime;
-
   private String executorName;
 
   private String executorMobile;
@@ -33,15 +31,16 @@ public class BuildJobModel {
 
     return Utils.join(
         Arrays.asList(
-            String.format("- 项目：%s", projectName),
-            String.format("- 任务：%s", jobName),
+            String.format("# [%s](%s)",projectName,projectUrl),
+            "---",
+            String.format("- 任务：[%s](%s)", jobName,jobUrl),
             String.format("- 状态：%s",
                 Utils.dye(
                     statusType.getLabel(),
                     statusType.getColor()
                 )
             ),
-            String.format("- 持续时间：%s", datetime),
+            String.format("- 持续时间：%s", duration),
             String.format("- 执行人：%s",
                 StringUtils.isEmpty(executorMobile) ?
                     executorName :

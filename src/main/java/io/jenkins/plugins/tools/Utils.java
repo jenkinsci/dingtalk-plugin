@@ -73,6 +73,11 @@ public class Utils {
     return String.join(DELIMITER, list);
   }
 
+  /**
+   * 字符串转数组
+   * @param str 字符串
+   * @return 数组
+   */
   public static String[] split(String str){
     return str.split(DELIMITER);
   }

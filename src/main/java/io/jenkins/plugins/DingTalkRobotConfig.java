@@ -188,7 +188,6 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
           .duration("-")
           .executorName(user.getDisplayName())
           .executorMobile(user.getDescription())
-          .datetime(formatter.format(System.currentTimeMillis()))
           .build()
           .toMarkdown();
       MessageModel msg = MessageModel
