@@ -31,6 +31,11 @@ import org.kohsuke.stapler.StaplerRequest;
 public class DingTalkGlobalConfig extends GlobalConfiguration {
 
   /**
+   * 是否打印详细日志
+   */
+  private boolean verbose;
+
+  /**
    * 通知时机
    */
   private Set<String> noticeOccasions = Arrays.stream(
@@ -62,6 +67,11 @@ public class DingTalkGlobalConfig extends GlobalConfiguration {
   }
 
   @DataBoundSetter
+  public void setVerbose(boolean verbose) {
+    this.verbose = verbose;
+  }
+
+  @DataBoundSetter
   public void setNoticeOccasions(Set<String> noticeOccasions) {
     this.noticeOccasions = noticeOccasions;
   }
@@ -73,8 +83,9 @@ public class DingTalkGlobalConfig extends GlobalConfiguration {
   }
 
   @DataBoundConstructor
-  public DingTalkGlobalConfig(Set<String> noticeOccasions,
+  public DingTalkGlobalConfig(boolean verbose,Set<String> noticeOccasions,
       CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs) {
+    this.verbose=verbose;
     this.noticeOccasions = noticeOccasions;
     this.robotConfigs = robotConfigs;
   }
@@ -110,7 +121,7 @@ public class DingTalkGlobalConfig extends GlobalConfiguration {
    *
    * @return 全局配置信息
    */
-  public static DingTalkGlobalConfig getInstance() {
+  public static DingTalkGlobalConfig get() {
     return GlobalConfiguration.all().get(DingTalkGlobalConfig.class);
   }
 }
