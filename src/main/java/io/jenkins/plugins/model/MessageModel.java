@@ -136,7 +136,7 @@ public class MessageModel {
    *
    * @return 按钮列表
    */
-  public List<Btns> getBtns() {
+  public List<Btns> getRobotBtns() {
     if (btns == null) {
       return null;
     }
@@ -149,5 +149,4 @@ public class MessageModel {
     }
     return btnList;
   }
-
 }

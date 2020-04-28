@@ -14,6 +14,7 @@ import io.jenkins.plugins.enums.MsgTypeEnum;
 import io.jenkins.plugins.model.ButtonModel;
 import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.service.impl.DingTalkServiceImpl;
+import io.jenkins.plugins.tools.Logger;
 import io.jenkins.plugins.tools.Utils;
 import java.io.IOException;
 import java.util.Arrays;
@@ -236,7 +237,7 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
             .build()
     );
     if (!StringUtils.isEmpty(result)) {
-      Utils.log(listener, result);
+      Logger.error(listener, result);
     }
   }
 

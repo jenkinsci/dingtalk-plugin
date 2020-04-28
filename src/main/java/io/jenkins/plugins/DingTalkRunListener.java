@@ -1,5 +1,6 @@
 package io.jenkins.plugins;
 
+import hudson.EnvVars;
 import hudson.Extension;
 import hudson.model.Cause.UserIdCause;
 import hudson.model.Job;
@@ -15,8 +16,10 @@ import io.jenkins.plugins.model.BuildJobModel;
 import io.jenkins.plugins.model.ButtonModel;
 import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.service.impl.DingTalkServiceImpl;
+import io.jenkins.plugins.tools.Logger;
+import io.jenkins.plugins.tools.Logger.LineType;
 import io.jenkins.plugins.tools.Utils;
-import java.io.PrintStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import jenkins.model.Jenkins;
 import lombok.extern.log4j.Log4j;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
  * 所有项目触发
@@ -36,18 +40,13 @@ import lombok.extern.log4j.Log4j;
 @Extension
 public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
-  private DingTalkServiceImpl service = new DingTalkServiceImpl();
+  private final DingTalkServiceImpl service = new DingTalkServiceImpl();
 
-  private DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.get();
+  private final DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.get();
 
   private final String rootPath = Jenkins.get().getRootUrl();
 
-  public DingTalkRunListener() {
-    log.debug("================= 钉钉监听器已生效 =================");
-  }
-
   public void send(Run<?, ?> run, TaskListener listener, BuildStatusEnum statusType) {
-    PrintStream logger = listener.getLogger();
     boolean isVerbose = globalConfig.isVerbose();
     Job<?, ?> job = run.getParent();
     UserIdCause userIdCause = run.getCause(UserIdCause.class);
@@ -61,7 +60,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
     if (user == null) {
       if (isVerbose) {
-        logger.println("未获取到构建人信息，将尝试从构建信息中模糊匹配。");
+        Logger.debug(listener, "未获取到构建人信息，将尝试从构建信息中模糊匹配。");
       }
       executorName = run.getCauses()
           .stream()
@@ -76,15 +75,12 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
       executorName = user.getDisplayName();
       executorMobile = user.getProperty(DingTalkUserProperty.class).getMobile();
       if (isVerbose && executorMobile == null) {
-        logger.println(String.format(
-            "[%s] 暂未设置手机号码，请前往 %s 添加。",
+        Logger.debug(
+            listener,
+            "用户【%s】暂未设置手机号码，请前往 %s 添加。",
             executorName,
-            String.format(
-                "<a href=\"%s\">%s</a>",
-                user.getAbsoluteUrl() + "/configure",
-                "设置页面"
-            )
-        ));
+            user.getAbsoluteUrl() + "/configure"
+        );
       }
     }
 
@@ -100,9 +96,20 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     List<String> result = new ArrayList<>();
     DingTalkJobProperty property = job.getProperty(DingTalkJobProperty.class);
     List<DingTalkNotifierConfig> notifierConfigs = property.getCheckedNotifierConfigs();
-
+    EnvVars envVars = null;
+    try {
+      envVars = run.getEnvironment(listener);
+      if (isVerbose) {
+        Logger.debug(listener, "当前可用的环境变量：%s", envVars);
+      }
+    } catch (InterruptedException | IOException e) {
+      log.error(e);
+      Logger.debug(listener, "获取环境变量时发生异常，钉钉自定义内容将跳过环境变量解析。");
+      Logger.debug(listener, ExceptionUtils.getStackTrace(e));
+    }
     for (DingTalkNotifierConfig item : notifierConfigs) {
       String robotId = item.getRobotId();
+      String content = item.getContent();
       Set<String> atMobiles = item.getAtMobiles();
       String text = BuildJobModel.builder()
           .projectName(projectName)
@@ -113,6 +120,9 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
           .duration(duration)
           .executorName(executorName)
           .executorMobile(executorMobile)
+          .content(
+              envVars == null ? content : envVars.expand(content)
+          )
           .build()
           .toMarkdown();
       MessageModel message = MessageModel.builder()
@@ -121,30 +131,27 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
           .text(text)
           .btns(btns)
           .build();
+      if (isVerbose) {
+        Logger.debug(listener, "当前钉钉机器人信息：%s", item);
+        Logger.debug(listener, "发送的消息详情：%s", message);
+      }
       String msg = service.send(robotId, message);
       if (msg != null) {
         result.add(msg);
       }
     }
 
-    if (result.isEmpty()) {
-      if (isVerbose) {
-        logger.println("钉钉已成功发送消息，请注意查收。");
-      }
-    } else {
-      result.forEach(msg -> Utils.log(listener, msg));
+    if (!result.isEmpty()) {
+      result.forEach(msg -> Logger.error(listener, msg));
     }
   }
 
   @Override
   public void onStarted(Run<?, ?> build, TaskListener listener) {
     boolean isVerbose = globalConfig.isVerbose();
-    PrintStream logger = listener.getLogger();
     if (isVerbose) {
-      logger.println(String.format(
-          "钉钉全局配置信息：<pre>%s</pre>",
-          globalConfig
-      ));
+      Logger.line(listener, LineType.START);
+      Logger.debug(listener, "钉钉全局配置信息：%s", globalConfig);
     }
     if (
         globalConfig.getNoticeOccasions().contains(
@@ -153,7 +160,10 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     ) {
       this.send(build, listener, BuildStatusEnum.START);
     } else if (isVerbose) {
-      listener.getLogger().println("项目开始构建：无需触发钉钉");
+      Logger.debug(listener, "项目开始构建：未匹配的通知时机，无需触发钉钉");
+    }
+    if (isVerbose) {
+      Logger.line(listener, LineType.END);
     }
   }
 
@@ -164,7 +174,11 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     boolean isVerbose = globalConfig.isVerbose();
     Set<String> noticeOccasions = globalConfig.getNoticeOccasions();
     Result result = build.getResult();
-    PrintStream logger = listener.getLogger();
+
+    if (isVerbose) {
+      Logger.line(listener, LineType.START);
+    }
+
     if (Result.SUCCESS.equals(result)) {
 
       if (noticeOccasions.contains(NoticeOccasionEnum.SUCCESS.name())) {
@@ -203,21 +217,22 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     } else {
       statusType = BuildStatusEnum.UNKNOWN;
       if (isVerbose) {
-        logger.println(String.format(
-            "不匹配的构建结果类型：%s",
-            result == null ? "null" : result
-        ));
+        Logger.debug(listener, "不匹配的构建结果类型：%s", result == null ? "null" : result);
       }
     }
 
     if (skipped) {
       if (isVerbose) {
-        logger.println("构建已结束：无需触发钉钉");
+        Logger.debug(listener, "构建已结束：无匹配的通知时机，无需触发钉钉");
       }
       return;
     }
 
     this.send(build, listener, statusType);
+
+    if (isVerbose) {
+      Logger.line(listener, LineType.END);
+    }
   }
 
 }

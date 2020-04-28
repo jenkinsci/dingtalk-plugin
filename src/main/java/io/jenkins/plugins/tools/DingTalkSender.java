@@ -130,7 +130,7 @@ public class DingTalkSender {
     );
     String singleTitle = msg.getSingleTitle();
     if (StringUtils.isEmpty(singleTitle)) {
-      actioncard.setBtns(msg.getBtns());
+      actioncard.setBtns(msg.getRobotBtns());
     } else {
       actioncard.setSingleTitle(singleTitle);
       actioncard.setSingleURL(

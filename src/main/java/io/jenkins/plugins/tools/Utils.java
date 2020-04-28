@@ -2,8 +2,10 @@ package io.jenkins.plugins.tools;
 
 import hudson.model.TaskListener;
 import io.jenkins.plugins.model.ButtonModel;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * 通用方法合集
@@ -18,15 +20,6 @@ public class Utils {
    */
   public static final String DELIMITER = "\n";
 
-  /**
-   * 统一输出日志
-   *
-   * @param listener 任务监听器
-   * @param msg      消息
-   */
-  public static void log(TaskListener listener, String msg) {
-    listener.error("钉钉机器人消息发送失败：%s", msg);
-  }
 
   /**
    * 创建默认的按钮列表
@@ -75,10 +68,11 @@ public class Utils {
 
   /**
    * 字符串转数组
+   *
    * @param str 字符串
    * @return 数组
    */
-  public static String[] split(String str){
+  public static String[] split(String str) {
     return str.split(DELIMITER);
   }
 

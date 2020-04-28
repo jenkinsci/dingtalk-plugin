@@ -6,6 +6,7 @@ import hudson.model.Descriptor;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -29,6 +30,8 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
 
   private String atMobile;
 
+  private String content;
+
   public Set<String> getAtMobiles() {
     if (StringUtils.isEmpty(atMobile)) {
       return null;
@@ -41,16 +44,18 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
       boolean checked,
       String robotId,
       String robotName,
-      String atMobile
+      String atMobile,
+      String content
   ) {
     this.checked = checked;
     this.robotId = robotId;
     this.robotName = robotName;
     this.atMobile = atMobile;
+    this.content = content;
   }
 
   public DingTalkNotifierConfig(DingTalkRobotConfig robotConfig) {
-    this(false, robotConfig.getId(), robotConfig.getName(), null);
+    this(false, robotConfig.getId(), robotConfig.getName(), null, "");
   }
 
   @Extension

@@ -24,6 +24,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
  */
 @ToString
 @NoArgsConstructor
+@SuppressWarnings("unused")
 public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
 
   private CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigs;
@@ -48,6 +49,7 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
           if (id.equals(robotId) && notifierConfig.isChecked()) {
             newNotifierConfig.setChecked(true);
             newNotifierConfig.setAtMobile(notifierConfig.getAtMobile());
+            newNotifierConfig.setContent(notifierConfig.getContent());
           }
         }
       }
