@@ -25,13 +25,7 @@ import org.junit.Test;
 public class SdkTest {
 
 
-  @Test
-  public void testJson() {
-    String result = JSONObject.fromObject(new DingTalkGlobalConfig(false, null, null)).toString();
-    System.out.println(result);
-  }
 
-  @Test
   public void testDingTalk() {
     try {
       Long timestamp = System.currentTimeMillis();

@@ -34,7 +34,11 @@ module.exports = {
         title: '指南',
         path: '/guide/getting-started',
         collapsable: false,
-        children: ['/guide/getting-started', '/guide/simple', '/guide/pipeline']
+        children: [
+          '/guide/getting-started',
+          '/guide/freestyle',
+          '/guide/pipeline'
+        ]
       },
       {
         title: '进阶',
@@ -44,9 +48,10 @@ module.exports = {
       },
       {
         title: '示例',
-        path: '/examples/text',
+        path: '/examples/freestyleAdvanced',
         collapsable: false,
         children: [
+          '/examples/freestyleAdvanced',
           '/examples/text',
           '/examples/link',
           '/examples/markdown',
