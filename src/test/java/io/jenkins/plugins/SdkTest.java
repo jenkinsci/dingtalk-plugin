@@ -13,7 +13,9 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import net.sf.json.JSONObject;
 import org.apache.commons.codec.binary.Base64;
+import org.junit.Test;
 
 /**
  * @author liuwei
@@ -22,12 +24,15 @@ import org.apache.commons.codec.binary.Base64;
 
 public class SdkTest {
 
-  public static void main(String[] args) {
-//    testDingTalk();
-//    AntdColor.GEEK_BLUE.show();
+
+  @Test
+  public void testJson() {
+    String result = JSONObject.fromObject(new DingTalkGlobalConfig(false, null, null)).toString();
+    System.out.println(result);
   }
 
-  static void testDingTalk() {
+  @Test
+  public void testDingTalk() {
     try {
       Long timestamp = System.currentTimeMillis();
       String secret = "SEC34778ce7a08f78577a2d11f8436d9ba67060e64acc8f0095afb61babaa31683b";

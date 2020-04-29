@@ -7,9 +7,15 @@
     field="checked"
     inline="true"
     checked="${instance.isChecked()}">
-    <f:entry field="atMobile" title="${%atMobileTitle}">
-      <f:textarea/>
-    </f:entry>
+    <f:advanced>
+      <f:entry field="atMobile" title="${%atMobileTitle}">
+        <f:textarea/>
+      </f:entry>
+      <f:entry field="content" title="${%content}">
+        <f:textarea/>
+      </f:entry>
+    </f:advanced>
+
     <f:invisibleEntry>
       <div style="display: none;">
         <f:textbox field="robotId" value="${instance.getRobotId()}"/>

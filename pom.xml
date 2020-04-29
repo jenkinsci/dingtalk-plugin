@@ -49,7 +49,7 @@
     <developerConnection>scm:git:git@github.com:jenkinsci/dingtalk-plugin.git
     </developerConnection>
     <url>https://github.com/jenkinsci/dingtalk-plugin</url>
-    <tag>dingtalk-${version}</tag>
+    <tag>dingtalk-${project.version}</tag>
   </scm>
 
   <repositories>

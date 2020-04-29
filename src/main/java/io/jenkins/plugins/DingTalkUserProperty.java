@@ -7,9 +7,7 @@ import hudson.model.UserPropertyDescriptor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import net.sf.json.JSONObject;
-import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 
 public class DingTalkUserProperty extends UserProperty {

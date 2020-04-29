@@ -3,7 +3,6 @@ package io.jenkins.plugins;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
 import hudson.model.Job;
 import hudson.model.JobProperty;
@@ -12,7 +11,6 @@ import io.jenkins.plugins.DingTalkNotifierConfig.DingTalkNotifierConfigDescripto
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
-import jenkins.YesNoMaybe;
 import jenkins.model.Jenkins;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -26,6 +24,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
  */
 @ToString
 @NoArgsConstructor
+@SuppressWarnings("unused")
 public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
 
   private CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigs;
@@ -38,7 +37,7 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
   public CopyOnWriteArrayList<DingTalkNotifierConfig> getNotifierConfigs() {
 
     CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigsList = new CopyOnWriteArrayList<>();
-    CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs = DingTalkGlobalConfig.getInstance()
+    CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs = DingTalkGlobalConfig.get()
         .getRobotConfigs();
 
     for (DingTalkRobotConfig robotConfig : robotConfigs) {
@@ -50,6 +49,7 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
           if (id.equals(robotId) && notifierConfig.isChecked()) {
             newNotifierConfig.setChecked(true);
             newNotifierConfig.setAtMobile(notifierConfig.getAtMobile());
+            newNotifierConfig.setContent(notifierConfig.getContent());
           }
         }
       }
@@ -105,7 +105,7 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
      */
     public List<DingTalkNotifierConfig> getDefaultNotifierConfigs() {
       return DingTalkGlobalConfig
-          .getInstance().getRobotConfigs()
+          .get().getRobotConfigs()
           .stream()
           .map(DingTalkNotifierConfig::new)
           .collect(Collectors.toList());

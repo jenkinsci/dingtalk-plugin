@@ -24,7 +24,7 @@ public class DingTalkServiceImpl implements DingTalkService {
   private DingTalkSender getSender(String robotId) {
     DingTalkSender sender = senders.get(robotId);
     if (sender == null) {
-      DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.getInstance();
+      DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.get();
       CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs = globalConfig.getRobotConfigs();
       Optional<DingTalkRobotConfig> robotConfigOptional = robotConfigs.stream()
           .filter(item -> robotId.equals(item.getId())).findAny();
@@ -43,6 +43,9 @@ public class DingTalkServiceImpl implements DingTalkService {
     DingTalkSender sender = getSender(robotId);
     if (sender == null) {
       return String.format("ID 为 %s 的机器人不存在。", robotId);
+    }
+    if (type == null) {
+      return "消息类型【type】不能为空";
     }
     switch (type) {
       case TEXT:
