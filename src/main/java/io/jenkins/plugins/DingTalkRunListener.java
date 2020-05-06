@@ -92,7 +92,6 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     String jobName = run.getDisplayName();
     String jobUrl = rootPath + run.getUrl();
     String duration = run.getDurationString();
-    List<ButtonModel> btns = Utils.createDefaultBtns(jobUrl);
     List<String> result = new ArrayList<>();
     DingTalkJobProperty property = job.getProperty(DingTalkJobProperty.class);
     List<DingTalkNotifierConfig> notifierConfigs = property.getCheckedNotifierConfigs();
@@ -129,7 +128,6 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
           .type(MsgTypeEnum.ACTION_CARD)
           .atMobiles(atMobiles)
           .text(text)
-          .btns(btns)
           .build();
       if (isVerbose) {
         Logger.debug(listener, "当前钉钉机器人信息：%s", item);

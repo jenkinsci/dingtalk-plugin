@@ -20,28 +20,6 @@ public class Utils {
    */
   public static final String DELIMITER = "\n";
 
-
-  /**
-   * 创建默认的按钮列表
-   *
-   * @param jobUrl 任务地址
-   * @return 按钮列表
-   */
-  public static List<ButtonModel> createDefaultBtns(String jobUrl) {
-    String changeLog = jobUrl + "/changes";
-    String console = jobUrl + "/console";
-
-    List<ButtonModel> btns = new ArrayList<>();
-    btns.add(
-        ButtonModel.of("更改记录", changeLog)
-    );
-    btns.add(
-        ButtonModel.of("控制台", console)
-    );
-
-    return btns;
-  }
-
   /**
    * markdown 染色
    *

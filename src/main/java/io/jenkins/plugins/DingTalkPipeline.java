@@ -169,14 +169,7 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
 
     EnvVars envVars = run.getEnvironment(listener);
 
-    boolean defaultBtns = MsgTypeEnum.ACTION_CARD.equals(type) &&
-        StringUtils.isEmpty(singleTitle) &&
-        (btns == null || btns.isEmpty());
-
-    if (defaultBtns) {
-      String jobUrl = rootPath + run.getUrl();
-      this.btns = Utils.createDefaultBtns(jobUrl);
-    } else if (btns != null) {
+    if (btns != null) {
       btns.forEach(item -> {
         item.setTitle(
             envVars.expand(

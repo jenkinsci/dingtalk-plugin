@@ -33,23 +33,27 @@ public class BuildJobModel {
   private String content;
 
   public String toMarkdown() {
+    String owner = StringUtils.isEmpty(executorMobile) ? executorName : ("@" + executorMobile);
+    String status = Utils.dye(statusType.getLabel(), statusType.getColor());
+    String consoleUrl = jobUrl + "console";
 
     return Utils.join(
         Arrays.asList(
-            String.format("# [%s](%s)", projectName, projectUrl),
+            String.format("# %s", projectName),
             "---",
-            String.format("- 任务：[%s](%s)", jobName, jobUrl),
-            String.format("- 状态：%s",
-                Utils.dye(
-                    statusType.getLabel(),
-                    statusType.getColor()
-                )
+            String.format(
+                "[%s](%s) - %s ",
+                jobName,
+                jobUrl,
+                status
             ),
-            String.format("- 持续时间：%s", duration),
-            String.format("- 执行人：%s",
-                StringUtils.isEmpty(executorMobile) ?
-                    executorName :
-                    ("@" + executorMobile)
+            "---",
+            owner,
+            "---",
+            String.format(
+                "%s - [Console](%s)",
+                duration,
+                consoleUrl
             ),
             content
         )
