@@ -51,7 +51,7 @@ public class BuildJobModel {
                     executorName :
                     ("@" + executorMobile)
             ),
-            content
+            content == null ? '' : content
         )
     );
   }
