@@ -8,6 +8,12 @@
 
 :::
 
+## 注意
+
+如果 jenkins 更新中心地址（升级站点）不是官方的，可能无法获取最新的版本（第三方镜像有延迟）。
+
+请切回官方镜像源：https://updates.jenkins.io/update-center.json 。
+
 ## 安装插件
 
 在 `Manage Plugins` 安装 [DingTalk](https://plugins.jenkins.io/dingtalk/)。

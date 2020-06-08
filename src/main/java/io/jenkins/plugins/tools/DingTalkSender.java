@@ -184,7 +184,7 @@ public class DingTalkSender {
     if (StringUtils.isEmpty(keys)) {
       return str;
     }
-    return str + "\uD83C\uDF44" + keys;
+    return str + " " + keys;
   }
 
   /**

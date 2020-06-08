@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import jenkins.model.Jenkins;
 import lombok.extern.log4j.Log4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
@@ -111,6 +112,9 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
       String robotId = item.getRobotId();
       String content = item.getContent();
       Set<String> atMobiles = item.getAtMobiles();
+      if(StringUtils.isNotEmpty(executorMobile)){
+        atMobiles.add(executorMobile);
+      }
       String text = BuildJobModel.builder()
           .projectName(projectName)
           .projectUrl(projectUrl)
@@ -121,7 +125,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
           .executorName(executorName)
           .executorMobile(executorMobile)
           .content(
-              envVars == null ? content : envVars.expand(content)
+              envVars == null ? content : envVars.expand(content).replaceAll("\\\\n","\n")
           )
           .build()
           .toMarkdown();
