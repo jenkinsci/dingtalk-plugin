@@ -4,6 +4,7 @@ import hudson.Extension;
 import hudson.model.AbstractDescribableImpl;
 import hudson.model.Descriptor;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
@@ -34,7 +35,7 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
 
   public Set<String> getAtMobiles() {
     if (StringUtils.isEmpty(atMobile)) {
-      return null;
+      return new HashSet<>(16);
     }
     return Arrays.stream(StringUtils.split(atMobile, "\n")).collect(Collectors.toSet());
   }

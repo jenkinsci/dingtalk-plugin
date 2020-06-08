@@ -26,55 +26,30 @@ public class SdkTest {
 
 
 
-  public void testDingTalk() {
-    try {
-      Long timestamp = System.currentTimeMillis();
-      String secret = "SEC34778ce7a08f78577a2d11f8436d9ba67060e64acc8f0095afb61babaa31683b";
+  public static void main(String ...args) {
+//    try {
+//      Long timestamp = System.currentTimeMillis();
+//      String secret = "SEC34778ce7a08f78577a2d11f8436d9ba67060e64acc8f0095afb61babaa31683b";
+//
+//      String stringToSign = timestamp + "\n" + secret;
+//      Mac mac = Mac.getInstance("HmacSHA256");
+//      mac.init(new SecretKeySpec(secret.getBytes("UTF-8"), "HmacSHA256"));
+//      byte[] signData = mac.doFinal(stringToSign.getBytes("UTF-8"));
+//      String sign = URLEncoder.encode(new String(Base64.encodeBase64(signData)), "UTF-8");
+//      DingTalkClient client = new DefaultDingTalkClient(
+//          "https://oapi.dingtalk.com/robot/send?access_token=af0f18ea706e6205c59ecc32011f3a2b5a87da8f565abf3e9033043d496438f9");
+//      OapiRobotSendRequest request = new OapiRobotSendRequest();
+//      request.setMsgtype("actionCard");
+//      OapiRobotSendRequest.Actioncard msg = new OapiRobotSendRequest.Actioncard();
+//      msg.setTitle("jenkins");
+//      msg.setText("![](https://jenkins.eastcoal.club/static/celesea_weapp_preview.png)");
+//      request.setActionCard(msg);
+//      OapiRobotSendResponse response = client.execute(request);
+//      System.out.println(response.getErrmsg());
+//    } catch (Exception e) {
+//      System.out.println(e);
+//    }
 
-      String stringToSign = timestamp + "\n" + secret;
-      Mac mac = Mac.getInstance("HmacSHA256");
-      mac.init(new SecretKeySpec(secret.getBytes("UTF-8"), "HmacSHA256"));
-      byte[] signData = mac.doFinal(stringToSign.getBytes("UTF-8"));
-      String sign = URLEncoder.encode(new String(Base64.encodeBase64(signData)), "UTF-8");
-      DingTalkClient client = new DefaultDingTalkClient(
-          "https://oapi.dingtalk.com/robot/send?access_token=d3e797903a606e7a19f510dc22863b87112e6783556bdbd264e9267d445b4e81&timestamp="
-              + timestamp + "&sign=" + sign);
-      OapiRobotSendRequest request = new OapiRobotSendRequest();
-      request.setMsgtype("actionCard");
-      OapiRobotSendRequest.Actioncard msg = new OapiRobotSendRequest.Actioncard();
-      msg.setTitle("杭州天气");
-      msg.setText("### 杭州天气" +
-          "\n\n" +
-          "9度，西北风1级，空气良89，相对温度73%" +
-          "\n" +
-          "---" +
-          "\n" +
-          "---" +
-          "\n- " +
-          Arrays.stream(BuildStatusEnum.values())
-              .map(item -> Utils.dye(item.getLabel(), item.getColor()))
-              .collect(
-                  Collectors.joining("\n- ")
-              ) +
-          "\n" +
-          "---" +
-          "\n" +
-          "<font color=#2f54eb>" +
-          "@18516600940" +
-          "</font>" +
-          "\n" +
-          "---" +
-          "\n" +
-          "10点20分发布 [天气](http://www.thinkpage.cn/)");
-      At at = new At();
-      at.setAtMobiles(Collections.singletonList("18516600940"));
-      request.setAt(at);
-      request.setActionCard(msg);
-      OapiRobotSendResponse response = client.execute(request);
-      System.out.println(response.getErrmsg());
-    } catch (Exception e) {
-      System.out.println(e);
-    }
-
+    System.out.println("测试构建消息1\\n- 昂哈哈昂昂昂昂昂\\n- 嘟嘟嘟叔叔嘟嘟双杜甫\\n".replaceAll("\\\\n","\n"));
   }
 }

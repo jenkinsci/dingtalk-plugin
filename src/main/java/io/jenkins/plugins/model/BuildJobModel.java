@@ -46,12 +46,8 @@ public class BuildJobModel {
                 )
             ),
             String.format("- 持续时间：%s", duration),
-            String.format("- 执行人：%s",
-                StringUtils.isEmpty(executorMobile) ?
-                    executorName :
-                    ("@" + executorMobile)
-            ),
-            content == null ? '' : content
+            String.format("- 执行人：%s", executorName),
+            content == null ? "" : content
         )
     );
   }
