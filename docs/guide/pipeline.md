@@ -12,10 +12,10 @@ dingtalk (
     at:[],
     atAll: false,
     title: '',
-    text:[],
+    text: [],
     messageUrl: '',
-    picUrl:'',
-    singleTitle:'',
+    picUrl: '',
+    singleTitle: '',
     btns: [],
     btnLayout: '',
     hideAvatar: false
