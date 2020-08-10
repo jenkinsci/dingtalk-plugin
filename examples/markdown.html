@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>MARKDOWN 类型的消息 | 钉钉机器人插件</title>
+    <meta name="generator" content="VuePress 1.5.3">
+    
+    <meta name="description" content="在 Jenkins 中使用钉钉机器人发送消息">
+    <link rel="preload" href="/dingtalk-plugin/assets/css/0.styles.c244bf36.css" as="style"><link rel="preload" href="/dingtalk-plugin/assets/js/app.c8d6e7cf.js" as="script"><link rel="preload" href="/dingtalk-plugin/assets/js/2.acfccf3a.js" as="script"><link rel="preload" href="/dingtalk-plugin/assets/js/11.8f4baf47.js" as="script"><link rel="prefetch" href="/dingtalk-plugin/assets/js/10.a8507e98.js"><link rel="prefetch" href="/dingtalk-plugin/assets/js/12.4ac0ae6e.js"><link rel="prefetch" href="/dingtalk-plugin/assets/js/13.a6c61357.js"><link rel="prefetch" href="/dingtalk-plugin/assets/js/14.42cdf32b.js"><link rel="prefetch" href="/dingtalk-plugin/assets/js/15.17915371.js"><link rel="prefetch" href="/dingtalk-plugin/assets/js/16.eada2edf.js"><link rel="prefetch" href="/dingtalk-plugin/assets/js/3.2c32125b.js"><link rel="prefetch" href="/dingtalk-plugin/assets/js/4.ee498678.js"><link rel="prefetch" href="/dingtalk-plugin/assets/js/5.c1a8eb1f.js"><link rel="prefetch" href="/dingtalk-plugin/assets/js/6.9a2290a9.js"><link rel="prefetch" href="/dingtalk-plugin/assets/js/7.957324c8.js"><link rel="prefetch" href="/dingtalk-plugin/assets/js/8.16d6dfd5.js"><link rel="prefetch" href="/dingtalk-plugin/assets/js/9.9e0daf93.js">
+    <link rel="stylesheet" href="/dingtalk-plugin/assets/css/0.styles.c244bf36.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/dingtalk-plugin/" class="home-link router-link-active"><!----> <span class="site-name">钉钉机器人插件</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="https://github.com/jenkinsci/dingtalk-plugin/releases" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  发布记录
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <a href="https://github.com/jenkinsci/dingtalk-plugin" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="https://github.com/jenkinsci/dingtalk-plugin/releases" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  发布记录
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div> <a href="https://github.com/jenkinsci/dingtalk-plugin" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><a href="/dingtalk-plugin/guide/getting-started" class="sidebar-heading clickable"><span>指南</span> <!----></a> <ul class="sidebar-links sidebar-group-items"><li><a href="/dingtalk-plugin/guide/getting-started.html" class="sidebar-link">快速开始</a></li><li><a href="/dingtalk-plugin/guide/freestyle.html" class="sidebar-link">在 freestyle 项目中使用</a></li><li><a href="/dingtalk-plugin/guide/pipeline.html" class="sidebar-link">在 pipeline 中使用</a></li></ul></section></li><li><section class="sidebar-group depth-0"><a href="/dingtalk-plugin/advance/getting-started" class="sidebar-heading clickable"><span>进阶</span> <!----></a> <ul class="sidebar-links sidebar-group-items"><li><a href="/dingtalk-plugin/advance/user-property.html" class="sidebar-link">用户属性扩展</a></li><li><a href="/dingtalk-plugin/advance/markdown.html" class="sidebar-link">Markdown</a></li></ul></section></li><li><section class="sidebar-group depth-0"><a href="/dingtalk-plugin/examples/freestyleAdvanced" class="sidebar-heading clickable open"><span>示例</span> <!----></a> <ul class="sidebar-links sidebar-group-items"><li><a href="/dingtalk-plugin/examples/freestyleAdvanced.html" class="sidebar-link">Freestyle 项目高级功能</a></li><li><a href="/dingtalk-plugin/examples/text.html" class="sidebar-link">TEXT 类型的消息</a></li><li><a href="/dingtalk-plugin/examples/link.html" class="sidebar-link">LINK 类型的消息</a></li><li><a href="/dingtalk-plugin/examples/markdown.html" aria-current="page" class="active sidebar-link">MARKDOWN 类型的消息</a></li><li><a href="/dingtalk-plugin/examples/actionCardSingle.html" class="sidebar-link">ACTION_CARD 整体跳转</a></li><li><a href="/dingtalk-plugin/examples/actionCardMultiple.html" class="sidebar-link">ACTION_CARD 整体跳转</a></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="markdown-类型的消息"><a href="#markdown-类型的消息" class="header-anchor">#</a> MARKDOWN 类型的消息</h1> <div class="language-groovy extra-class"><pre class="language-groovy"><code>
+pipeline <span class="token punctuation">{</span>
+    agent any
+    stages <span class="token punctuation">{</span>
+        <span class="token function">stage</span><span class="token punctuation">(</span><span class="token string">'link'</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            steps <span class="token punctuation">{</span>
+                echo <span class="token string">'测试 MARKDOWN 消息...'</span>
+            <span class="token punctuation">}</span>
+            post <span class="token punctuation">{</span>
+                success <span class="token punctuation">{</span>
+                    dingtalk <span class="token punctuation">(</span>
+                        robot<span class="token punctuation">:</span> <span class="token string">'58f10219-2cd3-4de7-a1af-f85f4010c10a'</span><span class="token punctuation">,</span>
+                        type<span class="token punctuation">:</span> <span class="token string">'MARKDOWN'</span><span class="token punctuation">,</span>
+                        title<span class="token punctuation">:</span> <span class="token string">'你有新的消息，请注意查收'</span><span class="token punctuation">,</span>
+                        text<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+                            <span class="token string">'# 这是消息内容的标题'</span><span class="token punctuation">,</span>
+                            <span class="token string">'消息正文：测试 markdown 类型的消息'</span><span class="token punctuation">,</span>
+                            <span class="token string">''</span><span class="token punctuation">,</span>
+                            <span class="token string">'---'</span><span class="token punctuation">,</span>
+                            <span class="token string">'我有分割线，哈哈哈哈'</span><span class="token punctuation">,</span>
+                            <span class="token string">'&gt; 引用内容'</span><span class="token punctuation">,</span>
+                            <span class="token string">'#### 展示列表'</span><span class="token punctuation">,</span>
+                            <span class="token string">'- 两个黄鹂鸣翠柳'</span><span class="token punctuation">,</span>
+                            <span class="token string">'- 一行白鹭上青天'</span><span class="token punctuation">,</span>
+                            <span class="token string">'- 窗含西岭千秋雪'</span><span class="token punctuation">,</span>
+                            <span class="token string">'- 门泊东吴万里船'</span>
+                        <span class="token punctuation">]</span><span class="token punctuation">,</span>
+                        at<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+                          <span class="token string">'185166001234'</span>
+                        <span class="token punctuation">]</span>
+                    <span class="token punctuation">)</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</code></pre></div><details class="custom-block details"><summary>查看结果</summary> <p><img src="/dingtalk-plugin/assets/img/markdown-example.33df19ea.jpg" alt="markdown-example"></p></details></div> <footer class="page-edit"><div class="edit-link"><a href="https://github.com/jenkinsci/dingtalk-plugin/edit/master/docs/examples/markdown.md" target="_blank" rel="noopener noreferrer">在 GitHub 上编辑此页</a> <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></div> <div class="last-updated"><span class="prefix">上次更新:</span> <span class="time">4/1/2020, 10:36:36 AM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/dingtalk-plugin/examples/link.html" class="prev">
+        LINK 类型的消息
+      </a></span> <span class="next"><a href="/dingtalk-plugin/examples/actionCardSingle.html">
+        ACTION_CARD 整体跳转
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/dingtalk-plugin/assets/js/app.c8d6e7cf.js" defer></script><script src="/dingtalk-plugin/assets/js/2.acfccf3a.js" defer></script><script src="/dingtalk-plugin/assets/js/11.8f4baf47.js" defer></script>
+  </body>
+</html>
