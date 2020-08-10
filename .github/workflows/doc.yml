@@ -1,15 +1,15 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Doc
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
+on: 
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Update doc'  
+        
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -21,10 +21,20 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@master
+      with:
+        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+        fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
     - uses: actions/setup-node@v1
       with:
         node-version: '10.x'
-
     # Runs a single command using the runners shell
-    - name: Build Doc
-      run: ./docs-release.sh
+    - name: build
+      run: |
+        npm install
+        npm run docs:build
+        cd docs-dist
+        git init
+        git add -A
+        git commit -m 'update docs'
+        git push -f git@github.com:jenkinsci/dingtalk-plugin.git master:gh-pages
