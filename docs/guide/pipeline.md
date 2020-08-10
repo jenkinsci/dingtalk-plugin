@@ -9,7 +9,7 @@
 dingtalk (
     robot: '',
     type: '',
-    at:[],
+    at: [],
     atAll: false,
     title: '',
     text: [],
