@@ -46,8 +46,8 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
       if (notifierConfigs != null && !notifierConfigs.isEmpty()) {
         for (DingTalkNotifierConfig notifierConfig : notifierConfigs) {
           String robotId = notifierConfig.getRobotId();
-          if (id.equals(robotId) && notifierConfig.isChecked()) {
-            newNotifierConfig.setChecked(true);
+          if (id.equals(robotId)) {
+            newNotifierConfig.setChecked(notifierConfig.isChecked());
             newNotifierConfig.setAtMobile(notifierConfig.getAtMobile());
             newNotifierConfig.setContent(notifierConfig.getContent());
           }
