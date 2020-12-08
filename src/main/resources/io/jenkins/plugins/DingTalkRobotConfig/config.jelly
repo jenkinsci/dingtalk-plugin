@@ -8,7 +8,7 @@
   </st:once>
 
   <f:entry title="${%id}" field="id" description="${%idDesc}">
-    <f:readOnlyTextbox/>
+    <f:textbox/>
   </f:entry>
   <f:entry title="${%name}" field="name">
     <f:textbox/>
