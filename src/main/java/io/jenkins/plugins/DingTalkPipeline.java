@@ -203,39 +203,23 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
       );
     }
 
-    String result = service.send(
-        robot,
-        MessageModel.builder()
-            .type(type)
-            .atMobiles(at)
-            .atAll(atAll)
-            .title(
-                envVars.expand(title)
-            )
-            .text(
-                envVars.expand(
-                    Utils.join(text)
-                )
-            )
-            .messageUrl(
-                envVars.expand(messageUrl)
-            )
-            .picUrl(
-                envVars.expand(picUrl)
-            )
-            .singleTitle(
-                envVars.expand(singleTitle)
-            )
-            .singleUrl(
-                envVars.expand(singleUrl)
-            )
-            .btns(btns)
-            .btnOrientation(
-                getBtnLayout()
-            )
-            .hideAvatar(isHideAvatar())
-            .build()
-    );
+    String result =
+        service.send(
+            envVars.expand(robot),
+            MessageModel.builder()
+                .type(type)
+                .atMobiles(at)
+                .atAll(atAll)
+                .title(envVars.expand(title))
+                .text(envVars.expand(Utils.join(text)))
+                .messageUrl(envVars.expand(messageUrl))
+                .picUrl(envVars.expand(picUrl))
+                .singleTitle(envVars.expand(singleTitle))
+                .singleUrl(envVars.expand(singleUrl))
+                .btns(btns)
+                .btnOrientation(getBtnLayout())
+                .hideAvatar(isHideAvatar())
+                .build());
     if (!StringUtils.isEmpty(result)) {
       Logger.error(listener, result);
     }
