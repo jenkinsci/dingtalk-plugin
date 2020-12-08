@@ -30,22 +30,16 @@ import org.kohsuke.stapler.StaplerRequest;
 @SuppressWarnings("unused")
 public class DingTalkGlobalConfig extends GlobalConfiguration {
 
-  /**
-   * 是否打印详细日志
-   */
+  private static DingTalkGlobalConfig instance;
+
+  /** 是否打印详细日志 */
   private boolean verbose;
 
-  /**
-   * 通知时机
-   */
-  private Set<String> noticeOccasions = Arrays.stream(
-      NoticeOccasionEnum.values())
-      .map(Enum::name)
-      .collect(Collectors.toSet());
+  /** 通知时机 */
+  private Set<String> noticeOccasions =
+      Arrays.stream(NoticeOccasionEnum.values()).map(Enum::name).collect(Collectors.toSet());
 
-  /**
-   * 机器人配置列表
-   */
+  /** 机器人配置列表 */
   private CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs = new CopyOnWriteArrayList<>();
 
   /**
@@ -77,15 +71,16 @@ public class DingTalkGlobalConfig extends GlobalConfiguration {
   }
 
   @DataBoundSetter
-  public void setRobotConfigs(
-      CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs) {
+  public void setRobotConfigs(CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs) {
     this.robotConfigs = robotConfigs;
   }
 
   @DataBoundConstructor
-  public DingTalkGlobalConfig(boolean verbose,Set<String> noticeOccasions,
+  public DingTalkGlobalConfig(
+      boolean verbose,
+      Set<String> noticeOccasions,
       CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs) {
-    this.verbose=verbose;
+    this.verbose = verbose;
     this.noticeOccasions = noticeOccasions;
     this.robotConfigs = robotConfigs;
   }
@@ -96,21 +91,22 @@ public class DingTalkGlobalConfig extends GlobalConfiguration {
 
   @Override
   public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
-//    System.out.println("============ old form data =============");
-//    System.out.println(json.toString());
+    //    System.out.println("============ old form data =============");
+    //    System.out.println(json.toString());
     Object robotConfigObj = json.get("robotConfigs");
     if (robotConfigObj == null) {
       json.put("robotConfigs", new JSONArray());
     } else {
       JSONArray robotConfigs = JSONArray.fromObject(robotConfigObj);
-      robotConfigs.removeIf(item -> {
-        JSONObject jsonObject = JSONObject.fromObject(item);
-        String webhook = jsonObject.getString("webhook");
-        return StringUtils.isEmpty(webhook);
-      });
+      robotConfigs.removeIf(
+          item -> {
+            JSONObject jsonObject = JSONObject.fromObject(item);
+            String webhook = jsonObject.getString("webhook");
+            return StringUtils.isEmpty(webhook);
+          });
     }
-//    System.out.println("============ new form data =============");
-    System.out.println(json.toString());
+    //    System.out.println("============ new form data =============");
+    //    System.out.println(json.toString());
     req.bindJSON(this, json);
     this.save();
     return super.configure(req, json);
@@ -122,6 +118,9 @@ public class DingTalkGlobalConfig extends GlobalConfiguration {
    * @return 全局配置信息
    */
   public static DingTalkGlobalConfig get() {
-    return GlobalConfiguration.all().get(DingTalkGlobalConfig.class);
+    if (instance == null) {
+      instance = GlobalConfiguration.all().get(DingTalkGlobalConfig.class);
+    }
+    return instance;
   }
 }
