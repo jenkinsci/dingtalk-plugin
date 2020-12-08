@@ -112,9 +112,6 @@ public class RobotConfigModel {
         case SECRET:
           meta.setSign(config.getValue());
           break;
-        case IP:
-          meta.setIps(config.getValues());
-          break;
         default:
           log.error("对应的安全策略不存在：" + type);
       }

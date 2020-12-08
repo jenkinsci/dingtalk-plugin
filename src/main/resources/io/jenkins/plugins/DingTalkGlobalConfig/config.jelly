@@ -1,6 +1,6 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
-  xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:dt="/lib/dingtalk">
 
   <!-- 通知时机列表 -->
   <j:set var="noticeOccasionTypes" value="${descriptor.getNoticeOccasionTypes()}"/>
@@ -9,37 +9,39 @@
   <j:set var="noticeOccasions"
     value="${descriptor.getNoticeOccasions()}"/>
 
-  <f:section title="${%globalConfigTitle}">
+  <f:section title="钉钉">
 
-    <f:entry title="${%verboseTitle}" field="verbose">
+    <f:entry title="详细日志" field="verbose">
       <f:checkbox/>
     </f:entry>
 
-    <f:entry title="${%noticeOccasionTitle}" field="noticeOccasions">
+    <f:entry title="通知时机" field="noticeOccasions">
+      <dt:blockWrapper>
         <j:forEach var="noticeOccasionTypeItem"
           items="${noticeOccasionTypes}">
           <j:scope>
             <j:set var="name" value="${noticeOccasionTypeItem.name()}"/>
             <j:set var="desc" value="${noticeOccasionTypeItem.getDesc()}"/>
-            <f:entry
-              title="${desc}">
+            <label>
               <f:checkbox
                 json="${name}"
                 name="noticeOccasions"
                 checked="${noticeOccasions.contains(name)}"
               />
-            </f:entry>
+              ${desc}
+            </label>
           </j:scope>
         </j:forEach>
+      </dt:blockWrapper>
     </f:entry>
 
-    <f:entry title="${%robotConfigTitle}">
+    <f:block>
       <j:scope>
         <j:set var="robotConfigDescriptor"
           value="${descriptor.getDingTalkRobotConfigDescriptor()}"/>
         <f:repeatable field="robotConfigs"
           items="${instance.getRobotConfigs()}"
-          header="${%robotConfigHeader}">
+          header="机器人">
           <table width="100%" class="ding-talk-robot-config">
             <st:include page="config.jelly" class="${robotConfigDescriptor.clazz}"/>
             <tr>
@@ -52,7 +54,7 @@
           </table>
         </f:repeatable>
       </j:scope>
-    </f:entry>
+    </f:block>
   </f:section>
 
 </j:jelly>

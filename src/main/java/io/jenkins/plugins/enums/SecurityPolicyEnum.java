@@ -10,26 +10,16 @@ import lombok.ToString;
  * @author liuwei
  * @date 2020/1/19 12:02
  */
-
 @ToString
 public enum SecurityPolicyEnum {
-  /**
-   * ip 地址/段
-   */
-  IP(Messages.SecurityPolicyType_ip()),
 
-  /**
-   * 关键字
-   */
+  /** 关键字 */
   KEY(Messages.SecurityPolicyType_key()),
 
-  /**
-   * 加密
-   */
+  /** 加签 */
   SECRET(Messages.SecurityPolicyType_secret());
 
-  @Getter
-  private String desc;
+  @Getter private final String desc;
 
   SecurityPolicyEnum(String desc) {
     this.desc = desc;

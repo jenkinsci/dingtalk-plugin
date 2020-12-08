@@ -1,16 +1,16 @@
 <?jelly escape-by-default='true'?>
 
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
-  xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  xmlns:t="/lib/hudson" xmlns:f="/lib/form" >
   <st:once>
     <script type="text/javascript"
       src="${rootURL}/plugin/dingding-notifications/scripts/customValidate.js"/>
   </st:once>
 
-  <f:entry title="${%id}" field="id" description="${%idDesc}">
+  <f:entry title="id" field="id" description="留空系统自动生成，手动填写请保证唯一性">
     <f:textbox/>
   </f:entry>
-  <f:entry title="${%name}" field="name">
+  <f:entry title="名称" field="name">
     <f:textbox/>
   </f:entry>
 
@@ -18,46 +18,26 @@
     <f:textbox/>
   </f:entry>
 
-  <f:entry title="${%securityPolicy}" field="securityPolicy">
+  <f:block>
     <j:scope>
       <j:set var="securityPolicyConfigDescriptor"
         value="${descriptor.getDingTalkSecurityPolicyConfigDescriptor()}"/>
       <j:set var="securityPolicyConfigs"
         value="${instance != null ? instance.getSecurityPolicyConfigs(): descriptor.getDefaultSecurityPolicyConfigs()}"/>
-      <div class="ding-talk-security-policy">
-        <f:repeatable
-          name="securityPolicyConfigs"
-          noAddButton="true"
-          items="${securityPolicyConfigs}"
-          var="instance"
-          header="${item}">
-          <j:choose>
-            <j:when test="${divBasedFormLayout}">
-              <div>
-                <j:scope>
-                  <j:set var="descriptor" value="${securityPolicyConfigDescriptor}"/>
-                  <st:include page="config.jelly" class="${descriptor.clazz}"/>
-                </j:scope>
-              </div>
-            </j:when>
-            <j:otherwise>
-              <table style="width:100%">
-                <j:scope>
-                  <j:set var="descriptor" value="${securityPolicyConfigDescriptor}"/>
-                  <st:include page="config.jelly" class="${descriptor.clazz}"/>
-                </j:scope>
-              </table>
-            </j:otherwise>
-          </j:choose>
-
-        </f:repeatable>
-      </div>
+      <f:repeatable
+        header=""
+        name="securityPolicyConfigs"
+        noAddButton="true"
+        var="instance"
+        items="${securityPolicyConfigs}">
+        <st:include page="config.jelly" class="${securityPolicyConfigDescriptor.clazz}"/>
+      </f:repeatable>
     </j:scope>
-  </f:entry>
+  </f:block>
 
   <f:entry>
     <div style="float:right">
-      <input type="button" value="${%testBtnLabel}" class="yui-button validate-button"
+      <input type="button" value="测试" class="yui-button validate-button"
         data-validate-button-descriptor-url="${descriptor.descriptorFullUrl}"
         data-validate-button-method="test"
         data-validate-button-with="${with}"

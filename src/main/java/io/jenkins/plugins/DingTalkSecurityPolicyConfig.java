@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import jenkins.model.Jenkins;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -21,20 +22,21 @@ import org.kohsuke.stapler.DataBoundConstructor;
  * @date 2019/12/25 17:09
  */
 @Getter
+@Setter
 @ToString
 public class DingTalkSecurityPolicyConfig implements Describable<DingTalkSecurityPolicyConfig> {
 
   private String type;
 
-  private Secret value;
-
   private String desc;
+
+  private Secret value;
 
   @DataBoundConstructor
   public DingTalkSecurityPolicyConfig(String type, String value, String desc) {
     this.type = type;
-    this.value = Secret.fromString(value);
     this.desc = desc;
+    this.value = Secret.fromString(value);
   }
 
   public String getValue() {
@@ -49,7 +51,14 @@ public class DingTalkSecurityPolicyConfig implements Describable<DingTalkSecurit
     if (StringUtils.isEmpty(value)) {
       return null;
     }
-    return Arrays.stream(value.split("\n")).collect(Collectors.toSet());
+    return Arrays.stream(
+            // 兼容 2.3.2 版本之前的数据
+            value.replaceAll("\n", ",").split(","))
+        .collect(Collectors.toSet());
+  }
+
+  public void setValue(String value) {
+    this.value = Secret.fromString(value);
   }
 
   @Override
