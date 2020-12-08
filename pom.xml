@@ -16,8 +16,8 @@
   <packaging>hpi</packaging>
   <properties>
     <!--    除了 jdk 版本，其他的在 org.jenkins-ci.plugins.plugin 中都定义了   -->
-    <jenkins.version>2.269</jenkins.version>
-<!--    <jenkins.version>2.249</jenkins.version>-->
+<!--    <jenkins.version>2.269</jenkins.version>-->
+    <jenkins.version>2.263.1</jenkins.version>
     <java.level>8</java.level>
     <hpi-plugin.version>3.16</hpi-plugin.version>
     <hpi.compatibleSinceVersion>2.0.0</hpi.compatibleSinceVersion>

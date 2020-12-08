@@ -61,10 +61,17 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
       String name,
       String webhook,
       CopyOnWriteArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs) {
-    this.id = StringUtils.isEmpty(id) ? UUID.randomUUID().toString() : id;
+    this.id = StringUtils.isBlank(id) ? UUID.randomUUID().toString() : id;
     this.name = name;
     this.webhook = Secret.fromString(webhook);
     this.securityPolicyConfigs = securityPolicyConfigs;
+  }
+
+  public String getId() {
+    if (StringUtils.isBlank(id)) {
+      setId(UUID.randomUUID().toString());
+    }
+    return id;
   }
 
   public String getWebhook() {
@@ -120,9 +127,22 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
     }
 
     /**
+     * id 字段必填
+     *
+     * @param value id
+     * @return 是否校验成功
+     */
+    public FormValidation doCheckId(@QueryParameter String value) {
+      if (StringUtils.isBlank(value)) {
+        return FormValidation.error(Messages.RobotConfigFormValidation_name());
+      }
+      return FormValidation.ok();
+    }
+
+    /**
      * name 字段必填
      *
-     * @param value webhook
+     * @param value name
      * @return 是否校验成功
      */
     public FormValidation doCheckName(@QueryParameter String value) {

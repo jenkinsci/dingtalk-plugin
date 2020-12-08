@@ -5,14 +5,10 @@ import hudson.model.Describable;
 import hudson.model.Descriptor;
 import hudson.util.Secret;
 import io.jenkins.plugins.enums.SecurityPolicyEnum;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.Collectors;
 import jenkins.model.Jenkins;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 /**
@@ -44,17 +40,6 @@ public class DingTalkSecurityPolicyConfig implements Describable<DingTalkSecurit
       return null;
     }
     return value.getPlainText();
-  }
-
-  public Set<String> getValues() {
-    String value = getValue();
-    if (StringUtils.isEmpty(value)) {
-      return null;
-    }
-    return Arrays.stream(
-            // 兼容 2.3.2 版本之前的数据
-            value.replaceAll("\n", ",").split(","))
-        .collect(Collectors.toSet());
   }
 
   public void setValue(String value) {

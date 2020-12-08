@@ -5,7 +5,7 @@
   <j:set var="type" value="${instance.getType()}"/>
   <j:set var="desc" value="${instance.getDesc()}"/>
 
-  <dt:blockWrapper style="width: 100%">
+  <dt:blockWrapper class="dt-security-config" style="width: 100%">
     <f:entry title="${desc}" field="value"
       help="${type == 'KEY' ? '/descriptor/io.jenkins.plugins.DingTalkSecurityPolicyConfig/help/key' : null}">
       <f:textbox/>

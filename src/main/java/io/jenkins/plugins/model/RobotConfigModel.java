@@ -8,7 +8,6 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -31,11 +30,6 @@ public class RobotConfigModel {
    * 关键字
    */
   private String keys;
-
-  /**
-   * 白名单 ip
-   */
-  private Set<String> ips;
 
   /**
    * 签名

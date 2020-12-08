@@ -37,21 +37,20 @@
 
     <f:block>
       <j:scope>
+        <j:set var="robotConfigs" value="${instance.getRobotConfigs()}"/>
         <j:set var="robotConfigDescriptor"
           value="${descriptor.getDingTalkRobotConfigDescriptor()}"/>
-        <f:repeatable field="robotConfigs"
-          items="${instance.getRobotConfigs()}"
-          header="机器人">
-          <table width="100%" class="ding-talk-robot-config">
+        <f:repeatable
+          header="机器人"
+          field="robotConfigs"
+          varStatus="item"
+          items="robotConfigs">
+          <dt:blockWrapper id="${instance.getId()}" style="width: 100%;">
             <st:include page="config.jelly" class="${robotConfigDescriptor.clazz}"/>
-            <tr>
-              <td colspan="3">
-                <div align="right">
-                  <f:repeatableDeleteButton/>
-                </div>
-              </td>
-            </tr>
-          </table>
+          </dt:blockWrapper>
+          <div style="text-align: right; margin-top: 8px;">
+            <f:repeatableDeleteButton/>
+          </div>
         </f:repeatable>
       </j:scope>
     </f:block>
