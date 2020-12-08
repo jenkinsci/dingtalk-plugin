@@ -40,14 +40,13 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
     return Arrays.stream(StringUtils.split(atMobile, "\n")).collect(Collectors.toSet());
   }
 
+  public String getContent() {
+    return content == null ? "" : content;
+  }
+
   @DataBoundConstructor
   public DingTalkNotifierConfig(
-      boolean checked,
-      String robotId,
-      String robotName,
-      String atMobile,
-      String content
-  ) {
+      boolean checked, String robotId, String robotName, String atMobile, String content) {
     this.checked = checked;
     this.robotId = robotId;
     this.robotName = robotName;
@@ -60,7 +59,5 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
   }
 
   @Extension
-  public static class DingTalkNotifierConfigDescriptor extends Descriptor<DingTalkNotifierConfig> {
-
-  }
+  public static class DingTalkNotifierConfigDescriptor extends Descriptor<DingTalkNotifierConfig> {}
 }
