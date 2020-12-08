@@ -43,12 +43,10 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
   private final DingTalkServiceImpl service = new DingTalkServiceImpl();
 
-  private final DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.get();
-
   private final String rootPath = Jenkins.get().getRootUrl();
 
   public void send(Run<?, ?> run, TaskListener listener, BuildStatusEnum statusType) {
-    boolean isVerbose = globalConfig.isVerbose();
+    boolean isVerbose = DingTalkGlobalConfig.get().isVerbose();
     Job<?, ?> job = run.getParent();
     UserIdCause userIdCause = run.getCause(UserIdCause.class);
     // 执行人信息
@@ -63,15 +61,10 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
       if (isVerbose) {
         Logger.debug(listener, "未获取到构建人信息，将尝试从构建信息中模糊匹配。");
       }
-      executorName = run.getCauses()
-          .stream()
-          .map(
-              item -> item.getShortDescription().replace(
-                  "Started by remote host",
-                  "Host"
-              )
-          )
-          .collect(Collectors.joining());
+      executorName =
+          run.getCauses().stream()
+              .map(item -> item.getShortDescription().replace("Started by remote host", "Host"))
+              .collect(Collectors.joining());
     } else {
       executorName = user.getDisplayName();
       executorMobile = user.getProperty(DingTalkUserProperty.class).getMobile();
@@ -80,8 +73,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
             listener,
             "用户【%s】暂未设置手机号码，请前往 %s 添加。",
             executorName,
-            user.getAbsoluteUrl() + "/configure"
-        );
+            user.getAbsoluteUrl() + "/configure");
       }
     }
 
@@ -112,29 +104,30 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
       String robotId = item.getRobotId();
       String content = item.getContent();
       Set<String> atMobiles = item.getAtMobiles();
-      if(StringUtils.isNotEmpty(executorMobile)){
+      if (StringUtils.isNotEmpty(executorMobile)) {
         atMobiles.add(executorMobile);
       }
-      String text = BuildJobModel.builder()
-          .projectName(projectName)
-          .projectUrl(projectUrl)
-          .jobName(jobName)
-          .jobUrl(jobUrl)
-          .statusType(statusType)
-          .duration(duration)
-          .executorName(executorName)
-          .executorMobile(executorMobile)
-          .content(
-              envVars == null ? content : envVars.expand(content).replaceAll("\\\\n","\n")
-          )
-          .build()
-          .toMarkdown();
-      MessageModel message = MessageModel.builder()
-          .type(MsgTypeEnum.ACTION_CARD)
-          .atMobiles(atMobiles)
-          .text(text)
-          .btns(btns)
-          .build();
+      String text =
+          BuildJobModel.builder()
+              .projectName(projectName)
+              .projectUrl(projectUrl)
+              .jobName(jobName)
+              .jobUrl(jobUrl)
+              .statusType(statusType)
+              .duration(duration)
+              .executorName(executorName)
+              .executorMobile(executorMobile)
+              .content(
+                  envVars == null ? content : envVars.expand(content).replaceAll("\\\\n", "\n"))
+              .build()
+              .toMarkdown();
+      MessageModel message =
+          MessageModel.builder()
+              .type(MsgTypeEnum.ACTION_CARD)
+              .atMobiles(atMobiles)
+              .text(text)
+              .btns(btns)
+              .build();
       if (isVerbose) {
         Logger.debug(listener, "当前钉钉机器人信息：%s", item);
         Logger.debug(listener, "发送的消息详情：%s", message);
@@ -152,16 +145,13 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
   @Override
   public void onStarted(Run<?, ?> build, TaskListener listener) {
+    DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.get();
     boolean isVerbose = globalConfig.isVerbose();
     if (isVerbose) {
       Logger.line(listener, LineType.START);
       Logger.debug(listener, "钉钉全局配置信息：%s", globalConfig);
     }
-    if (
-        globalConfig.getNoticeOccasions().contains(
-            NoticeOccasionEnum.START.name()
-        )
-    ) {
+    if (globalConfig.getNoticeOccasions().contains(NoticeOccasionEnum.START.name())) {
       this.send(build, listener, BuildStatusEnum.START);
     } else if (isVerbose) {
       Logger.debug(listener, "项目开始构建：未匹配的通知时机，无需触发钉钉");
@@ -173,6 +163,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
   @Override
   public void onCompleted(Run<?, ?> build, @Nonnull TaskListener listener) {
+    DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.get();
     BuildStatusEnum statusType = null;
     boolean skipped = true;
     boolean isVerbose = globalConfig.isVerbose();
@@ -238,5 +229,4 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
       Logger.line(listener, LineType.END);
     }
   }
-
 }
