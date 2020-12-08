@@ -100,7 +100,7 @@ public class RobotConfigModel {
     meta.setWebhook(robotConfig.getWebhook());
     // 解析安全策略
     securityPolicyConfigs.forEach(config -> {
-      if (!config.isChecked()) {
+      if (StringUtils.isEmpty(config.getValue())) {
         return;
       }
       String type = config.getType();

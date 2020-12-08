@@ -110,7 +110,7 @@ public class DingTalkGlobalConfig extends GlobalConfiguration {
       });
     }
 //    System.out.println("============ new form data =============");
-//    System.out.println(json.toString());
+    System.out.println(json.toString());
     req.bindJSON(this, json);
     this.save();
     return super.configure(req, json);

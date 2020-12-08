@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <!--  该插件决定了可以使用的 jenkins 版本 -->
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>3.55</version>
-    <relativePath />
+    <version>4.13</version>
+    <relativePath/>
   </parent>
   <groupId>io.jenkins.plugins</groupId>
   <artifactId>dingding-notifications</artifactId>
@@ -14,8 +16,10 @@
   <packaging>hpi</packaging>
   <properties>
     <!--    除了 jdk 版本，其他的在 org.jenkins-ci.plugins.plugin 中都定义了   -->
-    <jenkins.version>2.176.4</jenkins.version>
+    <jenkins.version>2.269</jenkins.version>
+<!--    <jenkins.version>2.249</jenkins.version>-->
     <java.level>8</java.level>
+    <hpi-plugin.version>3.16</hpi-plugin.version>
     <hpi.compatibleSinceVersion>2.0.0</hpi.compatibleSinceVersion>
     <!-- Other properties you may want to use:
       ~ jenkins-test-harness.version: Jenkins Test Harness version you use to test the plugin. For Jenkins version >= 1.580.1 use JTH 2.0 or higher.
@@ -52,29 +56,14 @@
     <tag>dingtalk-${project.version}</tag>
   </scm>
 
-  <repositories>
-    <repository>
-      <id>repo.jenkins-ci.org</id>
-      <url>https://repo.jenkins-ci.org/public/</url>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>repo.jenkins-ci.org</id>
-      <url>https://repo.jenkins-ci.org/public/</url>
-    </pluginRepository>
-  </pluginRepositories>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
-        <artifactId>bom-2.176.x</artifactId>
-        <version>5</version>
+        <artifactId>bom-2.249.x</artifactId>
+        <version>13</version>
         <type>pom</type>
       </dependency>
-
     </dependencies>
   </dependencyManagement>
 
@@ -92,28 +81,19 @@
     </dependency>
   </dependencies>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <tags>
-            <tag>
-              <name>date</name>
-            </tag>
-          </tags>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+  <repositories>
+    <repository>
+      <id>repo.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/releases/</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>repo.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/releases/</url>
+    </pluginRepository>
+  </pluginRepositories>
+
 
 </project>

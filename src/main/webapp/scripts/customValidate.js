@@ -27,7 +27,6 @@ function customValidate(yuiButton) {
 }
 
 function getParameters(button) {
-  var formData = new FormData();
   var securityPolicyConfigs = [];
   var id = findPreviousFormItem(button, 'id').value;
   var name = findPreviousFormItem(button, 'name').value;

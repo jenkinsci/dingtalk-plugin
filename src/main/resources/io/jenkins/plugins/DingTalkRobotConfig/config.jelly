@@ -8,7 +8,7 @@
   </st:once>
 
   <f:entry title="${%id}" field="id" description="${%idDesc}">
-    <f:readOnlyTextbox />
+    <f:readOnlyTextbox/>
   </f:entry>
   <f:entry title="${%name}" field="name">
     <f:textbox/>
@@ -18,8 +18,7 @@
     <f:textbox/>
   </f:entry>
 
-  <f:entry title="${%securityPolicy}" field="securityPolicy"/>
-  <f:entry>
+  <f:entry title="${%securityPolicy}" field="securityPolicy">
     <j:scope>
       <j:set var="securityPolicyConfigDescriptor"
         value="${descriptor.getDingTalkSecurityPolicyConfigDescriptor()}"/>
@@ -27,17 +26,30 @@
         value="${instance != null ? instance.getSecurityPolicyConfigs(): descriptor.getDefaultSecurityPolicyConfigs()}"/>
       <div class="ding-talk-security-policy">
         <f:repeatable
-          header=""
           name="securityPolicyConfigs"
           noAddButton="true"
+          items="${securityPolicyConfigs}"
           var="instance"
-          items="${securityPolicyConfigs}">
-          <table width="100%">
-            <j:scope>
-              <j:set var="descriptor" value="${securityPolicyConfigDescriptor}"/>
-              <st:include page="config.jelly" class="${descriptor.clazz}"/>
-            </j:scope>
-          </table>
+          header="${item}">
+          <j:choose>
+            <j:when test="${divBasedFormLayout}">
+              <div>
+                <j:scope>
+                  <j:set var="descriptor" value="${securityPolicyConfigDescriptor}"/>
+                  <st:include page="config.jelly" class="${descriptor.clazz}"/>
+                </j:scope>
+              </div>
+            </j:when>
+            <j:otherwise>
+              <table style="width:100%">
+                <j:scope>
+                  <j:set var="descriptor" value="${securityPolicyConfigDescriptor}"/>
+                  <st:include page="config.jelly" class="${descriptor.clazz}"/>
+                </j:scope>
+              </table>
+            </j:otherwise>
+          </j:choose>
+
         </f:repeatable>
       </div>
     </j:scope>

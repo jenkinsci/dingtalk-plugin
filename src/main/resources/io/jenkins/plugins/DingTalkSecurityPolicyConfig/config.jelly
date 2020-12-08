@@ -2,20 +2,17 @@
 
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
   xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-    <f:optionalBlock title="${instance.getDesc()}"
-    field="checked" inline="true" checked="${instance.isChecked()}">
-    <f:entry field="value">
-      <f:textarea/>
-    </f:entry>
-    <f:invisibleEntry>
-      <div style="display: none;">
-        <f:textbox field="type" value="${instance.getType()}"/>
-      </div>
-    </f:invisibleEntry>
-      <f:invisibleEntry>
-        <div style="display: none;">
-          <f:textbox field="desc" value="${instance.getDesc()}"/>
-        </div>
-      </f:invisibleEntry>
-  </f:optionalBlock>
+  <f:entry title="${instance.getDesc()}" field="value">
+    <f:textarea/>
+  </f:entry>
+  <f:invisibleEntry>
+    <div style="display: none;">
+      <f:textbox field="type" value="${instance.getType()}"/>
+    </div>
+  </f:invisibleEntry>
+  <f:invisibleEntry>
+    <div style="display: none;">
+      <f:textbox field="desc" value="${instance.getDesc()}"/>
+    </div>
+  </f:invisibleEntry>
 </j:jelly>

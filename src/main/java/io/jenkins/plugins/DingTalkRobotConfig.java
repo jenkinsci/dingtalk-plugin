@@ -157,7 +157,6 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
         JSONObject json = (JSONObject) item;
         securityPolicyConfigs.add(
             new DingTalkSecurityPolicyConfig(
-                (Boolean) json.get("checked"),
                 (String) json.get("type"),
                 (String) json.get("value"),
                 ""

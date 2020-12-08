@@ -24,8 +24,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
 @ToString
 public class DingTalkSecurityPolicyConfig implements Describable<DingTalkSecurityPolicyConfig> {
 
-  private boolean checked;
-
   private String type;
 
   private Secret value;
@@ -33,8 +31,7 @@ public class DingTalkSecurityPolicyConfig implements Describable<DingTalkSecurit
   private String desc;
 
   @DataBoundConstructor
-  public DingTalkSecurityPolicyConfig(boolean checked, String type, String value, String desc) {
-    this.checked = checked;
+  public DingTalkSecurityPolicyConfig(String type, String value, String desc) {
     this.type = type;
     this.value = Secret.fromString(value);
     this.desc = desc;
@@ -61,13 +58,11 @@ public class DingTalkSecurityPolicyConfig implements Describable<DingTalkSecurit
   }
 
   public static DingTalkSecurityPolicyConfig of(SecurityPolicyEnum securityPolicyEnum) {
-    return new DingTalkSecurityPolicyConfig(false, securityPolicyEnum.name(), "",
-        securityPolicyEnum.getDesc());
+    return new DingTalkSecurityPolicyConfig(
+        securityPolicyEnum.name(), "", securityPolicyEnum.getDesc());
   }
 
   @Extension
-  public static class DingTalkSecurityPolicyConfigDescriptor extends
-      Descriptor<DingTalkSecurityPolicyConfig> {
-
-  }
+  public static class DingTalkSecurityPolicyConfigDescriptor
+      extends Descriptor<DingTalkSecurityPolicyConfig> {}
 }
