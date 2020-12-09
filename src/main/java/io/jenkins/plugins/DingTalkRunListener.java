@@ -211,6 +211,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
       }
       String robotId = item.getRobotId();
       String content = item.getContent();
+      boolean atAll = item.isAtAll();
       Set<String> atMobiles = item.getAtMobiles();
       if (StringUtils.isNotEmpty(executorMobile)) {
         atMobiles.add(executorMobile);
@@ -231,6 +232,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
       MessageModel message =
           MessageModel.builder()
               .type(MsgTypeEnum.ACTION_CARD)
+              .atAll(atAll)
               .atMobiles(atMobiles)
               .text(text)
               .btns(btns)

@@ -5,39 +5,40 @@
   <!-- 通知时机列表 -->
   <j:set var="noticeOccasionTypes" value="${descriptor.getNoticeOccasionTypes()}"/>
 
-  <dt:blockWrapper>
+  <dt:blockWrapper class="dt-notifier-config">
     <f:optionalBlock
       title="${instance.getRobotName()}"
       field="checked"
       inline="true"
       checked="${instance.isChecked()}">
-      <!--      <f:advanced>-->
-      <f:entry title="通知时机" field="noticeOccasions">
-        <dt:blockWrapper>
-          <j:forEach var="noticeOccasionTypeItem"
-            items="${noticeOccasionTypes}">
-            <j:scope>
-              <j:set var="name" value="${noticeOccasionTypeItem.name()}"/>
-              <j:set var="desc" value="${noticeOccasionTypeItem.getDesc()}"/>
-              <label>
-                <f:checkbox
-                  json="${name}"
-                  name="noticeOccasions"
-                  checked="${instance.noticeOccasions.contains(name)}"
-                />
-                ${desc}
-              </label>
-            </j:scope>
-          </j:forEach>
-        </dt:blockWrapper>
-      </f:entry>
-      <f:entry field="atMobile" title="通知人">
-        <f:textarea/>
-      </f:entry>
-      <f:entry field="content" title="自定义内容">
-        <f:textarea/>
-      </f:entry>
-      <!--      </f:advanced>-->
+      <f:advanced>
+        <f:entry title="通知时机" field="noticeOccasions">
+          <dt:blockWrapper>
+            <j:forEach var="noticeOccasionTypeItem"
+              items="${noticeOccasionTypes}">
+              <j:scope>
+                <j:set var="name" value="${noticeOccasionTypeItem.name()}"/>
+                <j:set var="desc" value="${noticeOccasionTypeItem.getDesc()}"/>
+                <label>
+                  <f:checkbox
+                    json="${name}"
+                    name="noticeOccasions"
+                    checked="${instance.noticeOccasions.contains(name)}"
+                  />
+                  ${desc}
+                </label>
+              </j:scope>
+            </j:forEach>
+          </dt:blockWrapper>
+        </f:entry>
+        <f:entry title="通知人">
+          <f:checkbox title="atAll" field="atAll"/>
+          <f:textarea field="atMobile"/>
+        </f:entry>
+        <f:entry field="content" title="自定义内容">
+          <f:textarea/>
+        </f:entry>
+      </f:advanced>
 
       <f:invisibleEntry>
         <input type="hidden" name="robotId" value="${instance.getRobotId()}"/>

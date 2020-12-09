@@ -37,23 +37,22 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
   public CopyOnWriteArrayList<DingTalkNotifierConfig> getNotifierConfigs() {
 
     CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigsList = new CopyOnWriteArrayList<>();
-    CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs = DingTalkGlobalConfig.get()
-        .getRobotConfigs();
+    CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs =
+        DingTalkGlobalConfig.get().getRobotConfigs();
 
     for (DingTalkRobotConfig robotConfig : robotConfigs) {
       String id = robotConfig.getId();
       DingTalkNotifierConfig newNotifierConfig = new DingTalkNotifierConfig(robotConfig);
+
       if (notifierConfigs != null && !notifierConfigs.isEmpty()) {
         for (DingTalkNotifierConfig notifierConfig : notifierConfigs) {
           String robotId = notifierConfig.getRobotId();
           if (id.equals(robotId)) {
-            newNotifierConfig.setChecked(notifierConfig.isChecked());
-            newNotifierConfig.setAtMobile(notifierConfig.getAtMobile());
-            newNotifierConfig.setContent(notifierConfig.getContent());
-            newNotifierConfig.setNoticeOccasions(notifierConfig.getNoticeOccasions());
+            newNotifierConfig.copy(notifierConfig);
           }
         }
       }
+
       notifierConfigsList.add(newNotifierConfig);
     }
 
@@ -74,8 +73,7 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
   }
 
   @DataBoundConstructor
-  public DingTalkJobProperty(
-      CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigs) {
+  public DingTalkJobProperty(CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigs) {
     this.notifierConfigs = notifierConfigs;
   }
 
@@ -92,9 +90,7 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
       return true;
     }
 
-    /**
-     * 通知配置页面
-     */
+    /** 通知配置页面 */
     public DingTalkNotifierConfigDescriptor getDingTalkNotifierConfigDescriptor() {
       return Jenkins.get().getDescriptorByType(DingTalkNotifierConfigDescriptor.class);
     }
@@ -105,9 +101,7 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
      * @return 默认的通知配置列表
      */
     public List<DingTalkNotifierConfig> getDefaultNotifierConfigs() {
-      return DingTalkGlobalConfig
-          .get().getRobotConfigs()
-          .stream()
+      return DingTalkGlobalConfig.get().getRobotConfigs().stream()
           .map(DingTalkNotifierConfig::new)
           .collect(Collectors.toList());
     }

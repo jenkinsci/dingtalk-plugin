@@ -29,6 +29,8 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
 
   private String robotName;
 
+  private boolean atAll;
+
   private String atMobile;
 
   private String content;
@@ -47,7 +49,8 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
     if (StringUtils.isEmpty(atMobile)) {
       return new HashSet<>(16);
     }
-    return Arrays.stream(StringUtils.split(atMobile, "\n")).collect(Collectors.toSet());
+    return Arrays.stream(StringUtils.split(atMobile.replace("\n", ","), ","))
+        .collect(Collectors.toSet());
   }
 
   public String getContent() {
@@ -59,19 +62,36 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
       boolean checked,
       String robotId,
       String robotName,
+      boolean atAll,
       String atMobile,
       String content,
       Set<String> noticeOccasions) {
     this.checked = checked;
     this.robotId = robotId;
     this.robotName = robotName;
+    this.atAll = atAll;
     this.atMobile = atMobile;
     this.content = content;
     this.noticeOccasions = noticeOccasions;
   }
 
   public DingTalkNotifierConfig(DingTalkRobotConfig robotConfig) {
-    this(false, robotConfig.getId(), robotConfig.getName(), null, "", getDefaultNoticeOccasions());
+    this(
+        false,
+        robotConfig.getId(),
+        robotConfig.getName(),
+        false,
+        null,
+        null,
+        getDefaultNoticeOccasions());
+  }
+
+  public void copy(DingTalkNotifierConfig notifierConfig) {
+    this.setChecked(notifierConfig.isChecked());
+    this.setAtAll(notifierConfig.isAtAll());
+    this.setAtMobile(notifierConfig.getAtMobile());
+    this.setContent(notifierConfig.getContent());
+    this.setNoticeOccasions(notifierConfig.getNoticeOccasions());
   }
 
   @Extension
