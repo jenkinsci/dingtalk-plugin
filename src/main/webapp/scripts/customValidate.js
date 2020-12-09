@@ -30,13 +30,9 @@ function getParameters(button) {
   var id = findPreviousFormItem(button, 'id').value;
   var name = findPreviousFormItem(button, 'name').value;
   var webhook = findPreviousFormItem(button, 'webhook').value;
-  var robotId = button.getAttribute('data-id');
-  var robotDom = document.getElementById(robotId);
-  var securityDom = robotDom.querySelector('.dt-security-config')
-  var typeDoms = securityDom.querySelectorAll('input[name="type"]');
-  var valueDoms = securityDom.querySelectorAll(
-      'input[name="_.value"]');
-
+  var robotDom = button.closest('.dt-robot-config');
+  var typeDoms = robotDom.querySelectorAll('[name=type]');
+  var valueDoms = robotDom.querySelectorAll('[name="_.value"]');
   typeDoms.forEach((item, index) => {
     securityPolicyConfigs.push({
       checked: true,
@@ -44,7 +40,6 @@ function getParameters(button) {
       value: valueDoms[index].value
     });
   })
-
   var toJSON = Array.prototype.toJSON;
   delete Array.prototype.toJSON;
   var result = {

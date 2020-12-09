@@ -1,51 +1,53 @@
 <?jelly escape-by-default='true'?>
 
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
-  xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:dt="/lib/dingtalk">
   <st:once>
     <script type="text/javascript"
       src="${rootURL}/plugin/dingding-notifications/scripts/customValidate.js"/>
   </st:once>
 
-  <f:entry title="id" field="id">
-    <f:textbox/>
-  </f:entry>
-  <f:entry title="名称" field="name">
-    <f:textbox/>
-  </f:entry>
-  <f:entry title="webhook" field="webhook">
-    <f:textbox/>
-  </f:entry>
+  <dt:blockWrapper class="dt-robot-config" style="width: 100%;">
 
-  <f:block>
-    <j:scope>
-      <j:set var="securityPolicyConfigDescriptor"
-        value="${descriptor.getDingTalkSecurityPolicyConfigDescriptor()}"/>
-      <j:set var="securityPolicyConfigs"
-        value="${instance != null ? instance.getSecurityPolicyConfigs(): descriptor.getDefaultSecurityPolicyConfigs()}"/>
-      <f:repeatable
-        header=""
-        name="securityPolicyConfigs"
-        noAddButton="true"
-        var="instance"
-        items="${securityPolicyConfigs}">
-        <st:include page="config.jelly" class="${securityPolicyConfigDescriptor.clazz}"/>
-      </f:repeatable>
-    </j:scope>
-  </f:block>
+    <f:entry title="id" field="id">
+      <f:textbox/>
+    </f:entry>
+    <f:entry title="名称" field="name">
+      <f:textbox/>
+    </f:entry>
+    <f:entry title="webhook" field="webhook">
+      <f:textbox/>
+    </f:entry>
 
-  <f:block>
-    <input type="button" value="测试" class="validate-button" style="float:right"
-      data-id="${instance.getId()}"
-      data-validate-button-descriptor-url="${descriptor.descriptorFullUrl}"
-      data-validate-button-method="test"
-      data-validate-button-with="${with}"
-      onclick="customValidate(this)"/>
-    <div style="display:none;">
-      <img src="${imagesURL}/spinner.gif"/>
-      ${attrs.progress}
-    </div>
-    <div><!-- this is where the error message goes --></div>
-  </f:block>
+    <f:block>
+      <j:scope>
+        <j:set var="securityPolicyConfigDescriptor"
+          value="${descriptor.getDingTalkSecurityPolicyConfigDescriptor()}"/>
+        <j:set var="securityPolicyConfigs"
+          value="${instance != null ? instance.getSecurityPolicyConfigs(): descriptor.getDefaultSecurityPolicyConfigs()}"/>
+        <f:repeatable
+          header=""
+          name="securityPolicyConfigs"
+          noAddButton="true"
+          var="instance"
+          items="${securityPolicyConfigs}">
+          <st:include page="config.jelly" class="${securityPolicyConfigDescriptor.clazz}"/>
+        </f:repeatable>
+      </j:scope>
+    </f:block>
 
+    <f:block>
+      <input type="button" value="测试" class="validate-button" style="float:right"
+        data-validate-button-descriptor-url="${descriptor.descriptorFullUrl}"
+        data-validate-button-method="test"
+        data-validate-button-with="${with}"
+        onclick="customValidate(this)"/>
+      <div style="display:none;">
+        <img src="${imagesURL}/spinner.gif"/>
+        ${attrs.progress}
+      </div>
+      <div><!-- this is where the error message goes --></div>
+    </f:block>
+
+  </dt:blockWrapper>
 </j:jelly>

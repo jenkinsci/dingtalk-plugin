@@ -3,11 +3,11 @@ package io.jenkins.plugins;
 import hudson.Extension;
 import hudson.model.AbstractDescribableImpl;
 import hudson.model.Descriptor;
+import io.jenkins.plugins.enums.NoticeOccasionEnum;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -32,6 +32,14 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
   private String atMobile;
 
   private String content;
+
+  private Set<String> noticeOccasions;
+
+  public Set<String> getNoticeOccasions() {
+    return noticeOccasions == null
+        ? DingTalkGlobalConfig.get().getNoticeOccasions()
+        : noticeOccasions;
+  }
 
   public Set<String> getAtMobiles() {
     if (StringUtils.isEmpty(atMobile)) {
@@ -59,5 +67,14 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
   }
 
   @Extension
-  public static class DingTalkNotifierConfigDescriptor extends Descriptor<DingTalkNotifierConfig> {}
+  public static class DingTalkNotifierConfigDescriptor extends Descriptor<DingTalkNotifierConfig> {
+    /**
+     * 通知时机列表
+     *
+     * @return 通知时机
+     */
+    public NoticeOccasionEnum[] getNoticeOccasionTypes() {
+      return NoticeOccasionEnum.values();
+    }
+  }
 }

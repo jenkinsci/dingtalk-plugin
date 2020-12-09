@@ -45,9 +45,7 @@
           field="robotConfigs"
           varStatus="item"
           items="robotConfigs">
-          <dt:blockWrapper id="${instance.getId()}" style="width: 100%;">
-            <st:include page="config.jelly" class="${robotConfigDescriptor.clazz}"/>
-          </dt:blockWrapper>
+          <st:include page="config.jelly" class="${robotConfigDescriptor.clazz}"/>
           <div style="text-align: right; margin-top: 8px;">
             <f:repeatableDeleteButton/>
           </div>
