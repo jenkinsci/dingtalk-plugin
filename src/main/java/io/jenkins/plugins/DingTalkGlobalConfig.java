@@ -105,7 +105,7 @@ public class DingTalkGlobalConfig extends GlobalConfiguration {
             return StringUtils.isEmpty(webhook);
           });
     }
-    System.out.println(json.toString());
+//    System.out.println(json.toString());
     req.bindJSON(this, json);
     this.save();
     return super.configure(req, json);

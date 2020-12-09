@@ -50,6 +50,7 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
             newNotifierConfig.setChecked(notifierConfig.isChecked());
             newNotifierConfig.setAtMobile(notifierConfig.getAtMobile());
             newNotifierConfig.setContent(notifierConfig.getContent());
+            newNotifierConfig.setNoticeOccasions(notifierConfig.getNoticeOccasions());
           }
         }
       }

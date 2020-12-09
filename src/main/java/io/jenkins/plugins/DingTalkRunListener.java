@@ -2,6 +2,7 @@ package io.jenkins.plugins;
 
 import hudson.EnvVars;
 import hudson.Extension;
+import hudson.model.Cause;
 import hudson.model.Cause.UserIdCause;
 import hudson.model.Job;
 import hudson.model.Result;
@@ -17,11 +18,12 @@ import io.jenkins.plugins.model.ButtonModel;
 import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.service.impl.DingTalkServiceImpl;
 import io.jenkins.plugins.tools.Logger;
-import io.jenkins.plugins.tools.Logger.LineType;
 import io.jenkins.plugins.tools.Utils;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
@@ -45,9 +47,82 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
   private final String rootPath = Jenkins.get().getRootUrl();
 
-  public void send(Run<?, ?> run, TaskListener listener, BuildStatusEnum statusType) {
-    boolean isVerbose = DingTalkGlobalConfig.get().isVerbose();
-    Job<?, ?> job = run.getParent();
+  @Override
+  public void onStarted(Run<?, ?> run, TaskListener listener) {
+    DingTalkGlobalConfig globalConfig =DingTalkGlobalConfig.get();
+    log(listener, "全局配置信息：%s", globalConfig);
+    this.send(run, listener, NoticeOccasionEnum.START);
+  }
+
+  @Override
+  public void onCompleted(Run<?, ?> run, @Nonnull TaskListener listener) {
+    Result result = run.getResult();
+    NoticeOccasionEnum noticeOccasion = getNoticeOccasion(result);
+    this.send(run, listener, noticeOccasion);
+  }
+
+  private NoticeOccasionEnum getNoticeOccasion(Result result) {
+    if (Result.SUCCESS.equals(result)) {
+
+      return NoticeOccasionEnum.SUCCESS;
+    }
+    if (Result.FAILURE.equals(result)) {
+
+      return NoticeOccasionEnum.FAILURE;
+    }
+    if (Result.ABORTED.equals(result)) {
+
+      return NoticeOccasionEnum.ABORTED;
+    }
+    if (Result.UNSTABLE.equals(result)) {
+
+      return NoticeOccasionEnum.UNSTABLE;
+    }
+    if (Result.NOT_BUILT.equals(result)) {
+
+      return NoticeOccasionEnum.NOT_BUILT;
+    }
+    return null;
+  }
+
+  private BuildStatusEnum getBuildStatus(NoticeOccasionEnum noticeOccasion) {
+    if (NoticeOccasionEnum.START.equals(noticeOccasion)) {
+      return BuildStatusEnum.START;
+    }
+
+    if (NoticeOccasionEnum.SUCCESS.equals(noticeOccasion)) {
+      return BuildStatusEnum.SUCCESS;
+    }
+
+    if (NoticeOccasionEnum.FAILURE.equals(noticeOccasion)) {
+      return BuildStatusEnum.FAILURE;
+    }
+    if (NoticeOccasionEnum.ABORTED.equals(noticeOccasion)) {
+
+      return BuildStatusEnum.ABORTED;
+    }
+    if (NoticeOccasionEnum.UNSTABLE.equals(noticeOccasion)) {
+
+      return BuildStatusEnum.UNSTABLE;
+    }
+    if (NoticeOccasionEnum.NOT_BUILT.equals(noticeOccasion)) {
+
+      return BuildStatusEnum.NOT_BUILT;
+    }
+    return null;
+  }
+
+  private void log(TaskListener listener, String formatMsg, Object... args) {
+    DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.get();
+    boolean verbose = globalConfig.isVerbose();
+    if (verbose) {
+      //      Logger.line(listener, LineType.START);
+      Logger.debug(listener, "钉钉插件：" + formatMsg, args);
+      //      Logger.line(listener, LineType.END);
+    }
+  }
+
+  private Map<String, String> getUser(Run<?, ?> run, TaskListener listener) {
     UserIdCause userIdCause = run.getCause(UserIdCause.class);
     // 执行人信息
     User user = null;
@@ -58,49 +133,82 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     }
 
     if (user == null) {
-      if (isVerbose) {
-        Logger.debug(listener, "未获取到构建人信息，将尝试从构建信息中模糊匹配。");
-      }
+      log(listener, "未获取到构建人信息，将尝试从构建信息中模糊匹配。");
       executorName =
-          run.getCauses().stream()
-              .map(item -> item.getShortDescription().replace("Started by remote host", "Host"))
-              .collect(Collectors.joining());
+          run.getCauses().stream().map(Cause::getShortDescription).collect(Collectors.joining());
     } else {
       executorName = user.getDisplayName();
       executorMobile = user.getProperty(DingTalkUserProperty.class).getMobile();
-      if (isVerbose && executorMobile == null) {
-        Logger.debug(
+      if (executorMobile == null) {
+        log(
             listener,
             "用户【%s】暂未设置手机号码，请前往 %s 添加。",
             executorName,
             user.getAbsoluteUrl() + "/configure");
       }
     }
+    Map<String, String> result = new HashMap<>(16);
+    result.put("name", executorName);
+    result.put("mobile", executorMobile);
+    return result;
+  }
+
+  private EnvVars getEnvVars(Run<?, ?> run, TaskListener listener) {
+    EnvVars envVars;
+    try {
+      envVars = run.getEnvironment(listener);
+    } catch (InterruptedException | IOException e) {
+      envVars = new EnvVars();
+      log.error(e);
+      log(listener, "获取环境变量时发生异常，将只使用 jenkins 默认的环境变量。");
+      log(listener, ExceptionUtils.getStackTrace(e));
+    }
+    return envVars;
+  }
+
+  private boolean skip(
+      TaskListener listener,
+      NoticeOccasionEnum noticeOccasion,
+      DingTalkNotifierConfig notifierConfig) {
+    String stage = noticeOccasion.name();
+    Set<String> noticeOccasions = notifierConfig.getNoticeOccasions();
+    if (noticeOccasions.contains(stage)) {
+      return false;
+    }
+    log(listener, "机器人 %s 已跳过 %s 环节", notifierConfig.getRobotName(), stage);
+    return true;
+  }
+
+  private void send(Run<?, ?> run, TaskListener listener, NoticeOccasionEnum noticeOccasion) {
+    Job<?, ?> job = run.getParent();
+    DingTalkJobProperty property = job.getProperty(DingTalkJobProperty.class);
+
+    // 执行人信息
+    Map<String, String> user = getUser(run, listener);
+    String executorName = user.get("name");
+    String executorMobile = user.get("mobile");
 
     // 项目信息
     String projectName = job.getFullDisplayName();
     String projectUrl = job.getAbsoluteUrl();
 
     // 构建信息
+    BuildStatusEnum statusType = getBuildStatus(noticeOccasion);
     String jobName = run.getDisplayName();
     String jobUrl = rootPath + run.getUrl();
     String duration = run.getDurationString();
     List<ButtonModel> btns = Utils.createDefaultBtns(jobUrl);
     List<String> result = new ArrayList<>();
-    DingTalkJobProperty property = job.getProperty(DingTalkJobProperty.class);
     List<DingTalkNotifierConfig> notifierConfigs = property.getCheckedNotifierConfigs();
-    EnvVars envVars = null;
-    try {
-      envVars = run.getEnvironment(listener);
-      if (isVerbose) {
-        Logger.debug(listener, "当前可用的环境变量：%s", envVars);
-      }
-    } catch (InterruptedException | IOException e) {
-      log.error(e);
-      Logger.debug(listener, "获取环境变量时发生异常，钉钉自定义内容将跳过环境变量解析。");
-      Logger.debug(listener, ExceptionUtils.getStackTrace(e));
-    }
+
+    // 环境变量
+    EnvVars envVars = getEnvVars(run, listener);
+
     for (DingTalkNotifierConfig item : notifierConfigs) {
+      boolean skipped = skip(listener, noticeOccasion, item);
+      if (skipped) {
+        break;
+      }
       String robotId = item.getRobotId();
       String content = item.getContent();
       Set<String> atMobiles = item.getAtMobiles();
@@ -117,8 +225,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
               .duration(duration)
               .executorName(executorName)
               .executorMobile(executorMobile)
-              .content(
-                  envVars == null ? content : envVars.expand(content).replaceAll("\\\\n", "\n"))
+              .content(envVars.expand(content).replaceAll("\\\\n", "\n"))
               .build()
               .toMarkdown();
       MessageModel message =
@@ -128,10 +235,8 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
               .text(text)
               .btns(btns)
               .build();
-      if (isVerbose) {
-        Logger.debug(listener, "当前钉钉机器人信息：%s", item);
-        Logger.debug(listener, "发送的消息详情：%s", message);
-      }
+      log(listener, "当前机器人信息，%s", item);
+      log(listener, "发送的消息详情，%s", message);
       String msg = service.send(robotId, message);
       if (msg != null) {
         result.add(msg);
@@ -140,93 +245,6 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
     if (!result.isEmpty()) {
       result.forEach(msg -> Logger.error(listener, msg));
-    }
-  }
-
-  @Override
-  public void onStarted(Run<?, ?> build, TaskListener listener) {
-    DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.get();
-    boolean isVerbose = globalConfig.isVerbose();
-    if (isVerbose) {
-      Logger.line(listener, LineType.START);
-      Logger.debug(listener, "钉钉全局配置信息：%s", globalConfig);
-    }
-    if (globalConfig.getNoticeOccasions().contains(NoticeOccasionEnum.START.name())) {
-      this.send(build, listener, BuildStatusEnum.START);
-    } else if (isVerbose) {
-      Logger.debug(listener, "项目开始构建：未匹配的通知时机，无需触发钉钉");
-    }
-    if (isVerbose) {
-      Logger.line(listener, LineType.END);
-    }
-  }
-
-  @Override
-  public void onCompleted(Run<?, ?> build, @Nonnull TaskListener listener) {
-    DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.get();
-    BuildStatusEnum statusType = null;
-    boolean skipped = true;
-    boolean isVerbose = globalConfig.isVerbose();
-    Set<String> noticeOccasions = globalConfig.getNoticeOccasions();
-    Result result = build.getResult();
-
-    if (isVerbose) {
-      Logger.line(listener, LineType.START);
-    }
-
-    if (Result.SUCCESS.equals(result)) {
-
-      if (noticeOccasions.contains(NoticeOccasionEnum.SUCCESS.name())) {
-        skipped = false;
-        statusType = BuildStatusEnum.SUCCESS;
-      }
-
-    } else if (Result.FAILURE.equals(result)) {
-
-      if (noticeOccasions.contains(NoticeOccasionEnum.FAILURE.name())) {
-        skipped = false;
-        statusType = BuildStatusEnum.FAILURE;
-      }
-
-    } else if (Result.ABORTED.equals(result)) {
-
-      if (noticeOccasions.contains(NoticeOccasionEnum.ABORTED.name())) {
-        skipped = false;
-        statusType = BuildStatusEnum.ABORTED;
-      }
-
-    } else if (Result.UNSTABLE.equals(result)) {
-
-      if (noticeOccasions.contains(NoticeOccasionEnum.UNSTABLE.name())) {
-        skipped = false;
-        statusType = BuildStatusEnum.UNSTABLE;
-      }
-
-    } else if (Result.NOT_BUILT.equals(result)) {
-
-      if (noticeOccasions.contains(NoticeOccasionEnum.NOT_BUILT.name())) {
-        skipped = false;
-        statusType = BuildStatusEnum.NOT_BUILT;
-      }
-
-    } else {
-      statusType = BuildStatusEnum.UNKNOWN;
-      if (isVerbose) {
-        Logger.debug(listener, "不匹配的构建结果类型：%s", result == null ? "null" : result);
-      }
-    }
-
-    if (skipped) {
-      if (isVerbose) {
-        Logger.debug(listener, "构建已结束：无匹配的通知时机，无需触发钉钉");
-      }
-      return;
-    }
-
-    this.send(build, listener, statusType);
-
-    if (isVerbose) {
-      Logger.line(listener, LineType.END);
     }
   }
 }
