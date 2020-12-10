@@ -23,7 +23,7 @@ public class SdkTest {
             "https://oapi.dingtalk.com/robot/send?access_token=af0f18ea706e6205c59ecc32011f3a2b5a87da8f565abf3e9033043d496438f9"));
     robot.setSecurityPolicyConfigs(securityPolicyConfigs);
 
-    DingTalkSender sender = new DingTalkSender(robot);
+    DingTalkSender sender = new DingTalkSender(robot,null);
     String text =
         BuildJobModel.builder()
             .projectName("欢迎使用钉钉机器人插件~")
@@ -37,12 +37,7 @@ public class SdkTest {
             .build()
             .toMarkdown();
     MessageModel msg =
-        MessageModel.builder()
-            .title("钉钉机器人测试成功")
-            .text(text)
-            .messageUrl("/")
-            .atAll(false)
-            .build();
-    sender.sendText(msg, null);
+        MessageModel.builder().title("钉钉机器人测试成功").text(text).messageUrl("/").atAll(false).build();
+    sender.sendText(msg);
   }
 }
