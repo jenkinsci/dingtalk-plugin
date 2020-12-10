@@ -25,7 +25,7 @@ public class DingTalkServiceImpl implements DingTalkService {
   private DingTalkSender getSender(String robotId) {
     DingTalkSender sender = senders.get(robotId);
     if (sender == null) {
-      DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.get();
+      DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.getInstance();
       Proxy proxy = globalConfig.getProxy();
       CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs = globalConfig.getRobotConfigs();
       Optional<DingTalkRobotConfig> robotConfigOptional =

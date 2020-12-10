@@ -38,7 +38,7 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
 
     CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigsList = new CopyOnWriteArrayList<>();
     CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs =
-        DingTalkGlobalConfig.get().getRobotConfigs();
+        DingTalkGlobalConfig.getInstance().getRobotConfigs();
 
     for (DingTalkRobotConfig robotConfig : robotConfigs) {
       String id = robotConfig.getId();
@@ -101,7 +101,7 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
      * @return 默认的通知配置列表
      */
     public List<DingTalkNotifierConfig> getDefaultNotifierConfigs() {
-      return DingTalkGlobalConfig.get().getRobotConfigs().stream()
+      return DingTalkGlobalConfig.getInstance().getRobotConfigs().stream()
           .map(DingTalkNotifierConfig::new)
           .collect(Collectors.toList());
     }

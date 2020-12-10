@@ -1,6 +1,5 @@
 package io.jenkins.plugins.sdk;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import lombok.Data;
@@ -10,7 +9,7 @@ import lombok.Data;
  * @date 2020-12-09 21:35:58
  */
 @Data
-public class HttpResponse implements Serializable {
+public class HttpResponse{
 
   private String body;
 

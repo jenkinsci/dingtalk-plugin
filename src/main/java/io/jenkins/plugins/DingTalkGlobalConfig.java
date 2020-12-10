@@ -30,8 +30,7 @@ import org.kohsuke.stapler.StaplerRequest;
 @Extension(ordinal = 100)
 @SuppressWarnings("unused")
 public class DingTalkGlobalConfig extends GlobalConfiguration {
-
-  private static DingTalkGlobalConfig instance;
+  private static volatile DingTalkGlobalConfig instance;
 
   /** 网络代理 */
   private DingTalkProxyConfig proxyConfig;
@@ -117,7 +116,7 @@ public class DingTalkGlobalConfig extends GlobalConfiguration {
             return StringUtils.isEmpty(webhook);
           });
     }
-//    System.out.println(json.toString());
+    //    System.out.println(json.toString());
     req.bindJSON(this, json);
     this.save();
     return super.configure(req, json);
@@ -146,9 +145,13 @@ public class DingTalkGlobalConfig extends GlobalConfiguration {
    *
    * @return 全局配置信息
    */
-  public static DingTalkGlobalConfig get() {
+  public static DingTalkGlobalConfig getInstance() {
     if (instance == null) {
-      instance = GlobalConfiguration.all().get(DingTalkGlobalConfig.class);
+      synchronized (DingTalkGlobalConfig.class) {
+        if (instance == null) {
+          instance = GlobalConfiguration.all().getInstance(DingTalkGlobalConfig.class);
+        }
+      }
     }
     return instance;
   }

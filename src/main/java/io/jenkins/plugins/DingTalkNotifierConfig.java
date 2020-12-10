@@ -38,7 +38,7 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
   private Set<String> noticeOccasions;
 
   private static Set<String> getDefaultNoticeOccasions() {
-    return DingTalkGlobalConfig.get().getNoticeOccasions();
+    return DingTalkGlobalConfig.getInstance().getNoticeOccasions();
   }
 
   public Set<String> getNoticeOccasions() {

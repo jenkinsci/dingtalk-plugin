@@ -1,7 +1,6 @@
 package io.jenkins.plugins.sdk;
 
 import io.jenkins.plugins.tools.Utils;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class DingTalkRobotRequest implements Serializable {
+public class DingTalkRobotRequest{
 
   /** 此消息类型为固定actionCard */
   private String actionCard;

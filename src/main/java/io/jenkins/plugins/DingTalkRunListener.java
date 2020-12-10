@@ -49,7 +49,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
   @Override
   public void onStarted(Run<?, ?> run, TaskListener listener) {
-    DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.get();
+    DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.getInstance();
     log(listener, "全局配置信息，%s", Utils.toJson(globalConfig));
     this.send(run, listener, NoticeOccasionEnum.START);
   }
@@ -113,7 +113,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
   }
 
   private void log(TaskListener listener, String formatMsg, Object... args) {
-    DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.get();
+    DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.getInstance();
     boolean verbose = globalConfig.isVerbose();
     if (verbose) {
       //      Logger.line(listener, LineType.START);

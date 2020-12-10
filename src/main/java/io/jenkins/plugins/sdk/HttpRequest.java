@@ -132,7 +132,7 @@ public class HttpRequest {
 
   public static byte[] buildBody(Object data, String charset) throws UnsupportedEncodingException {
     if (data == null) {
-      return null;
+      return new byte[] {};
     }
     String body;
     if (data instanceof String) {
@@ -261,7 +261,7 @@ public class HttpRequest {
   private static class TrustAllTrustManager implements X509TrustManager {
     @Override
     public X509Certificate[] getAcceptedIssuers() {
-      return null;
+      return new X509Certificate[] {};
     }
 
     @Override
