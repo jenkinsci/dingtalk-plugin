@@ -16,8 +16,8 @@
   <packaging>hpi</packaging>
   <properties>
     <!--    除了 jdk 版本，其他的在 org.jenkins-ci.plugins.plugin 中都定义了   -->
-        <jenkins.version>2.269</jenkins.version>
-<!--    <jenkins.version>2.263.1</jenkins.version>-->
+    <jenkins.version>2.269</jenkins.version>
+    <!--    <jenkins.version>2.263.1</jenkins.version>-->
     <java.level>8</java.level>
     <hpi-plugin.version>3.16</hpi-plugin.version>
     <hpi.compatibleSinceVersion>2.0.0</hpi.compatibleSinceVersion>
@@ -80,6 +80,30 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <tags>
+            <tag>
+              <name>date</name>
+            </tag>
+          </tags>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
   <repositories>
     <repository>
