@@ -16,7 +16,7 @@
   <packaging>hpi</packaging>
   <properties>
     <!--    除了 jdk 版本，其他的在 org.jenkins-ci.plugins.plugin 中都定义了   -->
-    <!--    <jenkins.version>2.269</jenkins.version>-->
+<!--    <jenkins.version>2.269</jenkins.version>-->
     <jenkins.version>2.263.1</jenkins.version>
     <java.level>8</java.level>
     <hpi-plugin.version>3.16</hpi-plugin.version>
@@ -68,20 +68,15 @@
   </dependencyManagement>
 
   <dependencies>
-    <!--    <dependency>-->
-    <!--      <groupId>com.dingtalk.open</groupId>-->
-    <!--      <artifactId>taobao-sdk-java-auto</artifactId>-->
-    <!--      <version>1.0</version>-->
-    <!--    </dependency>-->
     <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.8.6</version>
+      <groupId>com.dingtalk.open</groupId>
+      <artifactId>taobao-sdk-java-auto</artifactId>
+      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.16</version>
+      <version>1.18.10</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

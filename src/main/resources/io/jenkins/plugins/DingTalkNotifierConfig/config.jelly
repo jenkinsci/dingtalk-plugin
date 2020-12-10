@@ -31,7 +31,7 @@
             </j:forEach>
           </dt:blockWrapper>
         </f:entry>
-        <f:entry title="通知人">
+        <f:entry title="通知人" field="at">
           <f:checkbox title="atAll" field="atAll"/>
           <f:textarea field="atMobile"/>
         </f:entry>

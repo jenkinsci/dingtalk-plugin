@@ -3,6 +3,7 @@ package io.jenkins.plugins;
 import hudson.Extension;
 import io.jenkins.plugins.DingTalkRobotConfig.DingTalkRobotConfigDescriptor;
 import io.jenkins.plugins.enums.NoticeOccasionEnum;
+import java.net.Proxy;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -32,6 +33,9 @@ public class DingTalkGlobalConfig extends GlobalConfiguration {
 
   private static DingTalkGlobalConfig instance;
 
+  /** 网络代理 */
+  private DingTalkProxyConfig proxyConfig;
+
   /** 是否打印详细日志 */
   private boolean verbose;
 
@@ -52,12 +56,15 @@ public class DingTalkGlobalConfig extends GlobalConfiguration {
   }
 
   /**
-   * `机器人` 配置页面
+   * 获取网络代理
    *
-   * @return 机器人配置页面
+   * @return proxy
    */
-  public DingTalkRobotConfigDescriptor getDingTalkRobotConfigDescriptor() {
-    return Jenkins.get().getDescriptorByType(DingTalkRobotConfigDescriptor.class);
+  public Proxy getProxy() {
+    if (proxyConfig == null) {
+      return null;
+    }
+    return proxyConfig.getProxy();
   }
 
   @DataBoundSetter
@@ -71,15 +78,22 @@ public class DingTalkGlobalConfig extends GlobalConfiguration {
   }
 
   @DataBoundSetter
+  public void setProxyConfig(DingTalkProxyConfig proxyConfig) {
+    this.proxyConfig = proxyConfig;
+  }
+
+  @DataBoundSetter
   public void setRobotConfigs(CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs) {
     this.robotConfigs = robotConfigs;
   }
 
   @DataBoundConstructor
   public DingTalkGlobalConfig(
+      DingTalkProxyConfig proxyConfig,
       boolean verbose,
       Set<String> noticeOccasions,
       CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs) {
+    this.proxyConfig = proxyConfig;
     this.verbose = verbose;
     this.noticeOccasions = noticeOccasions;
     this.robotConfigs = robotConfigs;
@@ -91,8 +105,6 @@ public class DingTalkGlobalConfig extends GlobalConfiguration {
 
   @Override
   public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
-    //    System.out.println("============ old form data =============");
-    //    System.out.println(json.toString());
     Object robotConfigObj = json.get("robotConfigs");
     if (robotConfigObj == null) {
       json.put("robotConfigs", new JSONArray());
@@ -109,6 +121,24 @@ public class DingTalkGlobalConfig extends GlobalConfiguration {
     req.bindJSON(this, json);
     this.save();
     return super.configure(req, json);
+  }
+
+  /**
+   * `网络代理` 配置页面
+   *
+   * @return 网络代理配置页面
+   */
+  public DingTalkProxyConfig getDingTalkProxyConfig() {
+    return Jenkins.get().getDescriptorByType(DingTalkProxyConfig.class);
+  }
+
+  /**
+   * `机器人` 配置页面
+   *
+   * @return 机器人配置页面
+   */
+  public DingTalkRobotConfigDescriptor getDingTalkRobotConfigDescriptor() {
+    return Jenkins.get().getDescriptorByType(DingTalkRobotConfigDescriptor.class);
   }
 
   /**

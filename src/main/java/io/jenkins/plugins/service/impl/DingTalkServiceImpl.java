@@ -5,7 +5,8 @@ import io.jenkins.plugins.DingTalkRobotConfig;
 import io.jenkins.plugins.enums.MsgTypeEnum;
 import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.service.DingTalkService;
-import io.jenkins.plugins.tools.DingTalkSender;
+import io.jenkins.plugins.sdk.DingTalkSender;
+import java.net.Proxy;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,12 +26,13 @@ public class DingTalkServiceImpl implements DingTalkService {
     DingTalkSender sender = senders.get(robotId);
     if (sender == null) {
       DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.get();
+      Proxy proxy = globalConfig.getProxy();
       CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs = globalConfig.getRobotConfigs();
-      Optional<DingTalkRobotConfig> robotConfigOptional = robotConfigs.stream()
-          .filter(item -> robotId.equals(item.getId())).findAny();
+      Optional<DingTalkRobotConfig> robotConfigOptional =
+          robotConfigs.stream().filter(item -> robotId.equals(item.getId())).findAny();
       if (robotConfigOptional.isPresent()) {
         DingTalkRobotConfig robotConfig = robotConfigOptional.get();
-        sender = new DingTalkSender(robotConfig);
+        sender = new DingTalkSender(robotConfig, proxy);
         senders.put(robotId, sender);
       }
     }

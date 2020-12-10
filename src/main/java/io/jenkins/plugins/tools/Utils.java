@@ -1,11 +1,9 @@
 package io.jenkins.plugins.tools;
 
-import hudson.model.TaskListener;
+import com.google.gson.Gson;
 import io.jenkins.plugins.model.ButtonModel;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * 通用方法合集
@@ -15,11 +13,8 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Utils {
 
-  /**
-   * 字符串分隔符
-   */
+  /** 字符串分隔符 */
   public static final String DELIMITER = "\n";
-
 
   /**
    * 创建默认的按钮列表
@@ -32,12 +27,8 @@ public class Utils {
     String console = jobUrl + "/console";
 
     List<ButtonModel> btns = new ArrayList<>();
-    btns.add(
-        ButtonModel.of("更改记录", changeLog)
-    );
-    btns.add(
-        ButtonModel.of("控制台", console)
-    );
+    btns.add(ButtonModel.of("更改记录", changeLog));
+    btns.add(ButtonModel.of("控制台", console));
 
     return btns;
   }
@@ -46,7 +37,7 @@ public class Utils {
    * markdown 染色
    *
    * @param content 内容
-   * @param color   颜色
+   * @param color 颜色
    * @return 带颜色的内容
    */
   public static String dye(String content, String color) {
@@ -76,4 +67,25 @@ public class Utils {
     return str.split(DELIMITER);
   }
 
+  /**
+   * class to json string
+   *
+   * @param obj 实体类
+   * @return json 字符串
+   */
+  public static String toJson(Object obj) {
+    return new Gson().toJson(obj);
+  }
+
+  /**
+   * json string to class
+   *
+   * @param json json 字符串
+   * @param clazz 类
+   * @param <T> 泛型
+   * @return clazz 实体类
+   */
+  public static <T> T fromJson(String json, Class<T> clazz) {
+    return new Gson().fromJson(json, clazz);
+  }
 }

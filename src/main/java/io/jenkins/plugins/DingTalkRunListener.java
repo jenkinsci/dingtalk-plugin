@@ -49,8 +49,8 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
   @Override
   public void onStarted(Run<?, ?> run, TaskListener listener) {
-    DingTalkGlobalConfig globalConfig =DingTalkGlobalConfig.get();
-    log(listener, "全局配置信息：%s", globalConfig);
+    DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.get();
+    log(listener, "全局配置信息，%s", Utils.toJson(globalConfig));
     this.send(run, listener, NoticeOccasionEnum.START);
   }
 
@@ -237,8 +237,8 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
               .text(text)
               .btns(btns)
               .build();
-      log(listener, "当前机器人信息，%s", item);
-      log(listener, "发送的消息详情，%s", message);
+      log(listener, "当前机器人信息，%s", Utils.toJson(item));
+      log(listener, "发送的消息详情，%s", Utils.toJson(message));
       String msg = service.send(robotId, message);
       if (msg != null) {
         result.add(msg);

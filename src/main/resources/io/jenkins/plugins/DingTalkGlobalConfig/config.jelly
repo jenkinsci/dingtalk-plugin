@@ -11,11 +11,7 @@
 
   <f:section title="钉钉">
 
-    <f:entry title="详细日志" field="verbose">
-      <f:checkbox/>
-    </f:entry>
-
-    <f:entry title="通知时机" field="noticeOccasions">
+    <f:entry title="通知时机">
       <dt:blockWrapper>
         <j:forEach var="noticeOccasionTypeItem"
           items="${noticeOccasionTypes}">
@@ -35,6 +31,22 @@
       </dt:blockWrapper>
     </f:entry>
 
+    <f:advanced>
+      <f:entry title="详细日志" field="verbose">
+        <f:checkbox/>
+      </f:entry>
+
+      <f:block>
+        <f:property field="proxyConfig">
+          <j:scope>
+            <j:set var="instance" value="${instance.proxyConfig}"/>
+            <j:set var="descriptor" value="${descriptor.getDingTalkProxyConfig()}"/>
+            <st:include page="config.jelly" class="${descriptor.clazz}"/>
+          </j:scope>
+        </f:property>
+      </f:block>
+    </f:advanced>
+
     <f:block>
       <j:scope>
         <j:set var="robotConfigs" value="${instance.getRobotConfigs()}"/>
@@ -52,6 +64,7 @@
         </f:repeatable>
       </j:scope>
     </f:block>
+
   </f:section>
 
 </j:jelly>

@@ -13,7 +13,8 @@ import io.jenkins.plugins.enums.MsgTypeEnum;
 import io.jenkins.plugins.enums.SecurityPolicyEnum;
 import io.jenkins.plugins.model.BuildJobModel;
 import io.jenkins.plugins.model.MessageModel;
-import io.jenkins.plugins.tools.DingTalkSender;
+import io.jenkins.plugins.sdk.DingTalkSender;
+import java.net.Proxy;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
@@ -172,51 +173,31 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
      * @param name 名称
      * @param webhook webhook
      * @param securityPolicyConfigStr 安全策略
+     * @param proxyStr 代理
      * @return 机器人配置是否正确
      */
     public FormValidation doTest(
         @QueryParameter("id") String id,
         @QueryParameter("name") String name,
         @QueryParameter("webhook") String webhook,
-        @QueryParameter("securityPolicyConfigs") String securityPolicyConfigStr) {
+        @QueryParameter("securityPolicyConfigs") String securityPolicyConfigStr,
+        @QueryParameter("proxy") String proxyStr) {
       CopyOnWriteArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs =
-          new CopyOnWriteArrayList<>();
-      JSONArray array = (JSONArray) JSONSerializer.toJSON(securityPolicyConfigStr);
-      for (Object item : array) {
-        JSONObject json = (JSONObject) item;
-        securityPolicyConfigs.add(
-            new DingTalkSecurityPolicyConfig(
-                (String) json.get("type"), (String) json.get("value"), ""));
-      }
+          getSecurityPolicyConfigs(securityPolicyConfigStr);
+
       DingTalkRobotConfig robotConfig =
           new DingTalkRobotConfig(id, name, webhook, securityPolicyConfigs);
-      DingTalkSender sender = new DingTalkSender(robotConfig);
-      String rootUrl = Jenkins.get().getRootUrl();
-      User user = User.current();
-      if (user == null) {
-        user = User.getUnknown();
-      }
-      String text =
-          BuildJobModel.builder()
-              .projectName("欢迎使用钉钉机器人插件~")
-              .projectUrl(rootUrl)
-              .jobName("系统配置")
-              .jobUrl(rootUrl + "/configure")
-              .statusType(BuildStatusEnum.SUCCESS)
-              .duration("-")
-              .executorName(user.getDisplayName())
-              .executorMobile(user.getDescription())
-              .build()
-              .toMarkdown();
-      MessageModel msg =
-          MessageModel.builder()
-              .type(MsgTypeEnum.MARKDOWN)
-              .title("钉钉机器人测试成功")
-              .text(text)
-              .atAll(true)
-              .build();
+
+      Proxy proxy = getProxy(proxyStr);
+
+      DingTalkSender sender = new DingTalkSender(robotConfig, proxy);
+
+      MessageModel msg = getMsg();
+
       String message = sender.sendMarkdown(msg);
+
       if (message == null) {
+        String rootUrl = Jenkins.get().getRootUrl();
         return FormValidation.respond(
             Kind.OK,
             "<img src='"
@@ -225,6 +206,64 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
                 + "<span style='padding-left:4px;color:#52c41a;font-weight:bold;'>测试成功</span>");
       }
       return FormValidation.error(message);
+    }
+
+    private CopyOnWriteArrayList<DingTalkSecurityPolicyConfig> getSecurityPolicyConfigs(
+        String param) {
+      CopyOnWriteArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs =
+          new CopyOnWriteArrayList<>();
+      JSONArray array = (JSONArray) JSONSerializer.toJSON(param);
+      for (Object item : array) {
+        JSONObject json = (JSONObject) item;
+        securityPolicyConfigs.add(
+            new DingTalkSecurityPolicyConfig(
+                (String) json.get("type"), (String) json.get("value"), ""));
+      }
+      return securityPolicyConfigs;
+    }
+
+    private String getText() {
+      String rootUrl = Jenkins.get().getRootUrl();
+      User user = User.current();
+      if (user == null) {
+        user = User.getUnknown();
+      }
+      return BuildJobModel.builder()
+          .projectName("欢迎使用钉钉机器人插件~")
+          .projectUrl(rootUrl)
+          .jobName("系统配置")
+          .jobUrl(rootUrl + "/configure")
+          .statusType(BuildStatusEnum.SUCCESS)
+          .duration("-")
+          .executorName(user.getDisplayName())
+          .executorMobile(user.getDescription())
+          .build()
+          .toMarkdown();
+    }
+
+    private MessageModel getMsg() {
+      return MessageModel.builder()
+          .type(MsgTypeEnum.MARKDOWN)
+          .title("钉钉机器人测试成功")
+          .text(getText())
+          .atAll(false)
+          .build();
+    }
+
+    private Proxy getProxy(String param) {
+      Proxy proxy = null;
+      try {
+        JSONObject proxyObj = (JSONObject) JSONSerializer.toJSON(param);
+        DingTalkProxyConfig netProxy =
+            new DingTalkProxyConfig(
+                Proxy.Type.valueOf(proxyObj.getString("type")),
+                proxyObj.getString("host"),
+                proxyObj.getInt("port"));
+        proxy = netProxy.getProxy();
+      } catch (Exception ignored){
+
+      }
+      return proxy;
     }
   }
 }

@@ -1,5 +1,6 @@
 package io.jenkins.plugins;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.EnvVars;
 import hudson.Extension;
 import hudson.FilePath;
@@ -16,7 +17,6 @@ import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.service.impl.DingTalkServiceImpl;
 import io.jenkins.plugins.tools.Logger;
 import io.jenkins.plugins.tools.Utils;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -33,22 +33,21 @@ import org.kohsuke.stapler.DataBoundSetter;
 
 /**
  * 支持 pipeline 中使用
- * <p>
- * * 不要使用 @Data 注解，spotbugs 会报错 * <p> * Redundant nullcheck of this$title, which is known to be
- * non-null in * io.jenkins.plugins.model.MessageModel.equals(Object)
+ *
+ * <p>* 不要使用 @Data 注解，spotbugs 会报错 *
+ *
+ * <p>* Redundant nullcheck of this$title, which is known to be non-null in *
+ * io.jenkins.plugins.model.MessageModel.equals(Object)
  *
  * @author liuwei
  * @date 2020/3/27 16:36
  */
-
 @Getter
 @Setter
 @SuppressWarnings("unused")
 public class DingTalkPipeline extends Builder implements SimpleBuildStep {
 
-  /**
-   * 机器人 id
-   */
+  /** 机器人 id */
   private String robot;
 
   private MsgTypeEnum type;
@@ -163,44 +162,33 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
   }
 
   @Override
-  public void perform(@Nonnull Run<?, ?> run, @Nonnull FilePath workspace,
-      @Nonnull Launcher launcher, @Nonnull TaskListener listener)
-      throws InterruptedException, IOException {
+  public void perform(
+      @NonNull Run<?, ?> run,
+      @NonNull FilePath workspace,
+      @NonNull EnvVars envVars,
+      @NonNull Launcher launcher,
+      @NonNull TaskListener listener) {
 
-    EnvVars envVars = run.getEnvironment(listener);
-
-    boolean defaultBtns = MsgTypeEnum.ACTION_CARD.equals(type) &&
-        StringUtils.isEmpty(singleTitle) &&
-        (btns == null || btns.isEmpty());
+    boolean defaultBtns =
+        MsgTypeEnum.ACTION_CARD.equals(type)
+            && StringUtils.isEmpty(singleTitle)
+            && (btns == null || btns.isEmpty());
 
     if (defaultBtns) {
       String jobUrl = rootPath + run.getUrl();
       this.btns = Utils.createDefaultBtns(jobUrl);
     } else if (btns != null) {
-      btns.forEach(item -> {
-        item.setTitle(
-            envVars.expand(
-                item.getTitle()
-            )
-        );
-        item.setActionUrl(
-            envVars.expand(
-                item.getActionUrl()
-            )
-        );
-      });
+      btns.forEach(
+          item -> {
+            item.setTitle(envVars.expand(item.getTitle()));
+            item.setActionUrl(envVars.expand(item.getActionUrl()));
+          });
     }
 
     if (at != null) {
-      String atStr = envVars.expand(
-          Utils.join(at)
-      );
+      String atStr = envVars.expand(Utils.join(at));
 
-      this.at = new HashSet<>(
-          Arrays.asList(
-              Utils.split(atStr)
-          )
-      );
+      this.at = new HashSet<>(Arrays.asList(Utils.split(atStr)));
     }
 
     String result =
