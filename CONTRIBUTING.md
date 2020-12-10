@@ -2,11 +2,6 @@
 
 欢迎 PR ~
 
-## 开发环境
-
-1. 使用/参考 [settings.xml](./maven/settings.xml) 配置 `maven`。
-2. `windows` 环境下执行 [install.cmd](./maven/taobao-sdk-java-auto/install.cmd) 安装 `taobao-sdk`，其他环境请拷贝文件中的脚本手动执行安装。
-
 ## 开发服务
 
 在 `IDEA` 右侧 `maven` 控制面板中添加 `hpi:run` 到启动配置：
