@@ -3,7 +3,7 @@ package io.jenkins.plugins.sdk;
 import io.jenkins.plugins.DingTalkRobotConfig;
 import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.model.RobotConfigModel;
-import io.jenkins.plugins.sdk.DingTalkRobotRequest.Actioncard;
+import io.jenkins.plugins.sdk.DingTalkRobotRequest.ActionCard;
 import io.jenkins.plugins.sdk.DingTalkRobotRequest.At;
 import io.jenkins.plugins.sdk.DingTalkRobotRequest.Link;
 import io.jenkins.plugins.sdk.DingTalkRobotRequest.Markdown;
@@ -13,6 +13,7 @@ import io.jenkins.plugins.tools.Utils;
 import java.io.IOException;
 import java.net.Proxy;
 import java.util.List;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -44,12 +45,10 @@ public class DingTalkSender {
   public String sendText(MessageModel msg) {
     At at = msg.getAt();
     Text text = new Text();
+    text.setAt(at);
     text.setContent(addKeyWord(addAtInfo(msg.getText(), at, false)));
 
-    DingTalkRobotRequest request = new DingTalkRobotRequest();
-    request.setAt(at);
-    request.setText(text);
-    return call(request);
+    return call(text);
   }
 
   /**
@@ -61,32 +60,29 @@ public class DingTalkSender {
   public String sendLink(MessageModel msg) {
     At at = msg.getAt();
     Link link = new Link();
+    link.setAt(at);
     link.setTitle(addKeyWord(msg.getTitle()));
     link.setText(addAtInfo(msg.getText(), at, false));
     link.setMessageUrl(msg.getMessageUrl());
     link.setPicUrl(msg.getPicUrl());
 
-    DingTalkRobotRequest request = new DingTalkRobotRequest();
-    request.setLink(link);
-    request.setAt(at);
-    return call(request);
+    return call(link);
   }
 
   public String sendMarkdown(MessageModel msg) {
     At at = msg.getAt();
     Markdown markdown = new Markdown();
+    markdown.setAt(at);
     markdown.setTitle(addKeyWord(msg.getTitle()));
     markdown.setText(addAtInfo(msg.getText(), at, true));
 
-    DingTalkRobotRequest request = new DingTalkRobotRequest();
-    request.setAt(at);
-    request.setMarkdown(markdown);
-    return call(request);
+    return call(markdown);
   }
 
   public String sendActionCard(MessageModel msg) {
     At at = msg.getAt();
-    Actioncard actioncard = new Actioncard();
+    ActionCard actioncard = new ActionCard();
+    actioncard.setAt(at);
     actioncard.setTitle(addKeyWord(msg.getTitle()));
     actioncard.setText(addAtInfo(msg.getText(), at, true));
     String singleTitle = msg.getSingleTitle();
@@ -99,10 +95,7 @@ public class DingTalkSender {
     actioncard.setBtnOrientation(msg.getBtnOrientation());
     actioncard.setHideAvatar(msg.getHideAvatar());
 
-    DingTalkRobotRequest request = new DingTalkRobotRequest();
-    request.setAt(at);
-    request.setActionCard(actioncard);
-    return call(request);
+    return call(actioncard);
   }
 
   /**
@@ -114,10 +107,12 @@ public class DingTalkSender {
   private String call(DingTalkRobotRequest request) {
     try {
       String server = robotConfigModel.getServer();
+      Map<String, Object> content = request.getParams();
+
       HttpResponse response =
           HttpRequest.builder()
               .server(server)
-              .data(request.getTextParams())
+              .data(content)
               .method(Constants.METHOD_POST)
               .proxy(proxy)
               .build()

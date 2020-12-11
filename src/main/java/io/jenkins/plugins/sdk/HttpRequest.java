@@ -52,7 +52,7 @@ public class HttpRequest {
   private Map<String, String> params;
 
   /** body 参数 */
-  private Map<String, String> data;
+  private Map<String, Object> data;
 
   @Default private int timeout = 30000;
 

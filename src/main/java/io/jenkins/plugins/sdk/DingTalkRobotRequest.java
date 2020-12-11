@@ -1,10 +1,10 @@
 package io.jenkins.plugins.sdk;
 
-import io.jenkins.plugins.tools.Utils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -13,81 +13,25 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class DingTalkRobotRequest{
-
-  /** 此消息类型为固定actionCard */
-  private String actionCard;
+public abstract class DingTalkRobotRequest {
 
   /** 被@人的手机号 */
-  private String at;
-
-  /** 此消息类型为固定feedCard */
-  private String feedCard;
-
-  /** 消息类型，此时固定为:link */
-  private String link;
-
-  /** 此消息类型为固定markdown */
-  private String markdown;
-
-  /** 消息类型 */
-  private String msgtype;
-
-  /** text类型 */
-  private String text;
-
-  public void setAt(At at) {
-    this.at = Utils.toJson(at);
-  }
-
-  public void setActionCard(Actioncard actionCard) {
-    this.msgtype = Constants.MSG_TYPE_ACTION_CARD;
-    this.actionCard = Utils.toJson(actionCard);
-  }
-
-  public void setFeedCard(FeedCard feedCard) {
-    this.msgtype = Constants.MSG_TYPE_FEED_CARD;
-    this.feedCard = Utils.toJson(feedCard);
-  }
-
-  public void setLink(Link link) {
-    this.msgtype = Constants.MSG_TYPE_LINK;
-    this.link = Utils.toJson(link);
-  }
-
-  public void setMarkdown(Markdown markdown) {
-    this.msgtype = Constants.MSG_TYPE_MARKDOWN;
-    this.markdown = Utils.toJson(markdown);
-  }
-
-  public void setText(Text text) {
-    this.msgtype = Constants.MSG_TYPE_TEXT;
-    this.text = Utils.toJson(text);
-  }
-
-  public Map<String, String> getTextParams() {
-    Map<String, String> txtParams = new HashMap<>(16);
-    txtParams.put("actionCard", this.actionCard);
-    txtParams.put("at", this.at);
-    txtParams.put("feedCard", this.feedCard);
-    txtParams.put("link", this.link);
-    txtParams.put("markdown", this.markdown);
-    txtParams.put("msgtype", this.msgtype);
-    txtParams.put("text", this.text);
-    return txtParams;
-  }
+  private At at;
 
   /**
-   * text类型
+   * 消息类型
    *
-   * @author top auto create
-   * @since 1.0, null
+   * @return type
    */
-  @Data
-  @NoArgsConstructor
-  public static class Text {
-    /** text类型 */
-    private String content;
+  public abstract String getMsgType();
+
+  public Map<String, Object> getParams() {
+    String msgType = this.getMsgType();
+    Map<String, Object> params = new HashMap<>(16);
+    params.put("msgtype", msgType);
+    params.put(msgType, this);
+    params.put("at", this.at);
+    return params;
   }
 
   /**
@@ -106,14 +50,34 @@ public class DingTalkRobotRequest{
   }
 
   /**
+   * text类型
+   *
+   * @author top auto create
+   * @since 1.0, null
+   */
+  @EqualsAndHashCode(callSuper = true)
+  @Data
+  @NoArgsConstructor
+  public static class Text extends DingTalkRobotRequest {
+    /** text类型 */
+    private String content;
+
+    @Override
+    public String getMsgType() {
+      return Constants.MSG_TYPE_TEXT;
+    }
+  }
+
+  /**
    * 消息类型，此时固定为:link
    *
    * @author top auto create
    * @since 1.0, null
    */
+  @EqualsAndHashCode(callSuper = true)
   @Data
   @NoArgsConstructor
-  public static class Link {
+  public static class Link extends DingTalkRobotRequest {
     /** 点击消息跳转的URL */
     private String messageUrl;
     /** 图片URL */
@@ -122,6 +86,11 @@ public class DingTalkRobotRequest{
     private String text;
     /** 消息标题 */
     private String title;
+
+    @Override
+    public String getMsgType() {
+      return Constants.MSG_TYPE_LINK;
+    }
   }
 
   /**
@@ -130,13 +99,19 @@ public class DingTalkRobotRequest{
    * @author top auto create
    * @since 1.0, null
    */
+  @EqualsAndHashCode(callSuper = true)
   @Data
   @NoArgsConstructor
-  public static class Markdown {
+  public static class Markdown extends DingTalkRobotRequest {
     /** markdown格式的消息 */
     private String text;
     /** 首屏会话透出的展示内容 */
     private String title;
+
+    @Override
+    public String getMsgType() {
+      return Constants.MSG_TYPE_MARKDOWN;
+    }
   }
 
   /**
@@ -160,9 +135,10 @@ public class DingTalkRobotRequest{
    * @author top auto create
    * @since 1.0, null
    */
+  @EqualsAndHashCode(callSuper = true)
   @Data
   @NoArgsConstructor
-  public static class Actioncard {
+  public static class ActionCard extends DingTalkRobotRequest {
     /** 0-按钮竖直排列，1-按钮横向排列 */
     private String btnOrientation;
     /** 按钮的信息 */
@@ -177,6 +153,11 @@ public class DingTalkRobotRequest{
     private String text;
     /** 首屏会话透出的展示内容 */
     private String title;
+
+    @Override
+    public String getMsgType() {
+      return Constants.MSG_TYPE_ACTION_CARD;
+    }
   }
 
   /**
@@ -200,18 +181,16 @@ public class DingTalkRobotRequest{
    *
    * @since 1.0
    */
+  @EqualsAndHashCode(callSuper = true)
   @Data
   @NoArgsConstructor
-  public static class FeedCard {
+  public static class FeedCard extends DingTalkRobotRequest {
     /** links */
     private List<Links> links;
 
-    public List<Links> getLinks() {
-      return this.links;
-    }
-
-    public void setLinks(List<Links> links) {
-      this.links = links;
+    @Override
+    public String getMsgType() {
+      return Constants.MSG_TYPE_FEED_CARD;
     }
   }
 }
