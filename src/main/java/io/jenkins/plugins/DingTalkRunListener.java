@@ -4,6 +4,7 @@ import hudson.EnvVars;
 import hudson.Extension;
 import hudson.model.Cause;
 import hudson.model.Cause.UserIdCause;
+import hudson.model.FreeStyleBuild;
 import hudson.model.Job;
 import hudson.model.Result;
 import hudson.model.Run;
@@ -41,21 +42,21 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 @SuppressWarnings("unused")
 @Log4j
 @Extension
-public class DingTalkRunListener extends RunListener<Run<?, ?>> {
+public class DingTalkRunListener extends RunListener<FreeStyleBuild> {
 
   private final DingTalkServiceImpl service = new DingTalkServiceImpl();
 
   private final String rootPath = Jenkins.get().getRootUrl();
 
   @Override
-  public void onStarted(Run<?, ?> run, TaskListener listener) {
+  public void onStarted(FreeStyleBuild run, TaskListener listener) {
     DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.getInstance();
     log(listener, "全局配置信息，%s", Utils.toJson(globalConfig));
     this.send(run, listener, NoticeOccasionEnum.START);
   }
 
   @Override
-  public void onCompleted(Run<?, ?> run, @Nonnull TaskListener listener) {
+  public void onCompleted(FreeStyleBuild run, @Nonnull TaskListener listener) {
     Result result = run.getResult();
     NoticeOccasionEnum noticeOccasion = getNoticeOccasion(result);
     this.send(run, listener, noticeOccasion);
@@ -182,6 +183,11 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
   private void send(Run<?, ?> run, TaskListener listener, NoticeOccasionEnum noticeOccasion) {
     Job<?, ?> job = run.getParent();
     DingTalkJobProperty property = job.getProperty(DingTalkJobProperty.class);
+
+    if (property == null) {
+      this.log(listener, "不支持的项目类型，已跳过");
+      return;
+    }
 
     // 执行人信息
     Map<String, String> user = getUser(run, listener);
