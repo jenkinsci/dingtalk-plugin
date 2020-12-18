@@ -10,9 +10,10 @@
   </parent>
   <groupId>io.jenkins.plugins</groupId>
   <artifactId>dingding-notifications</artifactId>
-  <version>2.4.3-SNAPSHOT</version>
+  <version>2.4.4-SNAPSHOT</version>
   <packaging>hpi</packaging>
   <properties>
+<!--    <jenkins.version>2.271</jenkins.version>-->
     <jenkins.version>2.263.1</jenkins.version>
     <java.level>8</java.level>
     <hpi-plugin.version>3.16</hpi-plugin.version>

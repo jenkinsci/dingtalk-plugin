@@ -1,9 +1,7 @@
 package io.jenkins.plugins;
 
 import hudson.Extension;
-import hudson.Launcher;
-import hudson.model.AbstractBuild;
-import hudson.model.BuildListener;
+import hudson.model.FreeStyleProject;
 import hudson.model.Job;
 import hudson.model.JobProperty;
 import hudson.model.JobPropertyDescriptor;
@@ -25,7 +23,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 @ToString
 @NoArgsConstructor
 @SuppressWarnings("unused")
-public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
+public class DingTalkJobProperty extends JobProperty<FreeStyleProject> {
 
   private CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigs;
 
@@ -77,17 +75,12 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
     this.notifierConfigs = notifierConfigs;
   }
 
-  @Override
-  public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) {
-    return true;
-  }
-
   @Extension
   public static class DingTalkJobPropertyDescriptor extends JobPropertyDescriptor {
 
     @Override
     public boolean isApplicable(Class<? extends Job> jobType) {
-      return true;
+      return super.isApplicable(jobType);
     }
 
     /** 通知配置页面 */
