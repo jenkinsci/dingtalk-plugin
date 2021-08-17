@@ -34,3 +34,7 @@ rebel.xml
 # vuepress
 docs-dist/
 node_modules/
+
+# maven release
+release.properties
+pom.xml.releaseBackup
