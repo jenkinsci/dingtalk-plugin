@@ -7,18 +7,15 @@ assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**问题描述**
+<!-- 使用清晰明了的话描述问题 ->
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**日志信息**
+<!-- 打开 verbose 选项提供详细日志 -->
 
+**环境信息**
+- Jenkins 版本：
+- dingtalk-plugin 版本：
 
-**Jenkins Info(please complete the following information):**
- - Version [e.g. 22]
+**其他信息**
 
-**DingTalk Plugin Info(please complete the following information):**
- - Version [e.g. 22]
-
-**Additional context**
-Add any other context about the problem here.

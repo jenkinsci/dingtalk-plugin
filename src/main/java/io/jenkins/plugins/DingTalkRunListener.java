@@ -210,22 +210,28 @@ public class DingTalkRunListener extends RunListener<AbstractBuild<?, ?>> {
 			if (skipped) {
 				break;
 			}
+
 			String robotId = item.getRobotId();
 			String content = item.getContent();
 			boolean atAll = item.isAtAll();
 			Set<String> atMobiles = item.getAtMobiles();
+
 			if (StringUtils.isNotEmpty(executorMobile)) {
 				atMobiles.add(executorMobile);
 			}
+
 			String text = BuildJobModel.builder().projectName(projectName).projectUrl(projectUrl).jobName(jobName)
 					.jobUrl(jobUrl).statusType(statusType).duration(duration).executorName(executorName)
 					.executorMobile(executorMobile).content(envVars.expand(content).replaceAll("\\\\n", "\n")).build()
 					.toMarkdown();
 			MessageModel message = MessageModel.builder().type(MsgTypeEnum.ACTION_CARD).atAll(atAll)
 					.atMobiles(atMobiles).text(text).btns(btns).build();
+
 			log(listener, "当前机器人信息，%s", Utils.toJson(item));
 			log(listener, "发送的消息详情，%s", Utils.toJson(message));
+
 			String msg = service.send(robotId, message);
+
 			if (msg != null) {
 				result.add(msg);
 			}
