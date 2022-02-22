@@ -15,8 +15,9 @@
   <version>2.4.5-SNAPSHOT</version>
   <packaging>hpi</packaging>
   <properties>
-    <java.level>8</java.level>
     <jenkins.version>2.319</jenkins.version>
+    <java.level>11</java.level>
+    <plugin.minimumJavaVersion>11</plugin.minimumJavaVersion>
     <hpi.compatibleSinceVersion>2.0.0</hpi.compatibleSinceVersion>
   </properties>
 
@@ -74,6 +75,13 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.jenkins-ci.tools</groupId>
+        <artifactId>maven-hpi-plugin</artifactId>
+        <configuration>
+          <minimumJavaVersion>1.8</minimumJavaVersion>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
