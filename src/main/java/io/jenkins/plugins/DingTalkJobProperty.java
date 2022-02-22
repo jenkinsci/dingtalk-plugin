@@ -1,19 +1,17 @@
 package io.jenkins.plugins;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
-
-import org.kohsuke.stapler.DataBoundConstructor;
-
 import hudson.Extension;
 import hudson.model.Job;
 import hudson.model.JobProperty;
 import hudson.model.JobPropertyDescriptor;
 import io.jenkins.plugins.DingTalkNotifierConfig.DingTalkNotifierConfigDescriptor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import jenkins.model.Jenkins;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.kohsuke.stapler.DataBoundConstructor;
 
 /**
  * 任务配置页面添加钉钉配置
@@ -25,17 +23,17 @@ import lombok.ToString;
 @NoArgsConstructor
 public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
 
-	private CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigs;
+	private ArrayList<DingTalkNotifierConfig> notifierConfigs;
 
 	/**
 	 * 在配置页面展示的列表，需要跟 `全局配置` 同步机器人信息
 	 *
 	 * @return 机器人配置列表
 	 */
-	public CopyOnWriteArrayList<DingTalkNotifierConfig> getNotifierConfigs() {
+	public ArrayList<DingTalkNotifierConfig> getNotifierConfigs() {
 
-		CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigsList = new CopyOnWriteArrayList<>();
-		CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs = DingTalkGlobalConfig.getInstance().getRobotConfigs();
+		ArrayList<DingTalkNotifierConfig> notifierConfigsList = new ArrayList<>();
+		ArrayList<DingTalkRobotConfig> robotConfigs = DingTalkGlobalConfig.getInstance().getRobotConfigs();
 
 		for (DingTalkRobotConfig robotConfig : robotConfigs) {
 			String id = robotConfig.getId();
@@ -62,13 +60,13 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
 	 * @return 用户设置的通知配置
 	 */
 	public List<DingTalkNotifierConfig> getCheckedNotifierConfigs() {
-		CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigs = this.getNotifierConfigs();
+		ArrayList<DingTalkNotifierConfig> notifierConfigs = this.getNotifierConfigs();
 
 		return notifierConfigs.stream().filter(DingTalkNotifierConfig::isChecked).collect(Collectors.toList());
 	}
 
 	@DataBoundConstructor
-	public DingTalkJobProperty(CopyOnWriteArrayList<DingTalkNotifierConfig> notifierConfigs) {
+	public DingTalkJobProperty(ArrayList<DingTalkNotifierConfig> notifierConfigs) {
 		this.notifierConfigs = notifierConfigs;
 	}
 

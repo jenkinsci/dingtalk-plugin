@@ -5,7 +5,7 @@ import io.jenkins.plugins.enums.BuildStatusEnum;
 import io.jenkins.plugins.model.BuildJobModel;
 import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.sdk.DingTalkSender;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
 
 /**
  * @author liuwei
@@ -14,8 +14,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class SdkTest {
 
   public static void main(String... args) {
-    CopyOnWriteArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs =
-        new CopyOnWriteArrayList<>();
+    ArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs =
+        new ArrayList<>();
     securityPolicyConfigs.add(new DingTalkSecurityPolicyConfig("KEY", "jenkins", ""));
     DingTalkRobotConfig robot = new DingTalkRobotConfig();
     robot.setWebhook(

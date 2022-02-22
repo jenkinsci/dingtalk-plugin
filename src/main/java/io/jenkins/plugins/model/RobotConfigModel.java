@@ -8,7 +8,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.Data;
@@ -50,7 +50,7 @@ public class RobotConfigModel {
    * @return 机器人配置
    */
   public static RobotConfigModel of(DingTalkRobotConfig robotConfig) {
-    CopyOnWriteArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs =
+    ArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs =
         robotConfig.getSecurityPolicyConfigs();
     RobotConfigModel meta = new RobotConfigModel();
     meta.setWebhook(robotConfig.getWebhook());

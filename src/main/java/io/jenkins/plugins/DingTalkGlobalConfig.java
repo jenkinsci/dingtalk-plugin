@@ -4,9 +4,9 @@ import hudson.Extension;
 import io.jenkins.plugins.DingTalkRobotConfig.DingTalkRobotConfigDescriptor;
 import io.jenkins.plugins.enums.NoticeOccasionEnum;
 import java.net.Proxy;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import jenkins.model.GlobalConfiguration;
 import jenkins.model.Jenkins;
@@ -43,7 +43,7 @@ public class DingTalkGlobalConfig extends GlobalConfiguration {
       Arrays.stream(NoticeOccasionEnum.values()).map(Enum::name).collect(Collectors.toSet());
 
   /** 机器人配置列表 */
-  private CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs = new CopyOnWriteArrayList<>();
+  private ArrayList<DingTalkRobotConfig> robotConfigs = new ArrayList<>();
 
   /**
    * 通知时机列表
@@ -82,7 +82,7 @@ public class DingTalkGlobalConfig extends GlobalConfiguration {
   }
 
   @DataBoundSetter
-  public void setRobotConfigs(CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs) {
+  public void setRobotConfigs(ArrayList<DingTalkRobotConfig> robotConfigs) {
     this.robotConfigs = robotConfigs;
   }
 
@@ -91,7 +91,7 @@ public class DingTalkGlobalConfig extends GlobalConfiguration {
       DingTalkProxyConfig proxyConfig,
       boolean verbose,
       Set<String> noticeOccasions,
-      CopyOnWriteArrayList<DingTalkRobotConfig> robotConfigs) {
+      ArrayList<DingTalkRobotConfig> robotConfigs) {
     this.proxyConfig = proxyConfig;
     this.verbose = verbose;
     this.noticeOccasions = noticeOccasions;

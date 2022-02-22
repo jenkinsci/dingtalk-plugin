@@ -15,10 +15,10 @@ import io.jenkins.plugins.model.BuildJobModel;
 import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.sdk.DingTalkSender;
 import java.net.Proxy;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 import jenkins.model.Jenkins;
 import lombok.Getter;
@@ -54,14 +54,14 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
   private Secret webhook;
 
   /** 安全策略配置 */
-  private CopyOnWriteArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs;
+  private ArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs;
 
   @DataBoundConstructor
   public DingTalkRobotConfig(
       String id,
       String name,
       String webhook,
-      CopyOnWriteArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs) {
+      ArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs) {
     this.id = StringUtils.isBlank(id) ? UUID.randomUUID().toString() : id;
     this.name = name;
     this.webhook = Secret.fromString(webhook);
@@ -82,7 +82,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
     return webhook.getPlainText();
   }
 
-  public CopyOnWriteArrayList<DingTalkSecurityPolicyConfig> getSecurityPolicyConfigs() {
+  public ArrayList<DingTalkSecurityPolicyConfig> getSecurityPolicyConfigs() {
     return Arrays.stream(SecurityPolicyEnum.values())
         .map(
             enumItem -> {
@@ -96,7 +96,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
               }
               return newItem;
             })
-        .collect(Collectors.toCollection(CopyOnWriteArrayList::new));
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 
   @Override
@@ -121,10 +121,10 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
      *
      * @return 默认的安全配置选项
      */
-    public CopyOnWriteArrayList<DingTalkSecurityPolicyConfig> getDefaultSecurityPolicyConfigs() {
+    public ArrayList<DingTalkSecurityPolicyConfig> getDefaultSecurityPolicyConfigs() {
       return Arrays.stream(SecurityPolicyEnum.values())
           .map(DingTalkSecurityPolicyConfig::of)
-          .collect(Collectors.toCollection(CopyOnWriteArrayList::new));
+          .collect(Collectors.toCollection(ArrayList::new));
     }
 
     /**
@@ -182,7 +182,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
         @QueryParameter("webhook") String webhook,
         @QueryParameter("securityPolicyConfigs") String securityPolicyConfigStr,
         @QueryParameter("proxy") String proxyStr) {
-      CopyOnWriteArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs =
+      ArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs =
           getSecurityPolicyConfigs(securityPolicyConfigStr);
 
       DingTalkRobotConfig robotConfig =
@@ -208,10 +208,10 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
       return FormValidation.error(message);
     }
 
-    private CopyOnWriteArrayList<DingTalkSecurityPolicyConfig> getSecurityPolicyConfigs(
+    private ArrayList<DingTalkSecurityPolicyConfig> getSecurityPolicyConfigs(
         String param) {
-      CopyOnWriteArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs =
-          new CopyOnWriteArrayList<>();
+      ArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs =
+          new ArrayList<>();
       JSONArray array = (JSONArray) JSONSerializer.toJSON(param);
       for (Object item : array) {
         JSONObject json = (JSONObject) item;
