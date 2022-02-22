@@ -209,7 +209,7 @@ public class DingTalkRunListener extends RunListener<AbstractBuild<?, ?>> {
     for (DingTalkNotifierConfig item : notifierConfigs) {
       boolean skipped = skip(listener, noticeOccasion, item);
       if (skipped) {
-        break;
+        continue;
       }
 
       String robotId = item.getRobotId();
