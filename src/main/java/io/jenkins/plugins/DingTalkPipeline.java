@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.annotation.Nonnull;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import lombok.Getter;
@@ -217,7 +216,6 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
   @Extension
   public static class DescriptorImpl extends BuildStepDescriptor<Builder> {
 
-    @Nonnull
     @Override
     public String getDisplayName() {
       return "DingTalk";

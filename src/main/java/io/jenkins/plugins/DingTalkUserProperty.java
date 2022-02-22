@@ -1,11 +1,11 @@
 package io.jenkins.plugins;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
+import edu.umd.cs.findbugs.annotations.Nullable;
 import hudson.Extension;
 import hudson.model.User;
 import hudson.model.UserProperty;
 import hudson.model.UserPropertyDescriptor;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import lombok.Getter;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.StaplerRequest;
@@ -22,7 +22,7 @@ public class DingTalkUserProperty extends UserProperty {
   @Extension(ordinal = 1)
   public static final class DingTalkUserPropertyDescriptor extends UserPropertyDescriptor {
 
-    @Nonnull
+    @NonNull
     @Override
     public String getDisplayName() {
       return Messages.UserProperty_mobile();
@@ -34,7 +34,7 @@ public class DingTalkUserProperty extends UserProperty {
     }
 
     @Override
-    public UserProperty newInstance(@Nullable StaplerRequest req, @Nonnull JSONObject formData) {
+    public UserProperty newInstance(@Nullable StaplerRequest req, @NonNull JSONObject formData) {
       return new DingTalkUserProperty(formData.optString("mobile"));
     }
   }
