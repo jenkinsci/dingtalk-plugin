@@ -1,2 +1,0 @@
-_extends: .github
-tag-template: dingtalk-$NEXT_MINOR_VERSION

@@ -5,6 +5,6 @@
     "docs:release": "sh ./bin/docs-release.sh"
   },
   "devDependencies": {
-    "vuepress": "^1.4.0"
+    "vuepress": "^1.9.7"
   }
 }
