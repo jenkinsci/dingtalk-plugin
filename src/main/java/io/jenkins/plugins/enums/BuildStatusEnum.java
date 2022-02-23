@@ -48,10 +48,10 @@ public enum BuildStatusEnum {
   UNKNOWN(Messages.BuildStatusType_unknown(), AntdColor.PURPLE.toString());
 
 
-  private String label;
+  private final String label;
 
 
-  private String color;
+  private final String color;
 
   BuildStatusEnum(String label, String color) {
     this.label = label;

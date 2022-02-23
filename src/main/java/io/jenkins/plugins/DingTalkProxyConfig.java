@@ -6,7 +6,6 @@ import hudson.model.Descriptor;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Proxy.Type;
-import java.net.SocketAddress;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -54,9 +53,7 @@ public class DingTalkProxyConfig extends Descriptor<DingTalkProxyConfig>
 
   public Proxy getProxy() {
 
-    /**
-     * {@link Proxy#Proxy(Type, SocketAddress)} 防止抛异常
-     */
+    // {@link Proxy#Proxy(Type, SocketAddress)} 防止抛异常
     if (type == Type.DIRECT || StringUtils.isEmpty(host) || port == null) {
       return Proxy.NO_PROXY;
     }

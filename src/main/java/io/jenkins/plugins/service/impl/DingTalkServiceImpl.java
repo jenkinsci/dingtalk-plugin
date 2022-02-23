@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DingTalkServiceImpl implements DingTalkService {
 
-  private Map<String, DingTalkSender> senders = new ConcurrentHashMap<>();
+  private final Map<String, DingTalkSender> senders = new ConcurrentHashMap<>();
 
   private DingTalkSender getSender(String robotId) {
     DingTalkSender sender = senders.get(robotId);

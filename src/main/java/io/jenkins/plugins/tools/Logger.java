@@ -89,7 +89,7 @@ public class Logger {
     /**
      * 结束
      */
-    END;
+    END
   }
 
 }

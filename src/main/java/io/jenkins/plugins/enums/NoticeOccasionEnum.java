@@ -40,7 +40,7 @@ public enum NoticeOccasionEnum {
   NOT_BUILT(Messages.NoticeOccasion_not_built());
 
   @Getter
-  private String desc;
+  private final String desc;
 
   NoticeOccasionEnum(String desc) {
     this.desc = desc;

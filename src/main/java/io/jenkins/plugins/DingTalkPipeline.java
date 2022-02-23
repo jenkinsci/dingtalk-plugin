@@ -215,6 +215,7 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
   @Extension
   public static class DescriptorImpl extends BuildStepDescriptor<Builder> {
 
+    @NonNull
     @Override
     public String getDisplayName() {
       return "DingTalk";

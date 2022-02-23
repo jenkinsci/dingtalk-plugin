@@ -33,6 +33,7 @@ import org.apache.commons.lang.StringUtils;
 @Data
 @Builder
 public class HttpRequest {
+
   private static final String DEFAULT_CHARSET = Constants.CHARSET_UTF8;
 
   private static boolean IGNORE_SSL_CHECK = true;
@@ -41,21 +42,29 @@ public class HttpRequest {
 
   private String server;
 
-  @Default private String method = Constants.METHOD_GET;
+  @Default
+  private String method = Constants.METHOD_GET;
 
-  @Default private String contentType = Constants.CONTENT_TYPE_APPLICATION_JSON;
+  @Default
+  private String contentType = Constants.CONTENT_TYPE_APPLICATION_JSON;
 
   private Map<String, String> header;
 
-  /** url 参数 */
+  /**
+   * url 参数
+   */
   private Map<String, String> params;
 
-  /** body 参数 */
+  /**
+   * body 参数
+   */
   private Map<String, Object> data;
 
-  @Default private int timeout = 30000;
+  @Default
+  private int timeout = 30000;
 
-  @Default private String charset = DEFAULT_CHARSET;
+  @Default
+  private String charset = DEFAULT_CHARSET;
 
   private Proxy proxy;
 
@@ -102,7 +111,7 @@ public class HttpRequest {
       if (IGNORE_SSL_CHECK) {
         try {
           SSLContext ctx = SSLContext.getInstance("TLS");
-          ctx.init(null, new TrustManager[] {new TrustAllTrustManager()}, new SecureRandom());
+          ctx.init(null, new TrustManager[]{new TrustAllTrustManager()}, new SecureRandom());
           connHttps.setSSLSocketFactory(ctx.getSocketFactory());
           connHttps.setHostnameVerifier((hostname, session) -> true);
         } catch (Exception e) {
@@ -113,7 +122,6 @@ public class HttpRequest {
           connHttps.setHostnameVerifier((hostname, session) -> true);
         }
       }
-      conn = connHttps;
     }
 
     conn.setRequestMethod(method);
@@ -131,7 +139,7 @@ public class HttpRequest {
 
   public static byte[] buildBody(Object data, String charset) throws UnsupportedEncodingException {
     if (data == null) {
-      return new byte[] {};
+      return new byte[]{};
     }
     String body;
     if (data instanceof String) {
@@ -222,7 +230,7 @@ public class HttpRequest {
       StringBuilder response = new StringBuilder();
 
       final char[] buff = new char[1024];
-      int read = 0;
+      int read;
       while ((read = reader.read(buff)) > 0) {
         response.append(buff, 0, read);
       }
@@ -258,15 +266,18 @@ public class HttpRequest {
   }
 
   private static class TrustAllTrustManager implements X509TrustManager {
+
     @Override
     public X509Certificate[] getAcceptedIssuers() {
-      return new X509Certificate[] {};
+      return new X509Certificate[]{};
     }
 
     @Override
-    public void checkClientTrusted(X509Certificate[] chain, String authType) {}
+    public void checkClientTrusted(X509Certificate[] chain, String authType) {
+    }
 
     @Override
-    public void checkServerTrusted(X509Certificate[] chain, String authType) {}
+    public void checkServerTrusted(X509Certificate[] chain, String authType) {
+    }
   }
 }

@@ -15,5 +15,5 @@ public enum BtnLayoutEnum {
   /**
    * vertical：垂直排列
    */
-  V;
+  V
 }
