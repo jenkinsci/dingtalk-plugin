@@ -39,7 +39,6 @@ import lombok.extern.log4j.Log4j;
  * 所有项目触发
  *
  * @author liuwei
- * @date 2019/12/28 15:31
  */
 @Log4j
 @Extension

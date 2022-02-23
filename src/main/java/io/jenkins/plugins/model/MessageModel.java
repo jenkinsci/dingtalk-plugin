@@ -22,7 +22,6 @@ import org.apache.commons.lang.StringUtils;
  * io.jenkins.plugins.model.MessageModel.equals(Object)
  *
  * @author liuwei
- * @date 2020/3/27 17:05
  */
 @Getter
 @Setter

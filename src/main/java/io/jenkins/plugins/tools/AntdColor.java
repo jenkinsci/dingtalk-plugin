@@ -12,12 +12,11 @@ import lombok.Data;
  * https://github.com/ant-design/ant-design-colors
  *
  * @author liuwei
- * @date 2020/3/29 15:01
  */
 @SuppressWarnings("unused")
 public class AntdColor {
 
-  private ArrayList<String> pattens;
+  private final ArrayList<String> pattens;
 
   public AntdColor(String color) {
     this.pattens = generate(color);
@@ -38,7 +37,7 @@ public class AntdColor {
     return get(Level.PRIMARY);
   }
 
-  public static enum Level {
+  public enum Level {
     /**
      * 颜色等级
      */
@@ -54,7 +53,7 @@ public class AntdColor {
     NINE(9),
     TEN(10);
 
-    private int value;
+    private final int value;
 
     Level(int value) {
       this.value = value;

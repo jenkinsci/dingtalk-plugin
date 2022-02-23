@@ -2,7 +2,6 @@ package io.jenkins.plugins.sdk;
 
 /**
  * @author liuwei
- * @date 2020-12-09 21:21:02
  */
 public class Constants {
   /** 消息类型 */

@@ -12,7 +12,6 @@ import org.kohsuke.stapler.DataBoundSetter;
 
 /**
  * @author liuwei
- * @date 2020/3/28 15:46
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

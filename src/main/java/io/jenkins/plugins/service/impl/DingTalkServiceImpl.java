@@ -16,7 +16,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * service
  *
  * @author liuwei
- * @date 2019/12/26 10:45
  */
 public class DingTalkServiceImpl implements DingTalkService {
 

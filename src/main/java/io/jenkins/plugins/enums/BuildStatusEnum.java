@@ -8,7 +8,6 @@ import lombok.Getter;
  * 构建状态
  *
  * @author liuwei
- * @date 2020-03-28 22:48
  */
 @Getter
 public enum BuildStatusEnum {

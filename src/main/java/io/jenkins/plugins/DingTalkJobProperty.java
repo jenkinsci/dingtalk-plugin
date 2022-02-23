@@ -17,7 +17,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
  * 任务配置页面添加钉钉配置
  *
  * @author liuwei
- * @date 2020/1/20 16:56
  */
 @ToString
 @NoArgsConstructor

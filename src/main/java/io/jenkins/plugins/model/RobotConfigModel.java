@@ -20,7 +20,6 @@ import org.apache.commons.lang.StringUtils;
  * 机器人配置信息
  *
  * @author liuwei
- * @date 2019/12/23 14:08
  */
 @Data
 @Slf4j

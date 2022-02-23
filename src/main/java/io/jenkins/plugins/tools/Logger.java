@@ -6,7 +6,6 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * @author liuwei
- * @date 2020-04-29 15:25:29
  */
 public class Logger {
 

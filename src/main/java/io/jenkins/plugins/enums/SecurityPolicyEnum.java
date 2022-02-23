@@ -8,7 +8,6 @@ import lombok.ToString;
  * 安全策略
  *
  * @author liuwei
- * @date 2020/1/19 12:02
  */
 @ToString
 public enum SecurityPolicyEnum {

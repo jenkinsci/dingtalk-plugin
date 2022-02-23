@@ -23,7 +23,6 @@ import org.kohsuke.stapler.StaplerRequest;
  * 全局配置
  *
  * @author liuwei
- * @date 2019/12/24 10:46
  */
 @Getter
 @ToString

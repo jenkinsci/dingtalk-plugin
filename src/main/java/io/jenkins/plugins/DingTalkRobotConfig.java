@@ -36,7 +36,6 @@ import org.kohsuke.stapler.QueryParameter;
  * 机器人配置页面
  *
  * @author liuwei
- * @date 2019/12/25 17:09
  */
 @Getter
 @Setter

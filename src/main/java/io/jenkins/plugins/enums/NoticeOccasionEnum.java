@@ -7,7 +7,6 @@ import lombok.Getter;
  * 通知时机
  *
  * @author liuwei
- * @date 2019/12/19 11:28
  */
 public enum NoticeOccasionEnum {
   /**

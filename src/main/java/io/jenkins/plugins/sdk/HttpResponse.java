@@ -6,7 +6,6 @@ import lombok.Data;
 
 /**
  * @author liuwei
- * @date 2020-12-09 21:35:58
  */
 @Data
 public class HttpResponse{

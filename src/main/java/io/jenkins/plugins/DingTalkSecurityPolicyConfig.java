@@ -15,7 +15,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
  * 安全策略配置页面
  *
  * @author liuwei
- * @date 2019/12/25 17:09
  */
 @Getter
 @Setter

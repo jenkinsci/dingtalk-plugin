@@ -22,7 +22,6 @@ import org.apache.commons.lang.exception.ExceptionUtils;
  * 消息发送器
  *
  * @author liuwei
- * @date 2019/12/26 10:07
  */
 @Slf4j
 public class DingTalkSender {

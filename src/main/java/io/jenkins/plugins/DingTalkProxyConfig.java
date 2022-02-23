@@ -15,7 +15,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
 
 /**
  * @author liuwei
- * @date 2020-12-09 14:11:08
  */
 @Getter
 @Setter

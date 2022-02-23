@@ -39,7 +39,6 @@ import org.kohsuke.stapler.DataBoundSetter;
  * io.jenkins.plugins.model.MessageModel.equals(Object)
  *
  * @author liuwei
- * @date 2020/3/27 16:36
  */
 @Getter
 @Setter
