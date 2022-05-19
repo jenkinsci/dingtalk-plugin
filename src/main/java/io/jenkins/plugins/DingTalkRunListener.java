@@ -14,7 +14,6 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 
 import hudson.EnvVars;
 import hudson.Extension;
-import hudson.model.AbstractBuild;
 import hudson.model.Cause;
 import hudson.model.Job;
 import hudson.model.Result;
@@ -42,21 +41,21 @@ import lombok.extern.log4j.Log4j;
  */
 @Log4j
 @Extension
-public class DingTalkRunListener extends RunListener<AbstractBuild<?, ?>> {
+public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
   private final DingTalkServiceImpl service = new DingTalkServiceImpl();
 
   private final String rootPath = Jenkins.get().getRootUrl();
 
   @Override
-  public void onStarted(AbstractBuild<?, ?> run, TaskListener listener) {
+  public void onStarted(Run<?, ?> run, TaskListener listener) {
     DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.getInstance();
     log(listener, "全局配置信息，%s", Utils.toJson(globalConfig));
     this.send(run, listener, NoticeOccasionEnum.START);
   }
 
   @Override
-  public void onCompleted(AbstractBuild<?, ?> run, @NonNull TaskListener listener) {
+  public void onCompleted(Run<?, ?> run, @NonNull TaskListener listener) {
     Result result = run.getResult();
     NoticeOccasionEnum noticeOccasion = getNoticeOccasion(result);
     this.send(run, listener, noticeOccasion);
