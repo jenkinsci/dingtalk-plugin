@@ -225,8 +225,12 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
           .executorMobile(executorMobile).content(envVars.expand(content).replaceAll("\\\\n", "\n"))
           .build()
           .toMarkdown();
-      MessageModel message = MessageModel.builder().type(MsgTypeEnum.ACTION_CARD).atAll(atAll)
-          .atMobiles(atMobiles).text(text).btns(btns).build();
+      MessageModel message = MessageModel.builder()
+              .type(MsgTypeEnum.ACTION_CARD)
+              .atAll(atAll)
+              .atMobiles(atMobiles)
+              .title(envVars.expand(projectName + " " + statusType.getLabel()))
+              .text(text).btns(btns).build();
 
       log(listener, "当前机器人信息，%s", Utils.toJson(item));
       log(listener, "发送的消息详情，%s", Utils.toJson(message));
