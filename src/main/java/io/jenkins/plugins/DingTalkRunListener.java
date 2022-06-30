@@ -229,7 +229,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
               .type(MsgTypeEnum.ACTION_CARD)
               .atAll(atAll)
               .atMobiles(atMobiles)
-              .title(envVars.expand(job.getDisplayName() + " " + statusType.getLabel()))
+              .title(envVars.expand(job.getName() + " " + statusType.getLabel()))
               .text(text).btns(btns).build();
 
       log(listener, "当前机器人信息，%s", Utils.toJson(item));
