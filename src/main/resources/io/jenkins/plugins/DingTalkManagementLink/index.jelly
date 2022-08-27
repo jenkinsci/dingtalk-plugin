@@ -1,0 +1,21 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler"
+  xmlns:l="/lib/layout" xmlns:f="/lib/form">
+  <l:layout permission="${app.ADMINISTER}" norefresh="true" title="钉钉配置页面">
+    <st:include it="${app}" page="sidepanel.jelly"/>
+    <l:main-panel>
+      <h1>
+        <img src="${rootURL}/plugin/dingding-notifications/images/dingtalk.png" style="height:32px;"/>
+        钉钉全局配置
+      </h1>
+      <f:form action="configure" method="POST" name="dingTalkManagementLinkForm">
+        <j:scope>
+          <j:set var="descriptor" value="${it.getDingTalkGlobalConfigDescriptor()}"/>
+          <j:set var="instance" value="${descriptor}"/>
+          <j:set var="it" value="${descriptor}"/>
+          <st:include it="${it}" from="${descriptor}" page="${descriptor.configPage}"/>
+        </j:scope>
+      </f:form>
+    </l:main-panel>
+  </l:layout>
+</j:jelly>

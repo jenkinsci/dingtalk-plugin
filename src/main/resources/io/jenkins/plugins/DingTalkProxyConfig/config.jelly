@@ -1,17 +1,18 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
-  xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:dt="/lib/dingtalk">
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
 
-  <f:entry title="代理类型">
-    <f:enum field="type" default="DIRECT">
-      ${it.name()}
-    </f:enum>
-  </f:entry>
-  <f:entry title="代理服务" field="host">
-    <f:textbox/>
-  </f:entry>
-  <f:entry title="代理端口" field="port">
-    <f:number/>
-  </f:entry>
+  <div id="proxyConfigContainer">
+    <f:entry title="代理类型" field="type">
+      <f:enum>
+        ${it.name()}
+      </f:enum>
+    </f:entry>
+    <f:entry title="代理服务" field="host">
+      <f:textbox name="host"/>
+    </f:entry>
+    <f:entry title="代理端口" field="port">
+      <f:number name="port"/>
+    </f:entry>
+  </div>
 
 </j:jelly>

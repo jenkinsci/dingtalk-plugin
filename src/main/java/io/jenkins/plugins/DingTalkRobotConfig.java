@@ -46,13 +46,19 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
 
   private String id;
 
-  /** 名称 */
+  /**
+   * 名称
+   */
   private String name;
 
-  /** webhook 地址 */
+  /**
+   * webhook 地址
+   */
   private Secret webhook;
 
-  /** 安全策略配置 */
+  /**
+   * 安全策略配置
+   */
   private ArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs;
 
   @DataBoundConstructor
@@ -127,19 +133,6 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
     }
 
     /**
-     * id 字段必填
-     *
-     * @param value id
-     * @return 是否校验成功
-     */
-    public FormValidation doCheckId(@QueryParameter String value) {
-      if (StringUtils.isBlank(value)) {
-        return FormValidation.error(Messages.RobotConfigFormValidation_name());
-      }
-      return FormValidation.ok();
-    }
-
-    /**
      * name 字段必填
      *
      * @param value name
@@ -168,11 +161,11 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
     /**
      * 测试配置信息
      *
-     * @param id id
-     * @param name 名称
-     * @param webhook webhook
+     * @param id                      id
+     * @param name                    名称
+     * @param webhook                 webhook
      * @param securityPolicyConfigStr 安全策略
-     * @param proxyStr 代理
+     * @param proxyStr                代理
      * @return 机器人配置是否正确
      */
     public FormValidation doTest(
@@ -182,7 +175,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
         @QueryParameter("securityPolicyConfigs") String securityPolicyConfigStr,
         @QueryParameter("proxy") String proxyStr) {
       ArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs =
-          getSecurityPolicyConfigs(securityPolicyConfigStr);
+          parseSecurityPolicyConfigs(securityPolicyConfigStr);
 
       DingTalkRobotConfig robotConfig =
           new DingTalkRobotConfig(id, name, webhook, securityPolicyConfigs);
@@ -207,8 +200,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
       return FormValidation.error(message);
     }
 
-    private ArrayList<DingTalkSecurityPolicyConfig> getSecurityPolicyConfigs(
-        String param) {
+    private ArrayList<DingTalkSecurityPolicyConfig> parseSecurityPolicyConfigs(String param) {
       ArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs =
           new ArrayList<>();
       JSONArray array = (JSONArray) JSONSerializer.toJSON(param);
@@ -216,7 +208,8 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
         JSONObject json = (JSONObject) item;
         securityPolicyConfigs.add(
             new DingTalkSecurityPolicyConfig(
-                (String) json.get("type"), (String) json.get("value"), ""));
+                (String) json.get("type"), (String) json.get("value"), "")
+        );
       }
       return securityPolicyConfigs;
     }
@@ -259,7 +252,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
                 proxyObj.getString("host"),
                 proxyObj.getInt("port"));
         proxy = netProxy.getProxy();
-      } catch (Exception ignored){
+      } catch (Exception ignored) {
 
       }
       return proxy;

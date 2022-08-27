@@ -1,70 +1,67 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
-  xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:dt="/lib/dingtalk">
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler"
+  xmlns:f="/lib/form">
+  <st:adjunct includes="io.jenkins.plugins.bootstrap5"/>
 
-  <!-- 通知时机列表 -->
-  <j:set var="noticeOccasionTypes" value="${descriptor.getNoticeOccasionTypes()}"/>
-
-  <!-- 用户选择的通知时机-->
-  <j:set var="noticeOccasions"
-    value="${descriptor.getNoticeOccasions()}"/>
-
-  <f:section title="钉钉">
-
-    <f:entry title="通知时机">
-      <dt:blockWrapper>
-        <j:forEach var="noticeOccasionTypeItem"
-          items="${noticeOccasionTypes}">
+  <f:section title="通知时机">
+    <f:entry>
+      <j:scope>
+        <!-- 通知时机列表 -->
+        <j:set var="allNoticeOccasions" value="${descriptor.getAllNoticeOccasions()}"/>
+        <!-- 用户选择的通知时机-->
+        <j:set var="checkedNoticeOccasions"
+          value="${descriptor.getNoticeOccasions()}"/>
+        <j:forEach var="noticeOccasionItem"
+          items="${allNoticeOccasions}">
           <j:scope>
-            <j:set var="name" value="${noticeOccasionTypeItem.name()}"/>
-            <j:set var="desc" value="${noticeOccasionTypeItem.getDesc()}"/>
+            <j:set var="name" value="${noticeOccasionItem.name()}"/>
+            <j:set var="desc" value="${noticeOccasionItem.getDesc()}"/>
             <label>
               <f:checkbox
                 json="${name}"
                 name="noticeOccasions"
-                checked="${noticeOccasions.contains(name)}"
+                checked="${checkedNoticeOccasions.contains(name)}"
               />
               ${desc}
             </label>
           </j:scope>
         </j:forEach>
-      </dt:blockWrapper>
-    </f:entry>
-
-    <f:advanced>
-      <f:entry title="详细日志" field="verbose">
-        <f:checkbox/>
-      </f:entry>
-
-      <f:block>
-        <f:property field="proxyConfig">
-          <j:scope>
-            <j:set var="instance" value="${instance.proxyConfig}"/>
-            <j:set var="descriptor" value="${descriptor.getDingTalkProxyConfig()}"/>
-            <st:include page="config.jelly" class="${descriptor.clazz}"/>
-          </j:scope>
-        </f:property>
-      </f:block>
-    </f:advanced>
-
-    <f:block>
-      <j:scope>
-        <j:set var="robotConfigs" value="${instance.getRobotConfigs()}"/>
-        <j:set var="robotConfigDescriptor"
-          value="${descriptor.getDingTalkRobotConfigDescriptor()}"/>
-        <f:repeatable
-          header="机器人"
-          field="robotConfigs"
-          varStatus="item"
-          items="robotConfigs">
-          <st:include page="config.jelly" class="${robotConfigDescriptor.clazz}"/>
-          <div style="text-align: right; margin-top: 8px;">
-            <f:repeatableDeleteButton/>
-          </div>
-        </f:repeatable>
       </j:scope>
-    </f:block>
-
+    </f:entry>
   </f:section>
+
+  <f:section title="日志">
+    <f:entry field="verbose">
+      <f:checkbox title="详细日志"/>
+    </f:entry>
+  </f:section>
+
+  <f:section title="代理">
+    <f:property field="proxyConfig"
+      propertyDescriptor="${descriptor.getDingTalkProxyConfigDescriptor()}"/>
+  </f:section>
+
+  <f:section title="机器人">
+    <j:scope>
+      <j:set var="robotConfigs" value="${descriptor.robotConfigs}"/>
+      <j:set var="robotConfigDescriptor"
+        value="${descriptor.getDingTalkRobotConfigDescriptor()}"/>
+      <f:repeatable
+        field="robotConfigs"
+        var="item"
+        items="robotConfigs">
+        <st:include from="${robotConfigDescriptor}" page="${descriptor.configPage}"/>
+        <div style="margin-top: 20px; text-align: right;">
+          <f:repeatableDeleteButton/>
+        </div>
+      </f:repeatable>
+    </j:scope>
+  </f:section>
+
+  <f:bottomButtonBar>
+    <f:apply value="Apply"/>
+    <f:submit value="Submit"/>
+  </f:bottomButtonBar>
+
 
 </j:jelly>

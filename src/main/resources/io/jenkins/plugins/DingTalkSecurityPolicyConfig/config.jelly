@@ -1,19 +1,18 @@
 <?jelly escape-by-default='true'?>
 
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
-  xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:dt="/lib/dingtalk">
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
   <j:set var="type" value="${instance.getType()}"/>
   <j:set var="desc" value="${instance.getDesc()}"/>
 
-  <dt:blockWrapper class="dt-security-config" style="width: 100%">
+  <div class="security-config-container">
     <f:entry title="${desc}" field="value"
       help="${type == 'KEY' ? '/descriptor/io.jenkins.plugins.DingTalkSecurityPolicyConfig/help/key' : null}">
-      <f:textbox/>
+      <f:textbox name="value"/>
     </f:entry>
     <f:invisibleEntry>
       <input type="hidden" name="type" value="${type}"/>
       <input type="hidden" name="desc" value="${desc}"/>
     </f:invisibleEntry>
-  </dt:blockWrapper>
+  </div>
 
 </j:jelly>

@@ -1,30 +1,38 @@
 <?jelly escape-by-default='true'?>
 
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
-  xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:dt="/lib/dingtalk">
+  xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <st:adjunct includes="io.jenkins.plugins.jquery3"/>
   <st:once>
     <script type="text/javascript"
-      src="${rootURL}/plugin/dingding-notifications/scripts/customValidate.js"/>
+      src="${rootURL}/plugin/dingding-notifications/scripts/robotConfigValidator.js"/>
   </st:once>
 
-  <dt:blockWrapper class="dt-robot-config" style="width: 100%;">
+  <style>
+    .robot-config-validate-msg>.error{
+    min-height: 60px;
+    max-height: 240px;
+    overflow: auto;
+    }
+  </style>
 
+  <div class="robot-config-container">
     <f:entry title="id" field="id">
-      <f:textbox/>
+      <f:textbox name="id"/>
     </f:entry>
     <f:entry title="名称" field="name">
-      <f:textbox/>
+      <f:textbox name="name"/>
     </f:entry>
     <f:entry title="webhook" field="webhook">
-      <f:textbox/>
+      <f:textbox name="webhook"/>
     </f:entry>
 
-    <f:block>
-      <j:scope>
-        <j:set var="securityPolicyConfigDescriptor"
-          value="${descriptor.getDingTalkSecurityPolicyConfigDescriptor()}"/>
-        <j:set var="securityPolicyConfigs"
-          value="${instance != null ? instance.getSecurityPolicyConfigs(): descriptor.getDefaultSecurityPolicyConfigs()}"/>
+    <j:scope>
+      <j:set var="securityPolicyConfigDescriptor"
+        value="${descriptor.getDingTalkSecurityPolicyConfigDescriptor()}"/>
+      <j:set var="securityPolicyConfigs"
+        value="${instance != null ? instance.getSecurityPolicyConfigs(): descriptor.getDefaultSecurityPolicyConfigs()}"/>
+      <f:entry title="安全设置">
         <f:repeatable
           header=""
           name="securityPolicyConfigs"
@@ -33,21 +41,22 @@
           items="${securityPolicyConfigs}">
           <st:include page="config.jelly" class="${securityPolicyConfigDescriptor.clazz}"/>
         </f:repeatable>
-      </j:scope>
-    </f:block>
+      </f:entry>
+    </j:scope>
 
-    <f:block>
-      <input type="button" value="测试" class="validate-button" style="float:right"
+    <div class="robot-config-validate-msg"><!-- this is where the error message goes --></div>
+    <div style="text-align: right;">
+      <input
+        type="button"
+        value="测试"
+        class="robot-config-validate-btn"
         data-validate-button-descriptor-url="${descriptor.descriptorFullUrl}"
         data-validate-button-method="test"
         data-validate-button-with="${with}"
-        onclick="customValidate(this)"/>
-      <div style="display:none;">
-        <img src="${imagesURL}/spinner.gif"/>
-        ${attrs.progress}
-      </div>
-      <div><!-- this is where the error message goes --></div>
-    </f:block>
+      />
+    </div>
 
-  </dt:blockWrapper>
+  </div>
+
+
 </j:jelly>
