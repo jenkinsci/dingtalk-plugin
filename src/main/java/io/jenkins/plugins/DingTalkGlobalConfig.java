@@ -31,8 +31,8 @@ import org.kohsuke.stapler.StaplerRequest;
 @ToString
 @Extension
 @Symbol("dingtalk")
-public class DingTalkGlobalConfig extends Descriptor<DingTalkGlobalConfig>
-    implements Describable<DingTalkGlobalConfig> {
+public class DingTalkGlobalConfig extends Descriptor<DingTalkGlobalConfig> implements
+    Describable<DingTalkGlobalConfig> {
 
   private static volatile DingTalkGlobalConfig instance;
 
@@ -101,7 +101,6 @@ public class DingTalkGlobalConfig extends Descriptor<DingTalkGlobalConfig>
   public DingTalkGlobalConfig() {
     super(self());
     this.load();
-    instance = this;
   }
 
   @Override
@@ -164,7 +163,7 @@ public class DingTalkGlobalConfig extends Descriptor<DingTalkGlobalConfig>
    * @return 全局配置信息
    */
   public static DingTalkGlobalConfig getInstance() {
-    return instance;
+    return Jenkins.get().getDescriptorByType(DingTalkGlobalConfig.class);
   }
 
 }
