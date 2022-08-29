@@ -1,8 +1,6 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler"
   xmlns:f="/lib/form">
-  <st:adjunct includes="io.jenkins.plugins.bootstrap5"/>
-
   <f:section title="通知时机">
     <f:entry>
       <j:scope>

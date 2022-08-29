@@ -101,6 +101,7 @@ public class DingTalkGlobalConfig extends Descriptor<DingTalkGlobalConfig>
   public DingTalkGlobalConfig() {
     super(self());
     this.load();
+    instance = this;
   }
 
   @Override
@@ -117,35 +118,11 @@ public class DingTalkGlobalConfig extends Descriptor<DingTalkGlobalConfig>
         return StringUtils.isEmpty(webhook);
       });
     }
-    System.out.println(json.toString());
+//    System.out.println(json);
     req.bindJSON(this, json);
     this.save();
     return super.configure(req, json);
   }
-
-  //  public synchronized void doConfigure(StaplerRequest req, StaplerResponse rsp)
-//      throws IOException, ServletException {
-//    Jenkins.get().checkPermission(Jenkins.ADMINISTER);
-//
-//    JSONObject json = req.getSubmittedForm();
-//    Object robotConfigObj = json.get("robotConfigs");
-//
-//    if (robotConfigObj == null) {
-//      json.put("robotConfigs", new JSONArray());
-//    } else {
-//      JSONArray robotConfigs = JSONArray.fromObject(robotConfigObj);
-//      robotConfigs.removeIf(
-//          item -> {
-//            JSONObject jsonObject = JSONObject.fromObject(item);
-//            String webhook = jsonObject.getString("webhook");
-//            return StringUtils.isEmpty(webhook);
-//          });
-//    }
-//    System.out.println(json.toString());
-//    req.bindJSON(this, json);
-//    Jenkins.get().save();
-//    FormApply.success(req.getContextPath() + "/manage").generateResponse(req, rsp, null);
-//  }
 
   /**
    * 通知时机列表
@@ -187,13 +164,6 @@ public class DingTalkGlobalConfig extends Descriptor<DingTalkGlobalConfig>
    * @return 全局配置信息
    */
   public static DingTalkGlobalConfig getInstance() {
-    if (instance == null) {
-      synchronized (DingTalkGlobalConfig.class) {
-        if (instance == null) {
-          instance = null;
-        }
-      }
-    }
     return instance;
   }
 
