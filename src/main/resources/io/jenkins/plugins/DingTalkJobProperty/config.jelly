@@ -11,6 +11,9 @@
   <j:set var="notifierConfigs"
     value="${instance == null ? descriptor.getDefaultNotifierConfigs() : instance.getNotifierConfigs()}"/>
 
+
+  <!--  <f:descriptorList title="钉钉机器人"-->
+  <!--    descriptors="配置机器人进行构建通知">-->
   <f:entry title="钉钉机器人">
     <f:repeatable
       header=""
@@ -24,6 +27,6 @@
       </j:scope>
     </f:repeatable>
   </f:entry>
-
+  <!--  </f:descriptorList>-->
 
 </j:jelly>
