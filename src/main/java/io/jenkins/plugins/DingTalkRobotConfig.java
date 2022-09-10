@@ -192,10 +192,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
         String rootUrl = Jenkins.get().getRootUrl();
         return FormValidation.respond(
             Kind.OK,
-            "<img src='"
-                + rootUrl
-                + "/images/16x16/accept.png'>"
-                + "<span style='padding-left:4px;color:#52c41a;font-weight:bold;'>测试成功</span>");
+            "<span style='color:#52c41a;font-weight:bold;'>测试成功</span>");
       }
       return FormValidation.error(message);
     }

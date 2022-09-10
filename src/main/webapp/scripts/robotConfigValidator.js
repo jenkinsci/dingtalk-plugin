@@ -7,6 +7,26 @@
     $(document).on('click', '.robot-config-validate-btn', validateRobotConfig)
   })
 
+  function applyErrorMessage(elt, rsp) {
+    if (rsp.status == 200) {
+      elt.innerHTML = rsp.responseText;
+    } else {
+      var id = 'valerr' + (iota++);
+      elt.innerHTML = '<a href="" onclick="document.getElementById(\'' + id
+          + '\').style.display=\'block\';return false">ERROR</a><div id="'
+          + id + '" style="display:none">' + rsp.responseText + '</div>';
+      var error = document.getElementById('error-description'); // cf. oops.jelly
+      if (error) {
+        var div = document.getElementById(id);
+        while (div.firstElementChild) {
+          div.removeChild(div.firstElementChild);
+        }
+        div.appendChild(error);
+      }
+    }
+    Behaviour.applySubtree(elt);
+  }
+
   function validateRobotConfig() {
     var $btn = $(this)
 

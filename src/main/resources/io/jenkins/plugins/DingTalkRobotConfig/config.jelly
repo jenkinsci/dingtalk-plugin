@@ -55,8 +55,5 @@
         data-validate-button-with="${with}"
       />
     </div>
-
   </div>
-
-
 </j:jelly>
