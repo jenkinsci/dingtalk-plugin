@@ -136,9 +136,9 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
       RemoteCause remoteCause = run.getCause(RemoteCause.class);
       UpstreamCause streamCause = run.getCause(UpstreamCause.class);
       if (remoteCause != null) {
-        executorName = remoteCause.getAddr();
+        executorName = "remote " + remoteCause.getAddr();
       } else if (streamCause != null) {
-        executorName = streamCause.getUpstreamProject();
+        executorName = "project " + streamCause.getUpstreamProject();
       }
       if (executorName == null) {
         log(listener, "未获取到构建人信息，将尝试从构建信息中模糊匹配。");
