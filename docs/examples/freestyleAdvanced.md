@@ -4,11 +4,11 @@
 
 在系统设置中勾选 `详细日志`:
 
-![verbose](@/assets/verbose.png)
+![verbose](../assets/verbose-config.jpg)
 
 :::details 查看效果
 
-![verbose-example](@/assets/verbose-example.png)
+![verbose-example](../assets/verbose-example.png)
 
 :::
 
@@ -16,15 +16,15 @@
 
 在项目配置中勾选机器人之后，点击 `advanced` 按钮：
 
-![freestyle-advanced](@/assets/freestyle-advanced.png)
+![freestyle-advanced](../assets/freestyle-advanced.png)
 
-![freestyle-advanced-detail](@/assets/freestyle-advanced-detail.png)
+![freestyle-advanced-detail](../assets/freestyle-advanced-detail.png)
 
 :::details 查看效果
 
-![freestyle-at-example](@/assets/freestyle-at-example.jpg)
+![freestyle-at-example](../assets/freestyle-at-example.jpg)
 
-![freestyle-advanced-example](@/assets/freestyle-advanced-example.png)
+![freestyle-advanced-example](../assets/freestyle-advanced-example.png)
 
 :::
 

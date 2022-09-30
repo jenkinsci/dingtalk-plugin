@@ -33,9 +33,23 @@ pipeline {
 
 :::details 查看结果
 
-![actionCardMultiple-default-example](@/assets/actionCardMultiple-default-example.jpg)
+![actionCard-default-example](../assets/actionCard-default-example.jpg)
 
 :::
+
+## 单个按钮
+
+```groovy
+singleTitle: '查看更多',
+singleUrl: 'https://liuweigl.github.io/dingtalk-plugin/'
+```
+
+:::details 查看结果
+
+![actionCard-singleBtn-example](../assets/actionCard-singleBtn-example.jpg)
+
+:::
+
 
 ## 自定义按钮组
 
@@ -43,11 +57,11 @@ pipeline {
 
   btns: [
           [
-              title: '内容不错',
+              title: '更改记录',
               actionUrl: 'https://www.dingtalk.com/'
           ],
           [
-              title: '不感兴趣',
+              title: '控制台',
               actionUrl: 'https://www.dingtalk.com/'
           ]
       ]
@@ -56,7 +70,7 @@ pipeline {
 
 :::details 查看结果
 
-![actionCardMultiple-btns-example](@/assets/actionCardMultiple-btns-example.jpg)
+![actionCard-customBtns-example](../assets/actionCard-customBtns-example.jpg)
 
 :::
 
@@ -70,7 +84,7 @@ pipeline {
 
 :::details 查看结果
 
-![actionCardMultiple-btnLayout-example](@/assets/actionCardMultiple-btnLayout-example.jpg)
+![actionCard-btnLayout-example](../assets/actionCard-btnLayout-example.jpg)
 
 :::
 
@@ -84,6 +98,6 @@ pipeline {
 
 :::details 查看结果
 
-![actionCardMultiple-atAll-example](@/assets/actionCardMultiple-atAll-example.jpg)
+![actionCard-atAll-example](../assets/actionCard-atAll-example.jpg)
 
 :::

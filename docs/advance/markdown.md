@@ -109,6 +109,6 @@ _<font color=red>红色-斜体文字</font>_
 同样的 markdown 内容在 `MARKDOWN` 与 `ACTION_CARD` 消息中表现可能不一致，系正常现象，在意的可以去钉钉官方群反馈。
 :::
 
-![dingTalkLogo](@/assets/dingtalk-logo.png)
+![dingTalkLogo](../assets/dingtalk-logo.png)
 
 “钉钉机器人交流群（阿里同学加内部群，单聊找我）”群的钉钉群号： 11733391

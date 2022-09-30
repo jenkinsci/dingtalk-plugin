@@ -25,7 +25,8 @@
 示例截图：
 ::: details
 
-![全局配置](@/assets/global-config.jpg)
+![全局配置](../assets/global-config.jpg)
+![钉钉配置](../assets/dingtalk-config.jpg)
 
 :::
 
