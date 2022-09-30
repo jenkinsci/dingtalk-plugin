@@ -8,7 +8,12 @@ on:
   workflow_dispatch:
     inputs:
       tags:
-        description: 'Update doc'  
+        description: 'Update doc'
+  push:
+    branches:
+      - master
+    paths:
+      - 'docs/**'
         
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
