@@ -100,15 +100,11 @@
 
 ::: warning
 
-`face` 属性暂未经过测试，在钉钉中表现未知
+同样的 markdown 内容在 `MARKDOWN` 与 `ACTION_CARD` 消息中表现不一致属于正常现象，在意的可以去钉钉官方群反馈
+
+钉钉群号： 11733391
 
 :::
 
-::: danger
 
-同样的 markdown 内容在 `MARKDOWN` 与 `ACTION*CARD` 消息中表现可能不一致，系正常现象，在意的可以去钉钉官方群反馈
-:::
 
-![dingTalkLogo](../assets/dingtalk-logo.png)
-
-“钉钉群号： 11733391
