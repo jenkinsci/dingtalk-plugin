@@ -14,10 +14,11 @@ export default defineConfig({
     }
   },
   vite: {
-    root: path.resolve(__dirname, '..'),
+    build: {
+      emptyOutDir: true
+    },
     publicDir: path.resolve(__dirname, 'public')
   },
-  mpa:true,
   themeConfig: {
     lastUpdatedText: 'Updated Date',
     editLink: {
