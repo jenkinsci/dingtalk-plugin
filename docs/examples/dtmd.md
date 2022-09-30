@@ -8,7 +8,7 @@
 
 :::
 
-```groovy
+```groovy{17,18}
 
 pipeline {
     agent any
