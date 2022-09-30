@@ -17,6 +17,7 @@ export default defineConfig({
     root: path.resolve(__dirname, '..'),
     publicDir: path.resolve(__dirname, 'public')
   },
+  mpa:true,
   themeConfig: {
     lastUpdatedText: 'Updated Date',
     editLink: {
