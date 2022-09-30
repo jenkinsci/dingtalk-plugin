@@ -42,7 +42,7 @@ dingtalk (
 
 ::: details 查看详情
 
-![robotId.jpg](../assets/robotId.jpg)
+![robotId.jpg](/assets/robotId.jpg)
 
 :::
 

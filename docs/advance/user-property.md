@@ -6,7 +6,7 @@
 
 ::: details 查看详细
 
-![manage-users](../assets/manage-users.jpg)
+![manage-users](/assets/manage-users.jpg)
 
 :::
 
@@ -14,7 +14,7 @@
 
 ::: details 查看详细
 
-![user-setting](../assets/user-setting.jpg)
+![user-setting](/assets/user-setting.jpg)
 
 :::
 
@@ -22,6 +22,6 @@
 
 ::: details 查看详细
 
-![user-detail](../assets/user-detail.jpg)
+![user-detail](/assets/user-detail.jpg)
 
 :::

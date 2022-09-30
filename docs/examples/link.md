@@ -32,6 +32,6 @@ pipeline {
 
 :::details 查看结果
 
-![link-example](../assets/link-example.jpg)
+![link-example](/assets/link-example.jpg)
 
 :::

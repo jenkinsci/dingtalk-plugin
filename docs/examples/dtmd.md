@@ -39,6 +39,6 @@ pipeline {
 
 :::details 查看结果
 
-![dtmt-example](../assets/dtmt-example.jpg)
+![dtmt-example](/assets/dtmt-example.jpg)
 
 :::
