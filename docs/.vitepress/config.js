@@ -5,9 +5,17 @@ export default defineConfig({
   base: '/dingtalk-plugin/',
   title: '钉钉机器人插件',
   description: '在 Jenkins 中使用钉钉机器人发送消息',
-  head: [['link', { rel: 'icon', href: '/assets/favicion.ico' }]],
-  markdown: {
-    anchor: { permalink: true }
+  head: [['link', { rel: 'icon', href: '/dingtalk-plugin/favicion.ico' }]],
+  vue: {
+    template: {
+      compilerOptions: {
+        isCustomElement: tag => ['font'].includes(tag)
+      }
+    }
+  },
+  vite: {
+    root: path.resolve(__dirname, '..'),
+    publicDir: path.resolve(__dirname, 'public')
   },
   themeConfig: {
     lastUpdatedText: 'Updated Date',
@@ -83,12 +91,5 @@ export default defineConfig({
         ]
       }
     ]
-  },
-  vue: {
-    template: {
-      compilerOptions: {
-        isCustomElement: tag => ['font'].includes(tag)
-      }
-    }
   }
 })
