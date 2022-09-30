@@ -3,7 +3,6 @@ import path from 'path'
 export default {
   base: '/dingtalk-plugin/',
   port: 8888,
-  outDir: '../docs-dist',
   title: '钉钉机器人插件',
   description: '在 Jenkins 中使用钉钉机器人发送消息',
   configureWebpack: {

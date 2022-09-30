@@ -1,6 +1,7 @@
 # 介绍
 
 [![Jenkins Plugin](https://img.shields.io/jenkins/plugin/v/dingding-notifications.svg?label=Version)](https://plugins.jenkins.io/dingding-notifications)
+
 [![Jenkins Plugin Installs](https://img.shields.io/jenkins/plugin/i/dingding-notifications.svg?label=Installs&color=green)](https://plugins.jenkins.io/dingding-notifications)
 
 在 Jenkins 中使用钉钉机器人发送消息。

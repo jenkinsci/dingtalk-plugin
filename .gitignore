@@ -31,8 +31,8 @@ work
 *.iml
 rebel.xml
 
-# vuepress
-docs-dist/
+# vitepress
+dist/
 node_modules/
 
 # maven release
