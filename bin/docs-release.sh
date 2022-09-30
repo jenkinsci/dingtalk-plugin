@@ -3,6 +3,9 @@
 # 确保脚本抛出遇到的错误
 set -e
 
+# 更新依赖
+npm install 
+
 # 生成静态文件
 npm run docs:build
 
