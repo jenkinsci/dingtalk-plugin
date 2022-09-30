@@ -1,6 +1,6 @@
 # 在 pipeline 中使用
 
-取消项目中勾选的机器人，防止重复发送消息。
+取消项目中勾选的机器人，防止重复发送消息
 
 ## 语法
 
@@ -36,13 +36,13 @@ dingtalk (
 
 ::: tip
 
-`robot` 参数可以在机器人配置中找到。
+`robot` 参数可以在机器人配置中找到
 
 :::
 
 ::: details 查看详情
 
-![robotId.jpg](/assets/robotId.jpg)
+![robotId.jpg](../assets/robotId.jpg)
 
 :::
 
@@ -70,16 +70,16 @@ public enum MsgTypeEnum {
 
 ### LINK 类型的消息
 
-| 参数                                         |      类型      | 说明                           |
-| -------------------------------------------- | :------------: | ------------------------------ |
-| title                                        |     String     | 消息标题                       |
-| text                                         | List\<String\> | 消息内容，如果太长只会部分展示 |
-| messageUrl <Badge type="error" text="必填"/> |     String     | 点击消息跳转的 URL             |
-| picUrl                                       |     String     | 图片 URL                       |
+| 参数               |      类型      | 说明                           |
+| ------------------ | :------------: | ------------------------------ |
+| title              |     String     | 消息标题                       |
+| text               | List\<String\> | 消息内容，如果太长只会部分展示 |
+| messageUrl（必填） |     String     | 点击消息跳转的 URL             |
+| picUrl             |     String     | 图片 URL                       |
 
 ::: warning
 
-该类型的消息不支持 At 功能。
+该类型的消息不支持 At 功能
 
 :::
 
@@ -155,11 +155,11 @@ public class ButtonModel{
 
 ### title 参数
 
-当参数为空时，默认会使用 _Jenkins 通知_。
+当参数为空时，默认会使用 _Jenkins 通知_
 
 ### ACTION_CARD 类型的消息
 
-当 `singleTitle` 与 `btns` 都为空时，默认会创建 『更改记录』『控制台』 2 个按钮。
+当 `singleTitle` 与 `btns` 都为空时，默认会创建 『更改记录』『控制台』 2 个按钮
 
 ## 效果展示
 

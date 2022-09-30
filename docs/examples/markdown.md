@@ -42,6 +42,6 @@ pipeline {
 
 :::details 查看结果
 
-![markdown-example](/assets/markdown-example.jpg)
+![markdown-example](../assets/markdown-example.jpg)
 
 :::

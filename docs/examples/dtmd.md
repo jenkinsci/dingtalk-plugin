@@ -4,7 +4,7 @@
 
 ::: warning
 
-`dtmd` 协议只能在markdown、actioncard、feedcard 消息类型中使用。
+`dtmd` 协议只能在markdown、actioncard、feedcard 消息类型中使用
 
 :::
 
@@ -39,6 +39,6 @@ pipeline {
 
 :::details 查看结果
 
-![dtmt-example](/assets/dtmt-example.jpg)
+![dtmt-example](../assets/dtmt-example.jpg)
 
 :::

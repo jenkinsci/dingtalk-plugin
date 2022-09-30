@@ -1,12 +1,12 @@
 # 用户属性扩展
 
-为了实现 `执行人` 字段带 `@` 效果，需要为 Jenkins 用户补充相关信息。
+为了实现 `执行人` 字段带 `@` 效果，需要为 Jenkins 用户补充相关信息
 
 1. 打开 **Manage Users**
 
 ::: details 查看详细
 
-![manage-users](/assets/manage-users.jpg)
+![manage-users](../assets/manage-users.jpg)
 
 :::
 
@@ -14,7 +14,7 @@
 
 ::: details 查看详细
 
-![user-setting](/assets/user-setting.jpg)
+![user-setting](../assets/user-setting.jpg)
 
 :::
 
@@ -22,6 +22,6 @@
 
 ::: details 查看详细
 
-![user-detail](/assets/user-detail.jpg)
+![user-detail](../assets/user-detail.jpg)
 
 :::

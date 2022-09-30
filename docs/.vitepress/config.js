@@ -1,27 +1,21 @@
 import path from 'path'
+import { defineConfig } from 'vitepress'
 
-export default {
+export default defineConfig({
   base: '/dingtalk-plugin/',
-  port: 8888,
   title: '钉钉机器人插件',
   description: '在 Jenkins 中使用钉钉机器人发送消息',
-  configureWebpack: {
-    resolve: {
-      alias: {
-        '@': path.resolve(__dirname, '../')
-      }
-    }
-  },
+  head: [['link', { rel: 'icon', href: '/assets/favicion.ico' }]],
   markdown: {
     anchor: { permalink: true }
   },
   themeConfig: {
-    docsDir: 'docs',
-    repo: 'jenkinsci/dingtalk-plugin',
-    sidebarDepth: 1,
-    editLinks: true,
-    editLinkText: '在 GitHub 上编辑此页',
-    lastUpdated: '上次更新',
+    lastUpdatedText: 'Updated Date',
+    editLink: {
+      pattern:
+        'https://github.com/jenkinsci/dingtalk-plugin/edit/main/docs/:path',
+      text: 'Edit this page on GitHub'
+    },
     nav: [
       {
         text: '发布记录',
@@ -89,5 +83,12 @@ export default {
         ]
       }
     ]
+  },
+  vue: {
+    template: {
+      compilerOptions: {
+        isCustomElement: tag => ['font'].includes(tag)
+      }
+    }
   }
-}
+})

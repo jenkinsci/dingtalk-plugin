@@ -25,7 +25,7 @@
 
 文字加粗、斜体
 **bold**
-_italic_
+*italic*
 
 链接
 [this is a link](http://name.com)
@@ -46,7 +46,7 @@ _italic_
 
 ## 定制文字
 
-经测试钉钉支持在 markdown 中使用 [font](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/font) 标签。
+经测试钉钉支持在 markdown 中使用 [font](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/font) 标签
 
 示例：
 
@@ -56,10 +56,10 @@ _italic_
 <font color=red>红色文字</font>
 ```
 
-2. _<font color=red>红色-斜体文字</font>_
+2. *<font color=red>红色-斜体文字</font>*
 
 ```markdown
-_<font color=red>红色-斜体文字</font>_
+*<font color=red>红色-斜体文字</font>*
 ```
 
 3. **<font color=red>红色-加粗文字</font>**
@@ -68,10 +68,10 @@ _<font color=red>红色-斜体文字</font>_
 **<font color=red>红色-加粗</font>**
 ```
 
-4. **_<font color=red>红色-斜体-加粗文字</font>_**
+4. ***<font color=red>红色-斜体-加粗文字</font>***
 
 ```markdown
-**_<font color=red>红色-斜体-加粗</font>_**
+***<font color=red>红色-斜体-加粗</font>***
 ```
 
 5. <font color=red size=0 >红色-小号文字</font>
@@ -100,15 +100,15 @@ _<font color=red>红色-斜体文字</font>_
 
 ::: warning
 
-`face` 属性暂未经过测试，在钉钉中表现未知。
+`face` 属性暂未经过测试，在钉钉中表现未知
 
 :::
 
 ::: danger
 
-同样的 markdown 内容在 `MARKDOWN` 与 `ACTION_CARD` 消息中表现可能不一致，系正常现象，在意的可以去钉钉官方群反馈。
+同样的 markdown 内容在 `MARKDOWN` 与 `ACTION*CARD` 消息中表现可能不一致，系正常现象，在意的可以去钉钉官方群反馈
 :::
 
-![dingTalkLogo](/assets/dingtalk-logo.png)
+![dingTalkLogo](../assets/dingtalk-logo.png)
 
 “钉钉群号： 11733391
