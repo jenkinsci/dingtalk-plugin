@@ -25,8 +25,7 @@ pipeline {
                         title: '你有新的消息，请注意查收',
                         text: [
                             '# DTMD 消息',
-                            '- [点我](dtmd://dingtalkclient/sendMessage?content=你好)',
-                            '- [再点](dtmd://dingtalkclient/sendMessage?content=傻逼)'
+                            '- [点我](dtmd://dingtalkclient/sendMessage?content=你好)'
                         ]
                     )
                 }
