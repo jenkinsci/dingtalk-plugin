@@ -63,53 +63,40 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
   private NoticeOccasionEnum getNoticeOccasion(Result result) {
     if (Result.SUCCESS.equals(result)) {
-
       return NoticeOccasionEnum.SUCCESS;
     }
     if (Result.FAILURE.equals(result)) {
-
       return NoticeOccasionEnum.FAILURE;
     }
     if (Result.ABORTED.equals(result)) {
-
       return NoticeOccasionEnum.ABORTED;
     }
     if (Result.UNSTABLE.equals(result)) {
-
       return NoticeOccasionEnum.UNSTABLE;
     }
     if (Result.NOT_BUILT.equals(result)) {
-
       return NoticeOccasionEnum.NOT_BUILT;
     }
     return null;
   }
 
   private BuildStatusEnum getBuildStatus(NoticeOccasionEnum noticeOccasion) {
-    if (NoticeOccasionEnum.START.equals(noticeOccasion)) {
-      return BuildStatusEnum.START;
+    switch (noticeOccasion) {
+      case START:
+        return BuildStatusEnum.START;
+      case SUCCESS:
+        return BuildStatusEnum.SUCCESS;
+      case FAILURE:
+        return BuildStatusEnum.FAILURE;
+      case ABORTED:
+        return BuildStatusEnum.ABORTED;
+      case UNSTABLE:
+        return BuildStatusEnum.UNSTABLE;
+      case NOT_BUILT:
+        return BuildStatusEnum.NOT_BUILT;
+      default:
+        return null;
     }
-
-    if (NoticeOccasionEnum.SUCCESS.equals(noticeOccasion)) {
-      return BuildStatusEnum.SUCCESS;
-    }
-
-    if (NoticeOccasionEnum.FAILURE.equals(noticeOccasion)) {
-      return BuildStatusEnum.FAILURE;
-    }
-    if (NoticeOccasionEnum.ABORTED.equals(noticeOccasion)) {
-
-      return BuildStatusEnum.ABORTED;
-    }
-    if (NoticeOccasionEnum.UNSTABLE.equals(noticeOccasion)) {
-
-      return BuildStatusEnum.UNSTABLE;
-    }
-    if (NoticeOccasionEnum.NOT_BUILT.equals(noticeOccasion)) {
-
-      return BuildStatusEnum.NOT_BUILT;
-    }
-    return null;
   }
 
   private void log(TaskListener listener, String formatMsg, Object... args) {
@@ -143,7 +130,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
       if (executorName == null) {
         log(listener, "未获取到构建人信息，将尝试从构建信息中模糊匹配。");
         executorName = run.getCauses().stream().map(Cause::getShortDescription)
-                .collect(Collectors.joining());
+            .collect(Collectors.joining());
       }
     } else {
       executorName = user.getDisplayName();
