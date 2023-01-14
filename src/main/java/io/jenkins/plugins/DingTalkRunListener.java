@@ -104,33 +104,37 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     }
   }
 
-  private void log(TaskListener listener, String formatMsg, Object... args) {
-    DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.getInstance();
-    boolean verbose = globalConfig.isVerbose();
-    if (verbose) {
-      // Logger.line(listener, LineType.START);
-      Logger.debug(listener, "[钉钉插件]" + formatMsg, args);
-      // Logger.line(listener, LineType.END);
-    }
-  }
-
+  /**
+   * @see <a
+   * href="https://github.com/jenkinsci/build-user-vars-plugin/blob/master/src/main/java/org/jenkinsci/plugins/builduser/BuildUser.java">...</a>
+   */
   private Map<String, String> getUser(Run<?, ?> run, TaskListener listener) {
-    UserIdCause userIdCause = run.getCause(UserIdCause.class);
     // 执行人信息
     User user = null;
     String executorName = null;
     String executorMobile = null;
+
+    UserIdCause userIdCause = run.getCause(UserIdCause.class);
     if (userIdCause != null && userIdCause.getUserId() != null) {
       user = User.getById(userIdCause.getUserId(), false);
     }
-
     if (user == null) {
       RemoteCause remoteCause = run.getCause(RemoteCause.class);
-      UpstreamCause streamCause = run.getCause(UpstreamCause.class);
       if (remoteCause != null) {
-        executorName = "remote " + remoteCause.getAddr();
-      } else if (streamCause != null) {
-        executorName = "project " + streamCause.getUpstreamProject();
+        executorName = String.format("%s %s", remoteCause.getAddr(), remoteCause.getNote());
+      } else {
+        UpstreamCause upstreamCause = run.getCause(UpstreamCause.class);
+        if (upstreamCause != null) {
+          Job<?, ?> job = Jenkins.get()
+              .getItemByFullName(upstreamCause.getUpstreamProject(), Job.class);
+          if (job != null) {
+            Run<?, ?> upstream = job.getBuildByNumber(upstreamCause.getUpstreamBuild());
+            if (upstream != null) {
+              return getUser(run, listener);
+            }
+          }
+          executorName = upstreamCause.getUpstreamProject();
+        }
       }
       if (executorName == null) {
         log(listener, "未获取到构建人信息，将尝试从构建信息中模糊匹配。");
@@ -175,6 +179,18 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     log(listener, "机器人 %s 已跳过 %s 环节", notifierConfig.getRobotName(), stage);
     return true;
   }
+
+
+  private void log(TaskListener listener, String formatMsg, Object... args) {
+    DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.getInstance();
+    boolean verbose = globalConfig.isVerbose();
+    if (verbose) {
+      // Logger.line(listener, LineType.START);
+      Logger.debug(listener, "[钉钉插件]" + formatMsg, args);
+      // Logger.line(listener, LineType.END);
+    }
+  }
+
 
   private void send(Run<?, ?> run, TaskListener listener, NoticeOccasionEnum noticeOccasion) {
     Job<?, ?> job = run.getParent();
