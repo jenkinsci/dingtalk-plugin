@@ -1,5 +1,6 @@
 package io.jenkins.plugins;
 
+import hudson.EnvVars;
 import hudson.Extension;
 import hudson.model.AbstractDescribableImpl;
 import hudson.model.Descriptor;
@@ -44,11 +45,18 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
     return noticeOccasions == null ? getDefaultNoticeOccasions() : noticeOccasions;
   }
 
-  public Set<String> getAtMobiles() {
+  public Set<String> resolveAtMobiles(EnvVars envVars) {
     if (StringUtils.isEmpty(atMobile)) {
       return new HashSet<>(16);
     }
-    return Arrays.stream(StringUtils.split(atMobile.replace("\n", ","), ","))
+    String realMobile = envVars.expand(atMobile);
+    return Arrays.stream(
+            StringUtils.split(
+                // 支持多行，一行支持多个手机号
+                realMobile.replace("\n", ","),
+                ","
+            )
+        )
         .collect(Collectors.toSet());
   }
 
@@ -95,6 +103,7 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
 
   @Extension
   public static class DingTalkNotifierConfigDescriptor extends Descriptor<DingTalkNotifierConfig> {
+
     /**
      * 通知时机列表
      *

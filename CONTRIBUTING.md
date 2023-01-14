@@ -5,7 +5,7 @@
 ## 开发服务
 
 在 `IDEA` 右侧 `maven` 控制面板中添加 `hpi:run` 到启动配置：
-![启动配置](./docs../assets/contribuitingConfig.png) 
+![启动配置](./docs/assets/contribuiting-config.png) 
 
 ## 开发约定
 

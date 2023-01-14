@@ -1,26 +1,17 @@
 package io.jenkins.plugins;
 
 import edu.umd.cs.findbugs.annotations.NonNull;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.exception.ExceptionUtils;
-
 import hudson.EnvVars;
 import hudson.Extension;
 import hudson.model.Cause;
+import hudson.model.Cause.RemoteCause;
+import hudson.model.Cause.UpstreamCause;
+import hudson.model.Cause.UserIdCause;
 import hudson.model.Job;
 import hudson.model.Result;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.model.User;
-import hudson.model.Cause.*;
 import hudson.model.listeners.RunListener;
 import io.jenkins.plugins.enums.BuildStatusEnum;
 import io.jenkins.plugins.enums.MsgTypeEnum;
@@ -31,8 +22,17 @@ import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.service.impl.DingTalkServiceImpl;
 import io.jenkins.plugins.tools.Logger;
 import io.jenkins.plugins.tools.Utils;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import jenkins.model.Jenkins;
 import lombok.extern.log4j.Log4j;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 
 /**
  * 所有项目触发
@@ -58,7 +58,12 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
   public void onCompleted(Run<?, ?> run, @NonNull TaskListener listener) {
     Result result = run.getResult();
     NoticeOccasionEnum noticeOccasion = getNoticeOccasion(result);
-    this.send(run, listener, noticeOccasion);
+    try {
+      this.send(run, listener, noticeOccasion);
+    } catch (Exception e) {
+      e.printStackTrace();
+      log(listener, "发送消息时报错: %s", e);
+    }
   }
 
   private NoticeOccasionEnum getNoticeOccasion(Result result) {
@@ -104,7 +109,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     boolean verbose = globalConfig.isVerbose();
     if (verbose) {
       // Logger.line(listener, LineType.START);
-      Logger.debug(listener, "钉钉插件：" + formatMsg, args);
+      Logger.debug(listener, "[钉钉插件]" + formatMsg, args);
       // Logger.line(listener, LineType.END);
     }
   }
@@ -129,7 +134,8 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
       }
       if (executorName == null) {
         log(listener, "未获取到构建人信息，将尝试从构建信息中模糊匹配。");
-        executorName = run.getCauses().stream().map(Cause::getShortDescription)
+        executorName = run.getCauses()
+            .stream().map(Cause::getShortDescription)
             .collect(Collectors.joining());
       }
     } else {
@@ -179,10 +185,13 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
       return;
     }
 
+    // 环境变量
+    EnvVars envVars = getEnvVars(run, listener);
+
     // 执行人信息
     Map<String, String> user = getUser(run, listener);
-    String executorName = user.get("name");
-    String executorMobile = user.get("mobile");
+    String executorName = envVars.get("EXECUTOR_NAME", user.get("name"));
+    String executorMobile = envVars.get("EXECUTOR_MOBILE", user.get("mobile"));
 
     // 项目信息
     String projectName = job.getFullDisplayName();
@@ -197,9 +206,6 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     List<String> result = new ArrayList<>();
     List<DingTalkNotifierConfig> notifierConfigs = property.getCheckedNotifierConfigs();
 
-    // 环境变量
-    EnvVars envVars = getEnvVars(run, listener);
-
     for (DingTalkNotifierConfig item : notifierConfigs) {
       boolean skipped = skip(listener, noticeOccasion, item);
 
@@ -210,7 +216,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
       String robotId = item.getRobotId();
       String content = item.getContent();
       boolean atAll = item.isAtAll();
-      Set<String> atMobiles = item.getAtMobiles();
+      Set<String> atMobiles = item.resolveAtMobiles(envVars);
 
       if (StringUtils.isNotEmpty(executorMobile)) {
         atMobiles.add(executorMobile);
@@ -218,8 +224,14 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
       String text = BuildJobModel.builder().projectName(projectName).projectUrl(projectUrl)
           .jobName(jobName)
-          .jobUrl(jobUrl).statusType(statusType).duration(duration).executorName(executorName)
-          .executorMobile(executorMobile).content(envVars.expand(content).replaceAll("\\\\n", "\n"))
+          .jobUrl(jobUrl)
+          .statusType(statusType)
+          .duration(duration)
+          .executorName(executorName)
+          .executorMobile(executorMobile)
+          .content(
+              envVars.expand(content).replaceAll("\\\\n", "\n")
+          )
           .build()
           .toMarkdown();
 
@@ -232,7 +244,9 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
           .title(
               String.format("%s %s", projectName, statusLabel)
           )
-          .text(text).btns(btns).build();
+          .text(text)
+          .btns(btns)
+          .build();
 
       log(listener, "当前机器人信息，%s", Utils.toJson(item));
       log(listener, "发送的消息详情，%s", Utils.toJson(message));

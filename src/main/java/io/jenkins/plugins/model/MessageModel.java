@@ -90,7 +90,7 @@ public class MessageModel {
       at.setAtMobiles(
           atMobiles.stream()
               .map(String::trim)
-              .filter(item -> !StringUtils.isEmpty(item))
+              .filter(StringUtils::isNotEmpty)
               .collect(Collectors.toList()));
     }
     at.setIsAtAll(atAll);
