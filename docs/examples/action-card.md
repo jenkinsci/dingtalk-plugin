@@ -33,7 +33,7 @@ pipeline {
 
 :::details 查看结果
 
-![actionCard-default-example](../assets/actionCard-default-example.jpg)
+![action-card-default-example](../assets/action-card-default-example.jpg)
 
 :::
 
@@ -46,7 +46,7 @@ singleUrl: 'https://liuweigl.github.io/dingtalk-plugin/'
 
 :::details 查看结果
 
-![actionCard-singleBtn-example](../assets/actionCard-singleBtn-example.jpg)
+![action-card-single-btn-example](../assets/action-card-single-btn-example.jpg)
 
 :::
 
@@ -70,7 +70,7 @@ singleUrl: 'https://liuweigl.github.io/dingtalk-plugin/'
 
 :::details 查看结果
 
-![actionCard-customBtns-example](../assets/actionCard-customBtns-example.jpg)
+![action-card-custom-btns-example](../assets/action-card-custom-btns-example.jpg)
 
 :::
 
@@ -84,7 +84,7 @@ singleUrl: 'https://liuweigl.github.io/dingtalk-plugin/'
 
 :::details 查看结果
 
-![actionCard-btnLayout-example](../assets/actionCard-btnLayout-example.jpg)
+![action-card-at-all-example](../assets/action-card-btn-layout-example.jpg)
 
 :::
 
@@ -98,6 +98,6 @@ singleUrl: 'https://liuweigl.github.io/dingtalk-plugin/'
 
 :::details 查看结果
 
-![actionCard-atAll-example](../assets/actionCard-atAll-example.jpg)
+![action-card-at-all-example](../assets/action-card-at-all-example.jpg)
 
 :::

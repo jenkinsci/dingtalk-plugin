@@ -47,6 +47,10 @@ export default defineConfig({
           {
             text: '在 pipeline 中使用',
             link: '/guide/pipeline'
+          },
+          {
+            text: '环境变量',
+            link: '/guide/environment-variables'
           }
         ]
       },
@@ -68,7 +72,7 @@ export default defineConfig({
         items: [
           {
             text: 'Freestyle 项目高级功能',
-            link: '/examples/freestyleAdvanced'
+            link: '/examples/freestyle-advanced'
           },
           {
             text: 'TEXT 类型的消息',
@@ -84,7 +88,7 @@ export default defineConfig({
           },
           {
             text: 'ACTION_CARD 整体跳转',
-            link: '/examples/actionCard'
+            link: '/examples/action-card'
           },
           {
             text: 'DTMD 协议的消息',

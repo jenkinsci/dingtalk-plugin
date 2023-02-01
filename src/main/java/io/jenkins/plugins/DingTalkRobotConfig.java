@@ -176,24 +176,19 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
         @QueryParameter("proxy") String proxyStr) {
       ArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs =
           parseSecurityPolicyConfigs(securityPolicyConfigStr);
-
       DingTalkRobotConfig robotConfig =
           new DingTalkRobotConfig(id, name, webhook, securityPolicyConfigs);
-
       Proxy proxy = getProxy(proxyStr);
-
       DingTalkSender sender = new DingTalkSender(robotConfig, proxy);
-
       MessageModel msg = getMsg();
-
       String message = sender.sendMarkdown(msg);
 
       if (message == null) {
-        String rootUrl = Jenkins.get().getRootUrl();
         return FormValidation.respond(
             Kind.OK,
             "<span style='color:#52c41a;font-weight:bold;'>测试成功</span>");
       }
+
       return FormValidation.error(message);
     }
 
