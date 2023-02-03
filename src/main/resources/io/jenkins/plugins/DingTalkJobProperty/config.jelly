@@ -5,28 +5,60 @@
   xmlns:d="jelly:define"
   xmlns:l="/lib/layout"
   xmlns:t="/lib/hudson"
-  xmlns:f="/lib/form">
-  <j:set var="notifierConfigDescriptor"
-    value="${descriptor.getDingTalkNotifierConfigDescriptor()}"/>
+  xmlns:f="/lib/form"
+  xmlns:local="local">
+  <st:adjunct includes="lib.form.hetero-list.hetero-list"/>
+
   <j:set var="notifierConfigs"
     value="${instance == null ? descriptor.getDefaultNotifierConfigs() : instance.getNotifierConfigs()}"/>
+  <j:set var="checkedNotifierConfigs"
+    value="${instance.getCheckedNotifierConfigs()}"/>
 
+  <d:taglib uri="local">
+    <d:tag name="body">
+        <f:repeatableDeleteButton/>
+        <f:class-entry descriptor="${descriptor}"/>
+        <d:invokeBody/>
+    </d:tag>
+  </d:taglib>
 
-  <!--  <f:descriptorList title="钉钉机器人"-->
-  <!--    descriptors="配置机器人进行构建通知">-->
   <f:entry title="钉钉机器人">
-    <f:repeatable
-      header=""
-      name="notifierConfigs"
-      noAddButton="true"
-      var="instance"
-      items="${notifierConfigs}">
-      <j:scope>
-        <j:set var="descriptor" value="${notifierConfigDescriptor}"/>
-        <st:include page="config.jelly" class="${descriptor.clazz}"/>
-      </j:scope>
-    </f:repeatable>
+    <div
+      class="jenkins-form-item hetero-list-container one-each">
+      <!-- display existing items -->
+      <j:forEach var="config"
+        items="${checkedNotifierConfigs}">
+        <j:set var="instance" value="${config}"/>
+        <j:set var="descriptor" value="${config.descriptor}"/>
+        <div class="repeated-chunk" name="notifierConfigs" title="${config.robotName}"
+          descriptorId="${config.robotId}">
+          <local:body title="${config.robotName}" instance="${config}">
+            <st:include from="${descriptor}"
+              page="${descriptor.configPage}" optional="true"/>
+          </local:body>
+        </div>
+      </j:forEach>
+      <div class="repeatable-insertion-point"/>
+      <div class="prototypes to-be-removed">
+        <j:forEach var="config" items="${notifierConfigs}" varStatus="loop">
+          <j:set var="instance" value="${config}" />
+          <j:set var="descriptor" value="${config.descriptor}"/>
+          <div name="notifierConfigs" title="${config.robotName}" descriptorId="${config.robotId}">
+            <local:body title="${config.robotName}">
+              <l:renderOnDemand tag="div" clazz="config-page" capture="descriptor,it,instance">
+                <l:ajax>
+                  <st:include from="${descriptor}"
+                    page="${descriptor.configPage}" optional="true"/>
+                </l:ajax>
+              </l:renderOnDemand>
+            </local:body>
+          </div>
+        </j:forEach>
+      </div>
+      <div>
+        <input type="button" value="添加机器人" class="hetero-list-add"
+        />
+      </div>
+    </div>
   </f:entry>
-  <!--  </f:descriptorList>-->
-
 </j:jelly>

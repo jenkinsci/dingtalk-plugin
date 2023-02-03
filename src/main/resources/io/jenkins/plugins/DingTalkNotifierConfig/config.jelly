@@ -5,43 +5,41 @@
   <!-- 通知时机列表 -->
   <j:set var="noticeOccasionTypes" value="${descriptor.getNoticeOccasionTypes()}"/>
 
-  <f:optionalBlock
-    title="${instance.getRobotName()}"
-    field="checked"
-    inline="true"
-    checked="${instance.isChecked()}">
-    <f:advanced>
-      <f:entry title="通知时机" field="noticeOccasions">
-        <j:forEach var="noticeOccasionTypeItem"
-          items="${noticeOccasionTypes}">
-          <j:scope>
-            <j:set var="name" value="${noticeOccasionTypeItem.name()}"/>
-            <j:set var="desc" value="${noticeOccasionTypeItem.getDesc()}"/>
-            <label>
-              <f:checkbox
-                json="${name}"
-                name="noticeOccasions"
-                checked="${instance.noticeOccasions.contains(name)}"
-              />
-              ${desc}
-            </label>
-          </j:scope>
-        </j:forEach>
-      </f:entry>
-      <f:entry title="通知人" field="at">
-        <f:checkbox title="atAll" field="atAll"/>
-        <f:textarea field="atMobile"/>
-      </f:entry>
-      <f:entry field="content" title="自定义内容">
-        <f:textarea/>
-      </f:entry>
-    </f:advanced>
-
-    <f:invisibleEntry>
-      <input type="hidden" name="robotId" value="${instance.getRobotId()}"/>
-    </f:invisibleEntry>
-    <f:invisibleEntry>
-      <input type="hidden" name="robotName" value="${instance.getRobotName()}"/>
-    </f:invisibleEntry>
-  </f:optionalBlock>
+  <f:entry title="${instance.getRobotName()}">
+  <f:advanced>
+    <f:entry title="通知时机" field="noticeOccasions">
+      <j:forEach var="noticeOccasionTypeItem"
+        items="${noticeOccasionTypes}">
+        <j:scope>
+          <j:set var="name" value="${noticeOccasionTypeItem.name()}"/>
+          <j:set var="desc" value="${noticeOccasionTypeItem.getDesc()}"/>
+          <label>
+            <f:checkbox
+              json="${name}"
+              name="noticeOccasions"
+              checked="${instance.noticeOccasions.contains(name)}"
+            />
+            ${desc}
+          </label>
+        </j:scope>
+      </j:forEach>
+    </f:entry>
+    <f:entry title="通知人" field="at">
+      <f:checkbox title="atAll" field="atAll"/>
+      <f:textarea field="atMobile"/>
+    </f:entry>
+    <f:entry field="content" title="自定义内容">
+      <f:textarea/>
+    </f:entry>
+  </f:advanced>
+  </f:entry>
+  <f:invisibleEntry>
+    <input type="hidden" name="robotId" value="${instance.getRobotId()}"/>
+  </f:invisibleEntry>
+  <f:invisibleEntry>
+    <input type="hidden" name="robotName" value="${instance.getRobotName()}"/>
+  </f:invisibleEntry>
+  <f:invisibleEntry>
+    <input type="hidden" name="checked" value="true"/>
+  </f:invisibleEntry>
 </j:jelly>

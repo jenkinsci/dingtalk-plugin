@@ -4,11 +4,9 @@ import hudson.Extension;
 import hudson.model.Job;
 import hudson.model.JobProperty;
 import hudson.model.JobPropertyDescriptor;
-import io.jenkins.plugins.DingTalkNotifierConfig.DingTalkNotifierConfigDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import jenkins.model.Jenkins;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -30,8 +28,7 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
    * @return 机器人配置列表
    */
   public ArrayList<DingTalkNotifierConfig> getNotifierConfigs() {
-
-    ArrayList<DingTalkNotifierConfig> notifierConfigsList = new ArrayList<>();
+    ArrayList<DingTalkNotifierConfig> notifierConfigList = new ArrayList<>();
     ArrayList<DingTalkRobotConfig> robotConfigs = DingTalkGlobalConfig.getInstance()
         .getRobotConfigs();
 
@@ -39,8 +36,8 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
       String id = robotConfig.getId();
       DingTalkNotifierConfig newNotifierConfig = new DingTalkNotifierConfig(robotConfig);
 
-      if (notifierConfigs != null && !notifierConfigs.isEmpty()) {
-        for (DingTalkNotifierConfig notifierConfig : notifierConfigs) {
+      if (this.notifierConfigs != null) {
+        for (DingTalkNotifierConfig notifierConfig : this.notifierConfigs) {
           String robotId = notifierConfig.getRobotId();
           if (id.equals(robotId)) {
             newNotifierConfig.copy(notifierConfig);
@@ -48,10 +45,10 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
         }
       }
 
-      notifierConfigsList.add(newNotifierConfig);
+      notifierConfigList.add(newNotifierConfig);
     }
 
-    return notifierConfigsList;
+    return notifierConfigList;
   }
 
   /**
@@ -77,13 +74,6 @@ public class DingTalkJobProperty extends JobProperty<Job<?, ?>> {
     @Override
     public boolean isApplicable(Class<? extends Job> jobType) {
       return super.isApplicable(jobType);
-    }
-
-    /**
-     * 通知配置页面
-     */
-    public DingTalkNotifierConfigDescriptor getDingTalkNotifierConfigDescriptor() {
-      return Jenkins.get().getDescriptorByType(DingTalkNotifierConfigDescriptor.class);
     }
 
     /**
