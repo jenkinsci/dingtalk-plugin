@@ -210,7 +210,8 @@ public class DingTalkStep extends Step {
 
   private static class DingTalkStepExecution extends StepExecution {
 
-    private final DingTalkStep step;
+    private static final long serialVersionUID = 1L;
+    private final transient DingTalkStep step;
 
     private DingTalkStepExecution(DingTalkStep step, StepContext context) {
       super(context);
