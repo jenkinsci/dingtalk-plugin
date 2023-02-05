@@ -123,7 +123,7 @@ public class DingTalkSender {
         return body;
       }
     } catch (IOException e) {
-      log.error("钉钉消息发送失败：", e);
+      log.error("钉钉消息发送失败", e);
       return ExceptionUtils.getStackTrace(e);
     }
     return null;

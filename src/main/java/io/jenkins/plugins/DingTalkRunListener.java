@@ -13,6 +13,7 @@ import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.model.User;
 import hudson.model.listeners.RunListener;
+import io.jenkins.plugins.context.PipelineEnvContext;
 import io.jenkins.plugins.enums.BuildStatusEnum;
 import io.jenkins.plugins.enums.MsgTypeEnum;
 import io.jenkins.plugins.enums.NoticeOccasionEnum;
@@ -158,16 +159,17 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
   }
 
   private EnvVars getEnvVars(Run<?, ?> run, TaskListener listener) {
-    EnvVars envVars;
+    EnvVars jobEnvVars;
     try {
-      envVars = run.getEnvironment(listener);
+      jobEnvVars = run.getEnvironment(listener);
     } catch (InterruptedException | IOException e) {
-      envVars = new EnvVars();
+      jobEnvVars = new EnvVars();
       log.error(e);
-      log(listener, "获取环境变量时发生异常，将只使用 jenkins 默认的环境变量。");
-      log(listener, ExceptionUtils.getStackTrace(e));
+      DingTalkUtils.log(listener, "获取环境变量时发生异常，将只使用 jenkins 默认的环境变量。");
+      DingTalkUtils.log(listener, ExceptionUtils.getStackTrace(e));
     }
-    return envVars;
+    EnvVars pipelineEnvVars = PipelineEnvContext.get();
+    return jobEnvVars.overrideAll(pipelineEnvVars);
   }
 
   private boolean skip(TaskListener listener, NoticeOccasionEnum noticeOccasion,
