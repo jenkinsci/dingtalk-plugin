@@ -218,7 +218,7 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
     @NonNull
     @Override
     public String getDisplayName() {
-      return "DingTalk";
+      return "Send DingTalk message";
     }
 
     @Override
