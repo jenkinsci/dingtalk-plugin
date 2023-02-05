@@ -41,6 +41,10 @@ public class Logger {
   private static final String LOG_TITLE_PLACEHOLDER = StringUtils
       .repeat(LOG_LINE_SYMBOL, LOG_TITLE.length());
 
+  public static String format(String msg, Object... args) {
+    return String.format("钉钉机器人发生错误：%s", String.format(msg, args));
+  }
+
 
   /**
    * 统一输出错误日志
@@ -49,7 +53,7 @@ public class Logger {
    * @param msg      消息
    */
   public static void error(TaskListener listener, String msg, Object... args) {
-    listener.error("钉钉机器人发生错误：%s", String.format(msg, args));
+    listener.error(format(msg, args));
   }
 
   /**

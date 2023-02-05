@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+<!--  <f:entry field="robot" title="robot">-->
+<!--    <f:textbox/>-->
+<!--  </f:entry>-->
+<!--  <f:entry field="type" title="type">-->
+<!--    <f:textbox/>-->
+<!--  </f:entry>-->
+<!--  <f:entry field="at" title="at">-->
+<!--    <f:textbox/>-->
+<!--  </f:entry>-->
+<!--  <f:entry field="atAll" title="atAll">-->
+<!--    <f:textbox/>-->
+<!--  </f:entry>-->
+<!--  <f:entry field="title" title="title">-->
+<!--    <f:textbox/>-->
+<!--  </f:entry>-->
+<!--  <f:entry field="text" title="text">-->
+<!--    <f:textbox/>-->
+<!--  </f:entry>-->
+<!--  <f:entry field="messageUrl" title="messageUrl">-->
+<!--    <f:textbox/>-->
+<!--  </f:entry>-->
+<!--  <f:entry field="singleTitle" title="picUrl">-->
+<!--    <f:textbox/>-->
+<!--  </f:entry>-->
+<!--  <f:entry field="singleTitle" title="singleTitle">-->
+<!--    <f:textbox/>-->
+<!--  </f:entry>-->
+<!--  <f:entry field="btns" title="btns">-->
+<!--    <f:textbox/>-->
+<!--  </f:entry>-->
+<!--  <f:entry field="btnLayout" title="btnLayout">-->
+<!--    <f:textbox/>-->
+<!--  </f:entry>-->
+<!--  <f:entry field="hideAvatar" title="hideAvatar">-->
+<!--    <f:textbox/>-->
+<!--  </f:entry>-->
+</j:jelly>
+
+
+
+
+
+
+
+
+

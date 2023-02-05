@@ -3,13 +3,8 @@ package io.jenkins.plugins;
 import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.EnvVars;
 import hudson.Extension;
-import hudson.FilePath;
-import hudson.Launcher;
-import hudson.model.AbstractProject;
 import hudson.model.Run;
 import hudson.model.TaskListener;
-import hudson.tasks.BuildStepDescriptor;
-import hudson.tasks.Builder;
 import io.jenkins.plugins.enums.BtnLayoutEnum;
 import io.jenkins.plugins.enums.MsgTypeEnum;
 import io.jenkins.plugins.model.ButtonModel;
@@ -22,11 +17,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import jenkins.model.Jenkins;
-import jenkins.tasks.SimpleBuildStep;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
-import org.jenkinsci.Symbol;
+import org.jenkinsci.plugins.workflow.steps.Step;
+import org.jenkinsci.plugins.workflow.steps.StepContext;
+import org.jenkinsci.plugins.workflow.steps.StepDescriptor;
+import org.jenkinsci.plugins.workflow.steps.StepExecution;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 
@@ -43,9 +40,11 @@ import org.kohsuke.stapler.DataBoundSetter;
 @Getter
 @Setter
 @SuppressWarnings("unused")
-public class DingTalkPipeline extends Builder implements SimpleBuildStep {
+public class DingTalkStep extends Step {
 
-  /** 机器人 id */
+  /**
+   * 机器人 id
+   */
   private String robot;
 
   private MsgTypeEnum type;
@@ -77,7 +76,7 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
   private DingTalkServiceImpl service = new DingTalkServiceImpl();
 
   @DataBoundConstructor
-  public DingTalkPipeline(String robot) {
+  public DingTalkStep(String robot) {
     this.robot = robot;
   }
 
@@ -159,14 +158,7 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
     return hideAvatar ? "1" : "0";
   }
 
-  @Override
-  public void perform(
-      @NonNull Run<?, ?> run,
-      @NonNull FilePath workspace,
-      @NonNull EnvVars envVars,
-      @NonNull Launcher launcher,
-      @NonNull TaskListener listener) {
-
+  public String send(Run<?, ?> run, EnvVars envVars, TaskListener listener) {
     boolean defaultBtns =
         MsgTypeEnum.ACTION_CARD.equals(type)
             && StringUtils.isEmpty(singleTitle)
@@ -189,41 +181,80 @@ public class DingTalkPipeline extends Builder implements SimpleBuildStep {
       this.at = new HashSet<>(Arrays.asList(Utils.split(atStr)));
     }
 
-    String result =
-        service.send(
-            envVars.expand(robot),
-            MessageModel.builder()
-                .type(type)
-                .atMobiles(at)
-                .atAll(atAll)
-                .title(envVars.expand(title))
-                .text(envVars.expand(Utils.join(text)))
-                .messageUrl(envVars.expand(messageUrl))
-                .picUrl(envVars.expand(picUrl))
-                .singleTitle(envVars.expand(singleTitle))
-                .singleUrl(envVars.expand(singleUrl))
-                .btns(btns)
-                .btnOrientation(getBtnLayout())
-                .hideAvatar(isHideAvatar())
-                .build());
-    if (!StringUtils.isEmpty(result)) {
-      Logger.error(listener, result);
+    return service.send(
+        envVars.expand(robot),
+        MessageModel.builder()
+            .type(type)
+            .atMobiles(at)
+            .atAll(atAll)
+            .title(envVars.expand(title))
+            .text(envVars.expand(Utils.join(text)))
+            .messageUrl(envVars.expand(messageUrl))
+            .picUrl(envVars.expand(picUrl))
+            .singleTitle(envVars.expand(singleTitle))
+            .singleUrl(envVars.expand(singleUrl))
+            .btns(btns)
+            .btnOrientation(getBtnLayout())
+            .hideAvatar(isHideAvatar())
+            .build());
+
+  }
+
+  @Override
+  public StepExecution start(StepContext context) throws Exception {
+    return new DingTalkStepExecution(this, context);
+  }
+
+  private static class DingTalkStepExecution extends StepExecution {
+
+    private final DingTalkStep step;
+
+    private DingTalkStepExecution(DingTalkStep step, StepContext context) {
+      super(context);
+      this.step = step;
+    }
+
+    @Override
+    public boolean start() throws Exception {
+      StepContext context = this.getContext();
+      Run<?, ?> run = context.get(Run.class);
+      EnvVars envVars = context.get(EnvVars.class);
+      TaskListener listener = context.get(TaskListener.class);
+      try {
+        String result = this.step.send(run, envVars, listener);
+        if (StringUtils.isEmpty(result)) {
+          context.onSuccess(result);
+        } else {
+          context.onFailure(new Exception(Logger.format(result)));
+        }
+        return true;
+      } catch (Exception e) {
+        context.onFailure(e);
+        return false;
+      }
     }
   }
 
-  @Symbol({"dingtalk", "dingTalk"})
   @Extension
-  public static class DescriptorImpl extends BuildStepDescriptor<Builder> {
+  public static class DescriptorImpl extends StepDescriptor {
+
+    @Override
+    public Set<? extends Class<?>> getRequiredContext() {
+      return new HashSet<Class<?>>() {{
+        add(Run.class);
+        add(TaskListener.class);
+      }};
+    }
+
+    @Override
+    public String getFunctionName() {
+      return "dingtalk";
+    }
 
     @NonNull
     @Override
     public String getDisplayName() {
       return "Send DingTalk message";
-    }
-
-    @Override
-    public boolean isApplicable(Class<? extends AbstractProject> t) {
-      return false;
     }
   }
 }
