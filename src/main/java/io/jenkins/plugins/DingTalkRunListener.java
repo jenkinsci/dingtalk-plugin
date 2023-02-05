@@ -20,6 +20,7 @@ import io.jenkins.plugins.model.BuildJobModel;
 import io.jenkins.plugins.model.ButtonModel;
 import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.service.impl.DingTalkServiceImpl;
+import io.jenkins.plugins.tools.DingTalkUtils;
 import io.jenkins.plugins.tools.Logger;
 import io.jenkins.plugins.tools.Utils;
 import java.io.IOException;
@@ -50,7 +51,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
   @Override
   public void onStarted(Run<?, ?> run, TaskListener listener) {
     DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.getInstance();
-    log(listener, "全局配置信息，%s", Utils.toJson(globalConfig));
+    DingTalkUtils.log(listener, "全局配置信息，%s", Utils.toJson(globalConfig));
     this.send(run, listener, NoticeOccasionEnum.START);
   }
 
@@ -62,7 +63,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
       this.send(run, listener, noticeOccasion);
     } catch (Exception e) {
       e.printStackTrace();
-      log(listener, "发送消息时报错: %s", e);
+      DingTalkUtils.log(listener, "发送消息时报错: %s", e);
     }
   }
 
@@ -137,7 +138,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
         }
       }
       if (executorName == null) {
-        log(listener, "未获取到构建人信息，将尝试从构建信息中模糊匹配。");
+        DingTalkUtils.log(listener, "未获取到构建人信息，将尝试从构建信息中模糊匹配。");
         executorName = run.getCauses()
             .stream().map(Cause::getShortDescription)
             .collect(Collectors.joining());
@@ -146,7 +147,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
       executorName = user.getDisplayName();
       executorMobile = user.getProperty(DingTalkUserProperty.class).getMobile();
       if (executorMobile == null) {
-        log(listener, "用户【%s】暂未设置手机号码，请前往 %s 添加。", executorName,
+        DingTalkUtils.log(listener, "用户【%s】暂未设置手机号码，请前往 %s 添加。", executorName,
             user.getAbsoluteUrl() + "/configure");
       }
     }
@@ -176,19 +177,8 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     if (noticeOccasions.contains(stage)) {
       return false;
     }
-    log(listener, "机器人 %s 已跳过 %s 环节", notifierConfig.getRobotName(), stage);
+    DingTalkUtils.log(listener, "机器人 %s 已跳过 %s 环节", notifierConfig.getRobotName(), stage);
     return true;
-  }
-
-
-  private void log(TaskListener listener, String formatMsg, Object... args) {
-    DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.getInstance();
-    boolean verbose = globalConfig.isVerbose();
-    if (verbose) {
-      // Logger.line(listener, LineType.START);
-      Logger.debug(listener, "[钉钉插件]" + formatMsg, args);
-      // Logger.line(listener, LineType.END);
-    }
   }
 
 
@@ -197,7 +187,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     DingTalkJobProperty property = job.getProperty(DingTalkJobProperty.class);
 
     if (property == null) {
-      this.log(listener, "不支持的项目类型，已跳过");
+      DingTalkUtils.log(listener, "当前任务未配置机器人，已跳过");
       return;
     }
 
@@ -264,8 +254,8 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
           .btns(btns)
           .build();
 
-      log(listener, "当前机器人信息，%s", Utils.toJson(item));
-      log(listener, "发送的消息详情，%s", Utils.toJson(message));
+      DingTalkUtils.log(listener, "当前机器人信息，%s", Utils.toJson(item));
+      DingTalkUtils.log(listener, "发送的消息详情，%s", Utils.toJson(message));
 
       String msg = service.send(robotId, message);
 

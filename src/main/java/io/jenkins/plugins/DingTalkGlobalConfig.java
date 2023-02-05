@@ -8,6 +8,8 @@ import io.jenkins.plugins.enums.NoticeOccasionEnum;
 import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import jenkins.model.Jenkins;
@@ -33,8 +35,6 @@ import org.kohsuke.stapler.StaplerRequest;
 @Symbol("dingtalk")
 public class DingTalkGlobalConfig extends Descriptor<DingTalkGlobalConfig> implements
     Describable<DingTalkGlobalConfig> {
-
-  private static volatile DingTalkGlobalConfig instance;
 
   /**
    * 网络代理
@@ -166,4 +166,7 @@ public class DingTalkGlobalConfig extends Descriptor<DingTalkGlobalConfig> imple
     return Jenkins.get().getDescriptorByType(DingTalkGlobalConfig.class);
   }
 
+  public static Optional<DingTalkRobotConfig> getRobot(String robotId) {
+    return getInstance().robotConfigs.stream().filter(item -> Objects.equals(item.getId(), robotId)).findAny();
+  }
 }

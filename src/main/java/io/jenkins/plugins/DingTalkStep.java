@@ -10,6 +10,7 @@ import io.jenkins.plugins.enums.MsgTypeEnum;
 import io.jenkins.plugins.model.ButtonModel;
 import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.service.impl.DingTalkServiceImpl;
+import io.jenkins.plugins.tools.DingTalkUtils;
 import io.jenkins.plugins.tools.Logger;
 import io.jenkins.plugins.tools.Utils;
 import java.util.Arrays;
@@ -177,27 +178,29 @@ public class DingTalkStep extends Step {
 
     if (at != null) {
       String atStr = envVars.expand(Utils.join(at));
-
       this.at = new HashSet<>(Arrays.asList(Utils.split(atStr)));
     }
 
-    return service.send(
-        envVars.expand(robot),
-        MessageModel.builder()
-            .type(type)
-            .atMobiles(at)
-            .atAll(atAll)
-            .title(envVars.expand(title))
-            .text(envVars.expand(Utils.join(text)))
-            .messageUrl(envVars.expand(messageUrl))
-            .picUrl(envVars.expand(picUrl))
-            .singleTitle(envVars.expand(singleTitle))
-            .singleUrl(envVars.expand(singleUrl))
-            .btns(btns)
-            .btnOrientation(getBtnLayout())
-            .hideAvatar(isHideAvatar())
-            .build());
+    MessageModel message = MessageModel.builder()
+        .type(type)
+        .atMobiles(at)
+        .atAll(atAll)
+        .title(envVars.expand(title))
+        .text(envVars.expand(Utils.join(text)))
+        .messageUrl(envVars.expand(messageUrl))
+        .picUrl(envVars.expand(picUrl))
+        .singleTitle(envVars.expand(singleTitle))
+        .singleUrl(envVars.expand(singleUrl))
+        .btns(btns)
+        .btnOrientation(getBtnLayout())
+        .hideAvatar(isHideAvatar())
+        .build();
 
+    DingTalkUtils.log(listener, "当前机器人信息，%s",
+        Utils.toJson(DingTalkGlobalConfig.getRobot(robot)));
+    DingTalkUtils.log(listener, "发送的消息详情，%s", Utils.toJson(message));
+
+    return service.send(envVars.expand(robot), message);
   }
 
   @Override
@@ -214,6 +217,7 @@ public class DingTalkStep extends Step {
       this.step = step;
     }
 
+
     @Override
     public boolean start() throws Exception {
       StepContext context = this.getContext();
@@ -225,7 +229,7 @@ public class DingTalkStep extends Step {
         if (StringUtils.isEmpty(result)) {
           context.onSuccess(result);
         } else {
-          context.onFailure(new Exception(Logger.format(result)));
+          context.onFailure(new Throwable(Logger.format(result)));
         }
         return true;
       } catch (Exception e) {
