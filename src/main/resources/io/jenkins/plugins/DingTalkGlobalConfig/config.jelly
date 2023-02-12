@@ -45,6 +45,7 @@
       <j:set var="robotConfigDescriptor"
         value="${descriptor.getDingTalkRobotConfigDescriptor()}"/>
       <f:repeatable
+        enableTopButton="true"
         field="robotConfigs"
         var="item"
         items="robotConfigs">
