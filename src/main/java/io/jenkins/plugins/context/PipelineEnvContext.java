@@ -4,20 +4,26 @@ import hudson.EnvVars;
 
 public class PipelineEnvContext {
 
-  private final static ThreadLocal<EnvVars> store = new ThreadLocal<>();
+	private static final ThreadLocal<EnvVars> store = new ThreadLocal<>();
 
-  public static void merge(EnvVars value) {
-    EnvVars current = store.get();
+	public static void merge(EnvVars value) {
+		if (value == null) {
+			return;
+		}
+		EnvVars current = store.get();
+		if (current == null) {
+			store.set(value);
+		} else {
+			current.overrideAll(value);
+		}
+	}
 
-    if (current == null) {
-      store.set(value);
-    } else {
-      current.overrideAll(value);
-    }
-  }
+	public static EnvVars get() {
+		EnvVars current = store.get();
+		return current == null ? new EnvVars() : current;
+	}
 
-  public static EnvVars get() {
-    return store.get();
-  }
-
+	public static void reset() {
+		store.remove();
+	}
 }

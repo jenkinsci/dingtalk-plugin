@@ -24,7 +24,6 @@ import io.jenkins.plugins.service.impl.DingTalkServiceImpl;
 import io.jenkins.plugins.tools.DingTalkUtils;
 import io.jenkins.plugins.tools.Logger;
 import io.jenkins.plugins.tools.Utils;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,6 +64,9 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     } catch (Exception e) {
       e.printStackTrace();
       DingTalkUtils.log(listener, "发送消息时报错: %s", e);
+    }finally {
+      // 重置环境变量
+      PipelineEnvContext.reset();
     }
   }
 
@@ -162,14 +164,22 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     EnvVars jobEnvVars;
     try {
       jobEnvVars = run.getEnvironment(listener);
-    } catch (InterruptedException | IOException e) {
+    } catch (Exception e) {
       jobEnvVars = new EnvVars();
       log.error(e);
-      DingTalkUtils.log(listener, "获取环境变量时发生异常，将只使用 jenkins 默认的环境变量。");
+      DingTalkUtils.log(listener, "获取 job 任务的环境变量时发生异常");
+      DingTalkUtils.log(listener, ExceptionUtils.getStackTrace(e));
+      Thread.currentThread().interrupt();
+    }
+    try {
+      EnvVars pipelineEnvVars = PipelineEnvContext.get();
+      jobEnvVars.overrideAll(pipelineEnvVars);
+    }catch (Exception e){
+      log.error(e);
+      DingTalkUtils.log(listener, "获取 pipeline 环境变量时发生异常");
       DingTalkUtils.log(listener, ExceptionUtils.getStackTrace(e));
     }
-    EnvVars pipelineEnvVars = PipelineEnvContext.get();
-    return jobEnvVars.overrideAll(pipelineEnvVars);
+    return jobEnvVars;
   }
 
   private boolean skip(TaskListener listener, NoticeOccasionEnum noticeOccasion,
@@ -238,7 +248,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
           .executorName(executorName)
           .executorMobile(executorMobile)
           .content(
-              envVars.expand(content).replaceAll("\\\\n", "\n")
+              envVars.expand(content).replace("\\\\n", "\n")
           )
           .build()
           .toMarkdown();
