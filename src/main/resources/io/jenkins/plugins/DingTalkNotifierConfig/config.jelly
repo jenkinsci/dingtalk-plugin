@@ -2,13 +2,22 @@
 
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
 	xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+	<st:adjunct includes="io.jenkins.plugins.jquery3"/>
+	<st:once>
+		<script type="text/javascript"
+			src="${rootURL}/plugin/dingding-notifications/scripts/notifierConfig.js"/>
+	</st:once>
+
 	<!-- 通知时机列表 -->
 	<j:set var="noticeOccasionTypes" value="${descriptor.getNoticeOccasionTypes()}"/>
 
-	<f:entry title="${instance.getRobotName()}">
+	<f:entry title="${instance.getRobotName()}" class="">
 		<f:advanced>
 			<f:entry title="停用" field="disabled">
 				<f:checkbox checked="${instance.getDisabled()}"/>
+			</f:entry>
+			<f:entry title="禁用内置消息" field="raw" class="notifier-config-raw">
+				<f:checkbox checked="${instance.getRaw()}"/>
 			</f:entry>
 			<f:entry title="通知时机" field="noticeOccasions">
 				<j:forEach var="noticeOccasionTypeItem"
@@ -27,13 +36,20 @@
 					</j:scope>
 				</j:forEach>
 			</f:entry>
-			<f:entry title="通知人" field="at">
-				<f:checkbox title="atAll" field="atAll"/>
-				<f:textarea field="atMobile"/>
-			</f:entry>
-			<f:entry field="content" title="自定义内容">
-				<f:textarea/>
-			</f:entry>
+			<div class="raw-content">
+				<f:entry field="message" title="自定义消息">
+					<f:textarea/>
+				</f:entry>
+			</div>
+			<div class="none-raw-content">
+				<f:entry title="通知人" field="at">
+					<f:checkbox title="atAll" field="atAll"/>
+					<f:textarea field="atMobile"/>
+				</f:entry>
+				<f:entry field="content" title="自定义内容">
+					<f:textarea/>
+				</f:entry>
+			</div>
 		</f:advanced>
 	</f:entry>
 	<f:invisibleEntry>

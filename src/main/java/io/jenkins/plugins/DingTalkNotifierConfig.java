@@ -27,6 +27,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 @Slf4j
 public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNotifierConfig> {
 
+	private boolean raw;
 	private boolean disabled;
 	private boolean checked;
 
@@ -39,6 +40,7 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
 	private String atMobile;
 
 	private String content;
+	private String message;
 
 	private Set<String> noticeOccasions;
 
@@ -71,6 +73,7 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
 
 	@DataBoundConstructor
 	public DingTalkNotifierConfig(
+			boolean raw,
 			boolean disabled,
 			boolean checked,
 			String robotId,
@@ -78,7 +81,9 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
 			boolean atAll,
 			String atMobile,
 			String content,
+			String message,
 			Set<String> noticeOccasions) {
+		this.raw = raw;
 		this.disabled = disabled;
 		this.checked = checked;
 		this.robotId = robotId;
@@ -86,6 +91,7 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
 		this.atAll = atAll;
 		this.atMobile = atMobile;
 		this.content = content;
+		this.message = message;
 		this.noticeOccasions = noticeOccasions;
 	}
 
@@ -93,9 +99,11 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
 		this(
 				false,
 				false,
+				false,
 				robotConfig.getId(),
 				robotConfig.getName(),
 				false,
+				null,
 				null,
 				null,
 				getDefaultNoticeOccasions()

@@ -103,7 +103,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 			case NOT_BUILT:
 				return BuildStatusEnum.NOT_BUILT;
 			default:
-				return null;
+				return BuildStatusEnum.UNKNOWN;
 		}
 	}
 
@@ -244,10 +244,21 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 		String projectUrl = job.getAbsoluteUrl();
 
 		// 构建信息
-		BuildStatusEnum statusType = getBuildStatus(noticeOccasion);
 		String jobName = run.getDisplayName();
 		String jobUrl = rootPath + run.getUrl();
 		String duration = run.getDurationString();
+		BuildStatusEnum statusType = getBuildStatus(noticeOccasion);
+
+		// 设置环境变量
+		envVars.put("EXECUTOR_NAME", executorName == null ? "" : executorName);
+		envVars.put("EXECUTOR_MOBILE", executorMobile == null ? "" : executorMobile);
+		envVars.put("PROJECT_NAME", projectName);
+		envVars.put("PROJECT_URL", projectUrl);
+		envVars.put("JOB_NAME", jobName);
+		envVars.put("JOB_URL", jobUrl);
+		envVars.put("JOB_DURATION", duration);
+		envVars.put("JOB_STATUS", statusType.getLabel());
+
 		List<ButtonModel> btns = Utils.createDefaultBtns(jobUrl);
 		List<String> result = new ArrayList<>();
 		List<DingTalkNotifierConfig> notifierConfigs = property.getAvailableNotifierConfigs();
@@ -261,6 +272,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
 			String robotId = item.getRobotId();
 			String content = item.getContent();
+			String message = item.getMessage();
 			boolean atAll = item.isAtAll();
 			Set<String> atMobiles = item.resolveAtMobiles(envVars);
 
@@ -268,36 +280,39 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 				atMobiles.add(executorMobile);
 			}
 
-			String text = BuildJobModel.builder().projectName(projectName).projectUrl(projectUrl)
-					.jobName(jobName)
-					.jobUrl(jobUrl)
-					.statusType(statusType)
-					.duration(duration)
-					.executorName(executorName)
-					.executorMobile(executorMobile)
-					.content(
-							envVars.expand(content).replace("\\\\n", "\n")
-					)
-					.build()
-					.toMarkdown();
-
-			String statusLabel = statusType == null ? "unknown" : statusType.getLabel();
-
-			MessageModel message = MessageModel.builder()
-					.type(MsgTypeEnum.ACTION_CARD)
-					.atAll(atAll)
-					.atMobiles(atMobiles)
-					.title(
-							String.format("%s %s", projectName, statusLabel)
-					)
-					.text(text)
-					.btns(btns)
-					.build();
+			MessageModel msgModel =
+					item.isRaw() ? MessageModel.builder()
+							.type(MsgTypeEnum.MARKDOWN)
+							.text(
+									envVars.expand(message).replace("\\\\n", "\n")
+							).build()
+							: MessageModel.builder()
+									.type(MsgTypeEnum.ACTION_CARD)
+									.atAll(atAll)
+									.atMobiles(atMobiles)
+									.title(
+											String.format("%s %s", projectName, statusType.getLabel())
+									)
+									.text(
+											BuildJobModel.builder().projectName(projectName).projectUrl(projectUrl)
+													.jobName(jobName)
+													.jobUrl(jobUrl)
+													.statusType(statusType)
+													.duration(duration)
+													.executorName(executorName)
+													.executorMobile(executorMobile)
+													.content(
+															envVars.expand(content).replace("\\\\n", "\n")
+													)
+													.build()
+													.toMarkdown()
+									)
+									.btns(btns).build();
 
 			DingTalkUtils.log(listener, "当前机器人信息，%s", Utils.toJson(item));
 			DingTalkUtils.log(listener, "发送的消息详情，%s", Utils.toJson(message));
 
-			String msg = service.send(robotId, message);
+			String msg = service.send(robotId, msgModel);
 
 			if (msg != null) {
 				result.add(msg);
