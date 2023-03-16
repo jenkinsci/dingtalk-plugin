@@ -13,7 +13,7 @@
   <version>2.6.3-SNAPSHOT</version>
   <packaging>hpi</packaging>
   <properties>
-    <jenkins.version>2.361.4</jenkins.version>
+    <jenkins.version>2.387.1</jenkins.version>
     <hpi.compatibleSinceVersion>2.0.0</hpi.compatibleSinceVersion>
   </properties>
 

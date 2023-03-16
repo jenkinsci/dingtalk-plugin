@@ -222,7 +222,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
     String duration = run.getDurationString();
     List<ButtonModel> btns = Utils.createDefaultBtns(jobUrl);
     List<String> result = new ArrayList<>();
-    List<DingTalkNotifierConfig> notifierConfigs = property.getCheckedNotifierConfigs();
+    List<DingTalkNotifierConfig> notifierConfigs = property.getAvailableNotifierConfigs();
 
     for (DingTalkNotifierConfig item : notifierConfigs) {
       boolean skipped = skip(listener, noticeOccasion, item);
