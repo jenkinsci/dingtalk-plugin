@@ -58,8 +58,8 @@
   </f:section>
 
   <f:bottomButtonBar>
-    <f:apply value="Apply"/>
     <f:submit value="Submit"/>
+    <f:apply value="Apply"/>
   </f:bottomButtonBar>
 
 
