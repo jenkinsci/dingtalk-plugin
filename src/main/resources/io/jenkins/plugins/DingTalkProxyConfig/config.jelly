@@ -1,7 +1,7 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
 
-  <div id="proxyConfigContainer">
+  <div id="dt-proxyConfigContainer">
     <f:entry title="代理类型" field="type">
       <f:enum>
         ${it.name()}

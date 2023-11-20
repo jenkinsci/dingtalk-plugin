@@ -16,7 +16,7 @@
 			<f:entry title="停用" field="disabled">
 				<f:checkbox checked="${instance.getDisabled()}"/>
 			</f:entry>
-			<f:entry title="禁用内置消息" field="raw" class="notifier-config-raw">
+			<f:entry title="禁用内置消息" field="raw" class="dt-notifier-config-raw">
 				<f:checkbox checked="${instance.getRaw()}"/>
 			</f:entry>
 			<f:entry title="通知时机" field="noticeOccasions">
@@ -36,12 +36,12 @@
 					</j:scope>
 				</j:forEach>
 			</f:entry>
-			<div class="raw-content">
+			<div class="dt-raw-content-custom" style="display: none;">
 				<f:entry field="message" title="自定义消息">
 					<f:textarea/>
 				</f:entry>
 			</div>
-			<div class="none-raw-content">
+			<div class="dt-raw-content-builtin">
 				<f:entry title="通知人" field="at">
 					<f:checkbox title="atAll" field="atAll"/>
 					<f:textarea field="atMobile"/>
