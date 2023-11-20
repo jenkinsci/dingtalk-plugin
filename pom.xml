@@ -5,15 +5,14 @@
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
-    <version>4.48</version>
-    <relativePath />
+    <version>4.75</version>
   </parent>
   <groupId>io.jenkins.plugins</groupId>
   <artifactId>dingding-notifications</artifactId>
   <version>2.7.1-SNAPSHOT</version>
   <packaging>hpi</packaging>
   <properties>
-    <jenkins.version>2.387.1</jenkins.version>
+    <jenkins.version>2.432</jenkins.version>
     <hpi.compatibleSinceVersion>2.0.0</hpi.compatibleSinceVersion>
   </properties>
 
@@ -63,41 +62,22 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.28</version>
+      <version>1.18.30</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>io.jenkins.tools.bom</groupId>
-        <artifactId>bom-2.319.x</artifactId>
-        <version>1654.vcb_69d035fa_20</version>
-        <type>pom</type>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <repositories>
     <repository>
-      <id>aliyun-public</id>
-      <url>https://maven.aliyun.com/repository/public</url>
-    </repository>
-    <repository>
-      <id>repo.jenkins-ci.org</id>
+      <id>jenkins-ci</id>
       <url>https://repo.jenkins-ci.org/public</url>
     </repository>
   </repositories>
 
   <pluginRepositories>
     <pluginRepository>
-      <id>repo.jenkins-ci.org</id>
+      <id>jenkins-ci</id>
       <url>https://repo.jenkins-ci.org/public</url>
-    </pluginRepository>
-    <pluginRepository>
-      <id>aliyun-public</id>
-      <url>https://maven.aliyun.com/repository/public</url>
     </pluginRepository>
   </pluginRepositories>
 
