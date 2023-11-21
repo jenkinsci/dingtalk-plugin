@@ -47,7 +47,7 @@
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
       <artifactId>workflow-cps</artifactId>
-      <version>3565.v4b_d9b_8c29a_b_3</version>
+      <version>3806.va_3a_6988277b_2</version>
     </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
