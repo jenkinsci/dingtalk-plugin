@@ -6,6 +6,7 @@
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
     <version>4.77</version>
+    <relativePath />
   </parent>
   <groupId>io.jenkins.plugins</groupId>
   <artifactId>dingding-notifications</artifactId>
@@ -36,18 +37,29 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git://github.com/jenkinsci/dingtalk-plugin.git</connection>
-    <developerConnection>scm:git:git@github.com:jenkinsci/dingtalk-plugin.git
-    </developerConnection>
+    <connection>scm:git:git@github.com:jenkinsci/dingtalk-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:jenkinsci/dingtalk-plugin.git</developerConnection>
     <url>https://github.com/jenkinsci/dingtalk-plugin</url>
     <tag>dingding-notifications-2.7.1</tag>
   </scm>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <!-- Pick up common dependencies for the selected LTS line: https://github.com/jenkinsci/bom#usage -->
+        <groupId>io.jenkins.tools.bom</groupId>
+        <artifactId>bom-2.440.x</artifactId>
+        <version>2746.vb_79a_1d3e7b_c8</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
       <artifactId>workflow-cps</artifactId>
-      <version>3837.v305192405b_c0</version>
     </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
@@ -64,15 +76,15 @@
 
   <repositories>
     <repository>
-      <id>jenkins-ci</id>
-      <url>https://repo.jenkins-ci.org/public</url>
+      <id>repo.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/public/</url>
     </repository>
   </repositories>
 
   <pluginRepositories>
     <pluginRepository>
-      <id>jenkins-ci</id>
-      <url>https://repo.jenkins-ci.org/public</url>
+      <id>repo.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/public/</url>
     </pluginRepository>
   </pluginRepositories>
 
