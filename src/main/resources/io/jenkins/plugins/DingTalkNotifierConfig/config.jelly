@@ -16,8 +16,8 @@
 			<f:entry title="停用" field="disabled">
 				<f:checkbox checked="${instance.getDisabled()}"/>
 			</f:entry>
-			<f:entry title="禁用内置消息" field="raw" class="dt-notifier-config-raw">
-				<f:checkbox checked="${instance.getRaw()}"/>
+			<f:entry title="禁用内置消息" field="raw">
+				<f:checkbox checked="${instance.getRaw()}" class="dt-notifier-config-raw"/>
 			</f:entry>
 			<f:entry title="通知时机" field="noticeOccasions">
 				<j:forEach var="noticeOccasionTypeItem"
