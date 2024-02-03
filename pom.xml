@@ -1,26 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <!--  该插件决定了可以使用的 jenkins 版本 -->
+
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
     <version>4.77</version>
     <relativePath />
   </parent>
+
   <groupId>io.jenkins.plugins</groupId>
   <artifactId>dingding-notifications</artifactId>
   <version>2.7.2-SNAPSHOT</version>
   <packaging>hpi</packaging>
-  <properties>
-    <jenkins.version>2.432</jenkins.version>
-    <hpi.compatibleSinceVersion>2.0.0</hpi.compatibleSinceVersion>
-  </properties>
 
   <name>DingTalk</name>
   <description>钉钉 Jenkins 插件</description>
   <url>https://github.com/jenkinsci/dingtalk-plugin</url>
-
   <licenses>
     <license>
       <name>MIT License</name>
@@ -34,19 +30,30 @@
       <name>Liu Wei</name>
       <email>wei2460@qq.com</email>
     </developer>
+    <developer>
+      <id>BobDu</id>
+      <name>Bob Du</name>
+      <email>i@bobdu.cc</email>
+      <url>https://bobdu.cc</url>
+    </developer>
   </developers>
 
   <scm>
-    <connection>scm:git:git@github.com:jenkinsci/dingtalk-plugin.git</connection>
+    <connection>scm:git:https://github.com/jenkinsci/dingtalk-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/dingtalk-plugin.git</developerConnection>
-    <url>https://github.com/jenkinsci/dingtalk-plugin</url>
     <tag>dingding-notifications-2.7.1</tag>
+    <url>https://github.com/jenkinsci/dingtalk-plugin</url>
   </scm>
+
+  <properties>
+    <jenkins.version>2.432</jenkins.version>
+    <hpi.compatibleSinceVersion>2.0.0</hpi.compatibleSinceVersion>
+    <spotless.check.skip>false</spotless.check.skip>
+  </properties>
 
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <!-- Pick up common dependencies for the selected LTS line: https://github.com/jenkinsci/bom#usage -->
         <groupId>io.jenkins.tools.bom</groupId>
         <artifactId>bom-2.440.x</artifactId>
         <version>2746.vb_79a_1d3e7b_c8</version>
@@ -55,15 +62,14 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
   <dependencies>
-    <dependency>
-      <groupId>org.jenkins-ci.plugins.workflow</groupId>
-      <artifactId>workflow-cps</artifactId>
-    </dependency>
     <dependency>
       <groupId>io.jenkins.plugins</groupId>
       <artifactId>gson-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jenkins-ci.plugins.workflow</groupId>
+      <artifactId>workflow-cps</artifactId>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -79,7 +85,6 @@
       <url>https://repo.jenkins-ci.org/public/</url>
     </repository>
   </repositories>
-
   <pluginRepositories>
     <pluginRepository>
       <id>repo.jenkins-ci.org</id>
@@ -87,4 +92,35 @@
     </pluginRepository>
   </pluginRepositories>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <configuration>
+          <java>
+            <includes>
+              <include>dummy</include>
+            </includes>
+          </java>
+          <pom>
+            <sortPom>
+              <expandEmptyElements>false</expandEmptyElements>
+              <sortDependencies>scope,groupId,artifactId</sortDependencies>
+              <sortDependencyExclusions>groupId,artifactId</sortDependencyExclusions>
+              <spaceBeforeCloseEmptyElement>true</spaceBeforeCloseEmptyElement>
+            </sortPom>
+          </pom>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <phase>compile</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
