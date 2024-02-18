@@ -46,7 +46,7 @@
   </scm>
 
   <properties>
-    <jenkins.version>2.432</jenkins.version>
+    <jenkins.version>2.426</jenkins.version>
     <hpi.compatibleSinceVersion>2.0.0</hpi.compatibleSinceVersion>
     <spotless.check.skip>false</spotless.check.skip>
   </properties>
@@ -55,7 +55,7 @@
     <dependencies>
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
-        <artifactId>bom-2.440.x</artifactId>
+        <artifactId>bom-2.426.x</artifactId>
         <version>2805.v4398b_43dfc18</version>
         <type>pom</type>
         <scope>import</scope>
