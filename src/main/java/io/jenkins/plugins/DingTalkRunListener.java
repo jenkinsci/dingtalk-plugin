@@ -45,8 +45,6 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
 	private final DingTalkServiceImpl service = new DingTalkServiceImpl();
 
-	private final String rootPath = Jenkins.get().getRootUrl();
-
 	@Override
 	public void onStarted(Run<?, ?> run, TaskListener listener) {
 		DingTalkGlobalConfig globalConfig = DingTalkGlobalConfig.getInstance();
@@ -241,11 +239,30 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
 		// 项目信息
 		String projectName = job.getFullDisplayName();
-		String projectUrl = job.getAbsoluteUrl();
+		String projectUrl = job.getUrl();
+        try {
+            projectUrl = job.getAbsoluteUrl();
+        } catch (IllegalStateException e) {
+            DingTalkUtils.log(
+                    listener,
+                    "Get Project URL error, %s "
+                            + "Please set jenkins Root URL in [ System Configuration >> System >> Jenkins Location >> Jenkins URL ]",
+                    e.toString());
+        }
 
 		// 构建信息
 		String jobName = run.getDisplayName();
-		String jobUrl = rootPath + run.getUrl();
+        String jobUrl = "";
+        try {
+            jobUrl = run.getAbsoluteUrl();
+        } catch (IllegalStateException e) {
+            DingTalkUtils.log(
+                    listener,
+                    "Get job URL error, %s "
+                            + "Please set jenkins Root URL in [ System Configuration >> System >> Jenkins Location >> Jenkins URL ]",
+                    e.toString());
+        }
+
 		String duration = run.getDurationString();
 		BuildStatusEnum statusType = getBuildStatus(noticeOccasion);
 
