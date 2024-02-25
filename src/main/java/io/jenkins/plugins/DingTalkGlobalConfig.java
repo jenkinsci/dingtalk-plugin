@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import io.jenkins.plugins.service.DingTalkService;
 import jenkins.model.Jenkins;
 import lombok.Getter;
 import lombok.ToString;
@@ -86,6 +87,7 @@ public class DingTalkGlobalConfig extends Descriptor<DingTalkGlobalConfig> imple
 
   @DataBoundSetter
   public void setRobotConfigs(ArrayList<DingTalkRobotConfig> robotConfigs) {
+    DingTalkService.getInstance().resetSenders();
     this.robotConfigs = robotConfigs;
   }
 
