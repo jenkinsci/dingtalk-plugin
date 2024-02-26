@@ -7,7 +7,6 @@
   xmlns:t="/lib/hudson"
   xmlns:f="/lib/form"
   xmlns:local="local">
-  <st:adjunct includes="lib.form.hetero-list.hetero-list"/>
 
   <j:set var="notifierConfigs"
     value="${instance == null ? descriptor.getDefaultNotifierConfigs() : instance.getNotifierConfigs()}"/>
