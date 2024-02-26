@@ -21,7 +21,7 @@ import io.jenkins.plugins.model.BuildExecutor;
 import io.jenkins.plugins.model.BuildJobModel;
 import io.jenkins.plugins.model.ButtonModel;
 import io.jenkins.plugins.model.MessageModel;
-import io.jenkins.plugins.service.impl.DingTalkServiceImpl;
+import io.jenkins.plugins.service.DingTalkService;
 import io.jenkins.plugins.tools.DingTalkUtils;
 import io.jenkins.plugins.tools.Logger;
 import io.jenkins.plugins.tools.Utils;
@@ -42,8 +42,6 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 @Log4j
 @Extension
 public class DingTalkRunListener extends RunListener<Run<?, ?>> {
-
-	private final DingTalkServiceImpl service = new DingTalkServiceImpl();
 
 	@Override
 	public void onStarted(Run<?, ?> run, TaskListener listener) {
@@ -329,7 +327,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 			DingTalkUtils.log(listener, "当前机器人信息，%s", Utils.toJson(item));
 			DingTalkUtils.log(listener, "发送的消息详情，%s", Utils.toJson(message));
 
-			String msg = service.send(robotId, msgModel);
+			String msg = DingTalkService.getInstance().send(robotId, msgModel);
 
 			if (msg != null) {
 				result.add(msg);

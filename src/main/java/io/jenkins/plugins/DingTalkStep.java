@@ -9,7 +9,7 @@ import io.jenkins.plugins.enums.BtnLayoutEnum;
 import io.jenkins.plugins.enums.MsgTypeEnum;
 import io.jenkins.plugins.model.ButtonModel;
 import io.jenkins.plugins.model.MessageModel;
-import io.jenkins.plugins.service.impl.DingTalkServiceImpl;
+import io.jenkins.plugins.service.DingTalkService;
 import io.jenkins.plugins.tools.DingTalkUtils;
 import io.jenkins.plugins.tools.Logger;
 import io.jenkins.plugins.tools.Utils;
@@ -73,8 +73,6 @@ public class DingTalkStep extends Step {
   private boolean hideAvatar;
 
   private String rootPath = Jenkins.get().getRootUrl();
-
-  private DingTalkServiceImpl service = new DingTalkServiceImpl();
 
   @DataBoundConstructor
   public DingTalkStep(String robot) {
@@ -200,7 +198,7 @@ public class DingTalkStep extends Step {
         Utils.toJson(DingTalkGlobalConfig.getRobot(robot)));
     DingTalkUtils.log(listener, "发送的消息详情，%s", Utils.toJson(message));
 
-    return service.send(envVars.expand(robot), message);
+    return DingTalkService.getInstance().send(envVars.expand(robot), message);
   }
 
   @Override
