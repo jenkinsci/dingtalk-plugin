@@ -11,7 +11,6 @@ import io.jenkins.plugins.model.ButtonModel;
 import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.service.DingTalkService;
 import io.jenkins.plugins.tools.DingTalkUtils;
-import io.jenkins.plugins.tools.Logger;
 import io.jenkins.plugins.tools.Utils;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -228,7 +227,7 @@ public class DingTalkStep extends Step {
         if (StringUtils.isEmpty(result)) {
           context.onSuccess(result);
         } else {
-          context.onFailure(new Throwable(Logger.format(result)));
+          context.onFailure(new Throwable(String.format("钉钉机器人发生错误：%s", result)));
         }
         return true;
       } catch (Exception e) {
