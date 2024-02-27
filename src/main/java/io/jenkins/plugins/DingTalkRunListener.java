@@ -295,34 +295,33 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 				atMobiles.add(executorMobile);
 			}
 
-			MessageModel msgModel =
-					item.isRaw() ? MessageModel.builder()
-							.type(MsgTypeEnum.MARKDOWN)
-							.text(
-									envVars.expand(message).replace("\\\\n", "\n")
-							).build()
-							: MessageModel.builder()
-									.type(MsgTypeEnum.ACTION_CARD)
-									.atAll(atAll)
-									.atMobiles(atMobiles)
-									.title(
-											String.format("%s %s", projectName, statusType.getLabel())
-									)
-									.text(
-											BuildJobModel.builder().projectName(projectName).projectUrl(projectUrl)
-													.jobName(jobName)
-													.jobUrl(jobUrl)
-													.statusType(statusType)
-													.duration(duration)
-													.executorName(executorName)
-													.executorMobile(executorMobile)
-													.content(
-															envVars.expand(content).replace("\\\\n", "\n")
-													)
-													.build()
-													.toMarkdown()
-									)
-									.btns(btns).build();
+            String title = String.format("%s %s", projectName, statusType.getLabel());
+
+            MessageModel msgModel = item.isRaw()
+                    ? MessageModel.builder()
+                            .type(MsgTypeEnum.MARKDOWN)
+                            .title(title)
+                            .text(envVars.expand(message).replace("\\\\n", "\n"))
+                            .build()
+                    : MessageModel.builder()
+                            .type(MsgTypeEnum.ACTION_CARD)
+                            .atAll(atAll)
+                            .atMobiles(atMobiles)
+                            .title(title)
+                            .text(BuildJobModel.builder()
+                                    .projectName(projectName)
+                                    .projectUrl(projectUrl)
+                                    .jobName(jobName)
+                                    .jobUrl(jobUrl)
+                                    .statusType(statusType)
+                                    .duration(duration)
+                                    .executorName(executorName)
+                                    .executorMobile(executorMobile)
+                                    .content(envVars.expand(content).replace("\\\\n", "\n"))
+                                    .build()
+                                    .toMarkdown())
+                            .btns(btns)
+                            .build();
 
 			DingTalkUtils.log(listener, "当前机器人信息，%s", Utils.toJson(item));
 			DingTalkUtils.log(listener, "发送的消息详情，%s", Utils.toJson(message));
