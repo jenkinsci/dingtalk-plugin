@@ -1,6 +1,12 @@
 # DTMD 协议的消息
 
-[支持简单的单向交互](https://m.dingtalk.com/qidian/help-detail-1060976699)
+关于 DTMD 协议的消息，可以参考钉钉官方文档 资料较少
+
+[如何通过钉钉链接发送消息给机器人](https://dingtalk.com/qidian/help-detail-1060976699.html)
+
+[dtmd介绍](https://www.dingtalk.com/qidian/help-detail-1066741046.html)
+
+[dtmd协议只能在markdown actioncard feedcard 消息类型中使用](https://open.dingtalk.com/document/orgapp/dingtalk-chatbot-for-one-on-one-query)
 
 ::: warning
 
