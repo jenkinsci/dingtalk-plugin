@@ -2,7 +2,7 @@ package io.jenkins.plugins.tools;
 
 import java.awt.Color;
 import java.util.Locale;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 class JavaFxColor {
 

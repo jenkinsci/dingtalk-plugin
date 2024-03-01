@@ -5,7 +5,6 @@ import io.jenkins.plugins.tools.Utils;
 import java.util.Arrays;
 import lombok.Builder;
 import lombok.Data;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * @author liuwei
