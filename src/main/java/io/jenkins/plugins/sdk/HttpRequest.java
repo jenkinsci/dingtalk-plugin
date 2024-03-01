@@ -25,7 +25,7 @@ import javax.net.ssl.X509TrustManager;
 import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author liuwei

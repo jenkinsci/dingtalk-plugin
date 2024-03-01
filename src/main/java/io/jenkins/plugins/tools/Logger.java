@@ -2,7 +2,7 @@ package io.jenkins.plugins.tools;
 
 import hudson.model.TaskListener;
 import java.io.PrintStream;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author liuwei
