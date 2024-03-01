@@ -11,7 +11,7 @@
 
   <groupId>io.jenkins.plugins</groupId>
   <artifactId>dingding-notifications</artifactId>
-  <version>2.7.3</version>
+  <version>2.7.4-SNAPSHOT</version>
   <packaging>hpi</packaging>
 
   <name>DingTalk</name>
@@ -41,7 +41,7 @@
   <scm>
     <connection>scm:git:https://github.com/jenkinsci/dingtalk-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/dingtalk-plugin.git</developerConnection>
-    <tag>dingding-notifications-2.7.3</tag>
+    <tag>dingding-notifications-2.7.2</tag>
     <url>https://github.com/jenkinsci/dingtalk-plugin</url>
   </scm>
 
