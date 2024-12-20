@@ -42,6 +42,7 @@
       </f:entry>
     </j:scope>
 
+    <st:adjunct includes="io.jenkins.plugins.DingTalkRobotConfig.validate-robot-config-onclick"/>
     <div class="robot-config-validate-msg"><!-- this is where the error message goes --></div>
     <div style="text-align: right;">
       <input
@@ -51,7 +52,6 @@
         data-validate-button-descriptor-url="${descriptor.descriptorFullUrl}"
         data-validate-button-method="test"
         data-validate-button-with="${with}"
-        onclick="validateRobotConfig(this)"
       />
     </div>
   </div>
