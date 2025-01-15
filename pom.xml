@@ -46,7 +46,9 @@
   </scm>
 
   <properties>
-    <jenkins.version>2.426</jenkins.version>
+    <!-- https://www.jenkins.io/doc/developer/plugin-development/choosing-jenkins-baseline/ -->
+    <jenkins.baseline>2.426</jenkins.baseline>
+    <jenkins.version>${jenkins.baseline}.1</jenkins.version>
     <hpi.compatibleSinceVersion>2.0.0</hpi.compatibleSinceVersion>
     <spotless.check.skip>false</spotless.check.skip>
   </properties>
@@ -55,7 +57,7 @@
     <dependencies>
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
-        <artifactId>bom-2.426.x</artifactId>
+        <artifactId>bom-${jenkins.baseline}.x</artifactId>
         <version>2884.vc36b_64ce114a_</version>
         <type>pom</type>
         <scope>import</scope>
