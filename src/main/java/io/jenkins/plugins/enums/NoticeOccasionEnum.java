@@ -8,6 +8,7 @@ import lombok.Getter;
  *
  * @author liuwei
  */
+@Getter
 public enum NoticeOccasionEnum {
   /**
    * 在启动构建时通知
@@ -39,7 +40,6 @@ public enum NoticeOccasionEnum {
    */
   NOT_BUILT(Messages.NoticeOccasion_not_built());
 
-  @Getter
   private final String desc;
 
   NoticeOccasionEnum(String desc) {

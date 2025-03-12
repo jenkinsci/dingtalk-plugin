@@ -145,22 +145,17 @@ class JavaFxColor {
     float c = ((type == PARSE_COMPONENT)
         ? Integer.parseInt(color)
         : Float.parseFloat(color));
-    switch (type) {
-      case PARSE_ALPHA:
-        return (c < 0.0f) ? 0.0f : (Math.min(c, 1.0f));
-      case PARSE_PERCENT:
-        return (c <= 0.0f) ? 0.0f : ((c >= 100.0f) ? 1.0f : (c / 100.0f));
-      case PARSE_COMPONENT:
-        return (c <= 0.0f) ? 0.0f : ((c >= 255.0f) ? 1.0f : (c / 255.0f));
-      case PARSE_ANGLE:
-        return ((c < 0.0f)
-            ? ((c % 360.0f) + 360.0f)
-            : ((c > 360.0f)
-                ? (c % 360.0f)
-                : c));
-    }
-
-    throw new IllegalArgumentException("Invalid color specification");
+	  return switch (type) {
+		  case PARSE_ALPHA -> (c < 0.0f) ? 0.0f : (Math.min(c, 1.0f));
+		  case PARSE_PERCENT -> (c <= 0.0f) ? 0.0f : ((c >= 100.0f) ? 1.0f : (c / 100.0f));
+		  case PARSE_COMPONENT -> (c <= 0.0f) ? 0.0f : ((c >= 255.0f) ? 1.0f : (c / 255.0f));
+		  case PARSE_ANGLE -> ((c < 0.0f)
+				  ? ((c % 360.0f) + 360.0f)
+				  : ((c > 360.0f)
+				  ? (c % 360.0f)
+				  : c));
+		  default -> throw new IllegalArgumentException("Invalid color specification");
+	  };
   }
 
   private static Color parseHSLColor(String color, int hoff,
@@ -287,11 +282,11 @@ class JavaFxColor {
   private static float[] rgb2Hsb(float r, float g, float b) {
     float hue, saturation, brightness;
     float[] hsbvals = new float[3];
-    float cmax = (r > g) ? r : g;
+    float cmax = Math.max(r, g);
     if (b > cmax) {
       cmax = b;
     }
-    float cmin = (r < g) ? r : g;
+    float cmin = Math.min(r, g);
     if (b < cmin) {
       cmin = b;
     }

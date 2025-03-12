@@ -12,6 +12,8 @@ import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.service.DingTalkService;
 import io.jenkins.plugins.tools.DingTalkUtils;
 import io.jenkins.plugins.tools.Utils;
+
+import java.io.Serial;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -207,6 +209,7 @@ public class DingTalkStep extends Step {
 
   private static class DingTalkStepExecution extends StepExecution {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private final transient DingTalkStep step;
 
@@ -242,9 +245,9 @@ public class DingTalkStep extends Step {
 
     @Override
     public Set<? extends Class<?>> getRequiredContext() {
-      return new HashSet<Class<?>>() {{
-        add(Run.class);
-        add(TaskListener.class);
+      return new HashSet<>() {{
+	      add(Run.class);
+	      add(TaskListener.class);
       }};
     }
 

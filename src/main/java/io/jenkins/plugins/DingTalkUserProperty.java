@@ -10,9 +10,9 @@ import lombok.Getter;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.StaplerRequest2;
 
+@Getter
 public class DingTalkUserProperty extends UserProperty {
 
-  @Getter
   private String mobile;
 
   public DingTalkUserProperty(String mobile) {
