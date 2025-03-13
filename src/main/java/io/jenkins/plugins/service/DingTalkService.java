@@ -68,17 +68,11 @@ public class DingTalkService {
         if (type == null) {
             return "消息类型【type】不能为空";
         }
-        switch (type) {
-            case TEXT:
-                return sender.sendText(msg);
-            case LINK:
-                return sender.sendLink(msg);
-            case MARKDOWN:
-                return sender.sendMarkdown(msg);
-            case ACTION_CARD:
-                return sender.sendActionCard(msg);
-            default:
-                return String.format("错误的消息类型：%s", type.name());
-        }
+	    return switch (type) {
+		    case TEXT -> sender.sendText(msg);
+		    case LINK -> sender.sendLink(msg);
+		    case MARKDOWN -> sender.sendMarkdown(msg);
+		    case ACTION_CARD -> sender.sendActionCard(msg);
+	    };
     }
 }

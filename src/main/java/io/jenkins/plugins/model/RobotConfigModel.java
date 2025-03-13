@@ -3,7 +3,7 @@ package io.jenkins.plugins.model;
 import io.jenkins.plugins.DingTalkRobotConfig;
 import io.jenkins.plugins.DingTalkSecurityPolicyConfig;
 import io.jenkins.plugins.enums.SecurityPolicyEnum;
-import java.io.UnsupportedEncodingException;
+
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
@@ -69,7 +69,7 @@ public class RobotConfigModel {
               meta.setSign(config.getValue());
               break;
             default:
-              log.error("对应的安全策略不存在：" + type);
+	            log.error("对应的安全策略不存在：{}", type);
           }
         });
     return meta;
@@ -89,9 +89,9 @@ public class RobotConfigModel {
       byte[] signData = mac.doFinal(seed.getBytes(StandardCharsets.UTF_8));
       result =
           URLEncoder.encode(
-              new String(Base64.encodeBase64(signData), StandardCharsets.UTF_8.name()),
-              StandardCharsets.UTF_8.name());
-    } catch (NoSuchAlgorithmException | UnsupportedEncodingException | InvalidKeyException e) {
+              new String(Base64.encodeBase64(signData), StandardCharsets.UTF_8),
+		          StandardCharsets.UTF_8);
+    } catch (NoSuchAlgorithmException | InvalidKeyException e) {
       log.error("钉钉插件设置签名失败：", e);
     }
     return result;

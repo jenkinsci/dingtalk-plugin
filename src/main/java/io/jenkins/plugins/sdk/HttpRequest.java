@@ -106,9 +106,8 @@ public class HttpRequest {
     } else {
       conn = (HttpURLConnection) url.openConnection(proxy);
     }
-    if (conn instanceof HttpsURLConnection) {
-      HttpsURLConnection connHttps = (HttpsURLConnection) conn;
-      if (IGNORE_SSL_CHECK) {
+    if (conn instanceof HttpsURLConnection connHttps) {
+	  if (IGNORE_SSL_CHECK) {
         try {
           SSLContext ctx = SSLContext.getInstance("TLS");
           ctx.init(null, new TrustManager[]{new TrustAllTrustManager()}, new SecureRandom());

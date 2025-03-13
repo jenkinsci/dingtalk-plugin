@@ -9,6 +9,7 @@ import lombok.ToString;
  *
  * @author liuwei
  */
+@Getter
 @ToString
 public enum SecurityPolicyEnum {
 
@@ -18,7 +19,7 @@ public enum SecurityPolicyEnum {
   /** 加签 */
   SECRET(Messages.SecurityPolicyType_secret());
 
-  @Getter private final String desc;
+  private final String desc;
 
   SecurityPolicyEnum(String desc) {
     this.desc = desc;

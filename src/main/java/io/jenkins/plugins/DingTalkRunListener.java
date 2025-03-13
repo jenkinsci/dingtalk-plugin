@@ -85,22 +85,14 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 	}
 
 	private BuildStatusEnum getBuildStatus(NoticeOccasionEnum noticeOccasion) {
-		switch (noticeOccasion) {
-			case START:
-				return BuildStatusEnum.START;
-			case SUCCESS:
-				return BuildStatusEnum.SUCCESS;
-			case FAILURE:
-				return BuildStatusEnum.FAILURE;
-			case ABORTED:
-				return BuildStatusEnum.ABORTED;
-			case UNSTABLE:
-				return BuildStatusEnum.UNSTABLE;
-			case NOT_BUILT:
-				return BuildStatusEnum.NOT_BUILT;
-			default:
-				return BuildStatusEnum.UNKNOWN;
-		}
+		return switch (noticeOccasion) {
+			case START -> BuildStatusEnum.START;
+			case SUCCESS -> BuildStatusEnum.SUCCESS;
+			case FAILURE -> BuildStatusEnum.FAILURE;
+			case ABORTED -> BuildStatusEnum.ABORTED;
+			case UNSTABLE -> BuildStatusEnum.UNSTABLE;
+			case NOT_BUILT -> BuildStatusEnum.NOT_BUILT;
+		};
 	}
 
 	private BuildExecutor getExecutorFromUser(Run<?, ?> run, TaskListener listener) {

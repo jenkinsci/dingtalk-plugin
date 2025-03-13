@@ -8,11 +8,11 @@ import hudson.model.UserProperty;
 import hudson.model.UserPropertyDescriptor;
 import lombok.Getter;
 import net.sf.json.JSONObject;
-import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerRequest2;
 
+@Getter
 public class DingTalkUserProperty extends UserProperty {
 
-  @Getter
   private String mobile;
 
   public DingTalkUserProperty(String mobile) {
@@ -34,7 +34,7 @@ public class DingTalkUserProperty extends UserProperty {
     }
 
     @Override
-    public UserProperty newInstance(@Nullable StaplerRequest req, @NonNull JSONObject formData) {
+    public UserProperty newInstance(@Nullable StaplerRequest2 req, @NonNull JSONObject formData) {
       return new DingTalkUserProperty(formData.optString("mobile"));
     }
   }
