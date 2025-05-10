@@ -1,20 +1,12 @@
 function applyErrorMessage(elt, rsp) {
 	if (rsp.status == 200) {
 		elt.innerHTML = rsp.responseText
-	} else {
-		var id = 'valerr' + (iota++)
-		elt.innerHTML = '<a href="" onclick="document.getElementById(\'' + id
-				+ '\').style.display=\'block\';return false">ERROR</a><div id="'
-				+ id + '" style="display:none">' + rsp.responseText + '</div>'
-		var error = document.getElementById('error-description') // cf. oops.jelly
-		if (error) {
-			var div = document.getElementById(id)
-			while (div.firstElementChild) {
-				div.removeChild(div.firstElementChild)
-			}
-			div.appendChild(error)
-		}
-	}
+    if (rsp.responseText.startsWith('Error:')) {
+      elt.classList.add('jenkins-alert', 'jenkins-alert-danger')
+    } else {
+      elt.classList.add('jenkins-alert', 'jenkins-alert-success')
+    }
+  }
 	Behaviour.applySubtree(elt)
 }
 
@@ -27,6 +19,7 @@ async function validateRobotConfig(btn) {
 	var $msg = $robot.querySelector('.robot-config-validate-msg')
 
 	$msg.innerHTML = ''
+	$msg.className = 'robot-config-validate-msg'
 
 	var url = new URL(checkUrl, window.location.origin)
 	getParameters($robot).forEach(function (v, k) {

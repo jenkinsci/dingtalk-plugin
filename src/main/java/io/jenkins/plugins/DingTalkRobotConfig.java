@@ -168,7 +168,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
      * @param proxyStr                代理
      * @return 机器人配置是否正确
      */
-    public FormValidation doTest(
+    public String doTest(
         @QueryParameter("id") String id,
         @QueryParameter("name") String name,
         @QueryParameter("webhook") String webhook,
@@ -184,12 +184,9 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
       String message = sender.sendMarkdown(msg);
 
       if (message == null) {
-        return FormValidation.respond(
-            Kind.OK,
-            "<span style='color:#52c41a;font-weight:bold;'>测试成功</span>");
+          return Messages.RobotConfigFormValidation_success();
       }
-
-      return FormValidation.error(message);
+      return "Error: " + message;
     }
 
     private ArrayList<DingTalkSecurityPolicyConfig> parseSecurityPolicyConfigs(String param) {

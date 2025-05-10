@@ -6,14 +6,6 @@
       src="${rootURL}/plugin/dingding-notifications/scripts/robotConfigValidator.js"/>
   </st:once>
 
-  <style>
-    .robot-config-validate-msg>.error{
-    min-height: 60px;
-    max-height: 240px;
-    overflow: auto;
-    }
-  </style>
-
   <div class="robot-config-container">
     <f:entry title="id" field="id">
       <f:textbox name="id"/>
@@ -43,16 +35,17 @@
     </j:scope>
 
     <st:adjunct includes="io.jenkins.plugins.DingTalkRobotConfig.validate-robot-config-onclick"/>
-    <div class="robot-config-validate-msg"><!-- this is where the error message goes --></div>
+    <div class="robot-config-validate-msg" style="white-space: pre-wrap;"><!-- this is where the error message goes --></div>
     <div style="text-align: right;">
-      <input
+      <button
         type="button"
-        value="测试"
-        class="robot-config-validate-btn"
+        class="jenkins-button robot-config-validate-btn"
         data-validate-button-descriptor-url="${descriptor.descriptorFullUrl}"
         data-validate-button-method="test"
         data-validate-button-with="${with}"
-      />
+      >
+        ${%test}
+      </button>
     </div>
   </div>
 </j:jelly>
