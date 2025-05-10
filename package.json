@@ -6,6 +6,6 @@
     "docs:release": "sh ./bin/docs-release.sh"
   },
   "devDependencies": {
-    "vitepress": "^1.0.0-alpha.17"
+    "vitepress": "^1.6.3"
   }
 }
