@@ -1,5 +1,6 @@
 package io.jenkins.plugins;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.model.Descriptor.FormException;
@@ -12,7 +13,7 @@ import org.kohsuke.stapler.StaplerRequest2;
 import org.kohsuke.stapler.StaplerResponse2;
 import org.kohsuke.stapler.verb.POST;
 
-@Extension(ordinal = Double.MAX_VALUE)
+@Extension()
 public class DingTalkManagementLink extends ManagementLink {
 
   @Override
@@ -34,6 +35,12 @@ public class DingTalkManagementLink extends ManagementLink {
   @Override
   public String getDescription() {
     return Messages.ManagementLink_description();
+  }
+
+  @NonNull
+  @Override
+  public Category getCategory() {
+    return Category.CONFIGURATION;
   }
 
   @POST
