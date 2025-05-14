@@ -12,15 +12,7 @@ import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.service.DingTalkService;
 import io.jenkins.plugins.tools.DingTalkUtils;
 import io.jenkins.plugins.tools.Utils;
-
-import java.io.Serial;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import jenkins.model.Jenkins;
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.jenkinsci.plugins.workflow.steps.Step;
 import org.jenkinsci.plugins.workflow.steps.StepContext;
@@ -28,6 +20,13 @@ import org.jenkinsci.plugins.workflow.steps.StepDescriptor;
 import org.jenkinsci.plugins.workflow.steps.StepExecution;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 支持 pipeline 中使用
@@ -39,9 +38,6 @@ import org.kohsuke.stapler.DataBoundSetter;
  *
  * @author liuwei
  */
-@Getter
-@Setter
-@SuppressWarnings("unused")
 public class DingTalkStep extends Step {
 
   /**
@@ -74,6 +70,9 @@ public class DingTalkStep extends Step {
   private boolean hideAvatar;
 
   private String rootPath = Jenkins.get().getRootUrl();
+
+  public DingTalkStep() {
+  }
 
   @DataBoundConstructor
   public DingTalkStep(String robot) {
@@ -240,8 +239,11 @@ public class DingTalkStep extends Step {
     }
   }
 
-  @Extension
-  public static class DescriptorImpl extends StepDescriptor {
+  @Extension(optional = true)
+  public static class DescriptorImpl extends StepDescriptor implements Serializable {
+
+    public DescriptorImpl() {
+    }
 
     @Override
     public Set<? extends Class<?>> getRequiredContext() {
