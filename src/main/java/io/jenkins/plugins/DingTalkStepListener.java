@@ -10,7 +10,7 @@ import org.jenkinsci.plugins.workflow.steps.StepContext;
 import org.springframework.lang.NonNull;
 
 @Slf4j
-@Extension
+@Extension(optional = true)
 public class DingTalkStepListener implements StepListener {
   @Override
   public void notifyOfNewStep(@NonNull Step step, @NonNull StepContext context) {

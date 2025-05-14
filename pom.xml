@@ -75,7 +75,8 @@
     </dependency>
     <dependency>
       <groupId>org.jenkins-ci.plugins.workflow</groupId>
-      <artifactId>workflow-cps</artifactId>
+      <artifactId>workflow-api</artifactId>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
