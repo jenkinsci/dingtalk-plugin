@@ -1,6 +1,7 @@
 {
+  "type": "module",
   "scripts": {
-    "docs:dev": "vitepress  dev docs",
+    "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs --port 5173",
     "docs:release": "sh ./bin/docs-release.sh"

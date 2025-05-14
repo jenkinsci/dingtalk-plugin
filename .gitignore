@@ -38,3 +38,6 @@ node_modules/
 # maven release
 release.properties
 pom.xml.releaseBackup
+
+docs/.vitepress/dist/
+docs/.vitepress/cache/
