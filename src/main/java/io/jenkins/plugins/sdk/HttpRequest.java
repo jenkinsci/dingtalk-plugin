@@ -36,9 +36,9 @@ public class HttpRequest {
 
   private static final String DEFAULT_CHARSET = Constants.CHARSET_UTF8;
 
-  private static boolean IGNORE_SSL_CHECK = true;
+  private static boolean IGNORE_SSL_CHECK = false;
 
-  private static boolean IGNORE_HOST_CHECK = true;
+  private static boolean IGNORE_HOST_CHECK = false;
 
   private String server;
 
