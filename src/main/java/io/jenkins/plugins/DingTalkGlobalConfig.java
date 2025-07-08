@@ -107,6 +107,8 @@ public class DingTalkGlobalConfig extends Descriptor<DingTalkGlobalConfig> imple
 
   @Override
   public boolean configure(StaplerRequest2 req, JSONObject json) throws FormException {
+    // Check configuration permission
+    Jenkins.get().checkPermission(DingTalkPermissions.CONFIGURE);
     Object robotConfigObj = json.get("robotConfigs");
 
     if (robotConfigObj == null) {
