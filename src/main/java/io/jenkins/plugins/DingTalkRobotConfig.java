@@ -155,6 +155,9 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
       if (StringUtils.isBlank(value)) {
         return FormValidation.error(Messages.RobotConfigFormValidation_webhook());
       }
+      if (!value.startsWith("https://oapi.dingtalk.com/robot/send?access_token=")) {
+        return FormValidation.error(Messages.RobotConfigFormValidation_webhook_invalid());
+      }
       return FormValidation.ok();
     }
 
@@ -176,6 +179,14 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
         @QueryParameter("proxy") String proxyStr) {
       // Check configuration permission
       Jenkins.get().checkPermission(DingTalkPermissions.CONFIGURE);
+
+      if (StringUtils.isBlank(webhook)) {
+          return "Error: " + Messages.RobotConfigFormValidation_webhook();
+      }
+      if (!webhook.startsWith("https://oapi.dingtalk.com/robot/send?access_token=")) {
+          return "Error: " + Messages.RobotConfigFormValidation_webhook_invalid();
+      }
+
       ArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs =
           parseSecurityPolicyConfigs(securityPolicyConfigStr);
       DingTalkRobotConfig robotConfig =
@@ -215,7 +226,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
           .projectName("欢迎使用钉钉机器人插件~")
           .projectUrl(rootUrl)
           .jobName("系统配置")
-          .jobUrl(rootUrl + "/configure")
+          .jobUrl(rootUrl + "configure")
           .statusType(BuildStatusEnum.SUCCESS)
           .duration("-")
           .executorName(user.getDisplayName())
