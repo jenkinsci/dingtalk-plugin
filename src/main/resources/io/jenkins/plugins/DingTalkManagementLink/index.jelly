@@ -1,7 +1,7 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler"
   xmlns:l="/lib/layout" xmlns:f="/lib/form">
-  <l:layout permission="${app.ADMINISTER}" norefresh="true" title="钉钉配置页面">
+  <l:layout permission="${it.requiredPermission}" norefresh="true" title="钉钉配置页面">
     <st:include it="${app}" page="sidepanel.jelly"/>
     <l:main-panel>
       <h1>

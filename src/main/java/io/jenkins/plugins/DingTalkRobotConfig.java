@@ -174,6 +174,8 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
         @QueryParameter("webhook") String webhook,
         @QueryParameter("securityPolicyConfigs") String securityPolicyConfigStr,
         @QueryParameter("proxy") String proxyStr) {
+      // Check configuration permission
+      Jenkins.get().checkPermission(DingTalkPermissions.CONFIGURE);
       ArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs =
           parseSecurityPolicyConfigs(securityPolicyConfigStr);
       DingTalkRobotConfig robotConfig =
