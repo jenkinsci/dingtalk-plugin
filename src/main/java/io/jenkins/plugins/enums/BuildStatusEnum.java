@@ -1,60 +1,28 @@
 package io.jenkins.plugins.enums;
 
 import io.jenkins.plugins.Messages;
-import io.jenkins.plugins.tools.AntdColor;
+import io.jenkins.plugins.tools.Constants;
 import lombok.Getter;
 
 /**
- * 构建状态
- *
- * @author liuwei
+ * Build status enumeration
  */
 @Getter
 public enum BuildStatusEnum {
 
-  /**
-   * 开始
-   */
-  START(Messages.BuildStatusType_start(), AntdColor.GEEK_BLUE.toString()),
+    START(Messages.BuildStatusType_start(), Constants.COLOR_GEEK_BLUE),
+    FAILURE(Messages.BuildStatusType_failure(), Constants.COLOR_RED),
+    SUCCESS(Messages.BuildStatusType_success(), Constants.COLOR_GREEN),
+    ABORTED(Messages.BuildStatusType_aborted(), Constants.COLOR_CYAN),
+    UNSTABLE(Messages.BuildStatusType_unstable(), Constants.COLOR_CYAN),
+    NOT_BUILT(Messages.BuildStatusType_not_built(), Constants.COLOR_CYAN),
+    UNKNOWN(Messages.BuildStatusType_unknown(), Constants.COLOR_PURPLE);
 
-  /**
-   * 失败
-   */
-  FAILURE(Messages.BuildStatusType_failure(), AntdColor.RED.toString()),
+    private final String label;
+    private final String color;
 
-  /**
-   * 成功
-   */
-  SUCCESS(Messages.BuildStatusType_success(), AntdColor.GREEN.toString()),
-
-  /**
-   * 取消
-   */
-  ABORTED(Messages.BuildStatusType_aborted(), AntdColor.CYAN.toString()),
-
-  /**
-   * 不稳定
-   */
-  UNSTABLE(Messages.BuildStatusType_unstable(), AntdColor.CYAN.toString()),
-
-  /**
-   * 未构建
-   */
-  NOT_BUILT(Messages.BuildStatusType_not_built(), AntdColor.CYAN.toString()),
-
-  /**
-   * 未知
-   */
-  UNKNOWN(Messages.BuildStatusType_unknown(), AntdColor.PURPLE.toString());
-
-
-  private final String label;
-
-
-  private final String color;
-
-  BuildStatusEnum(String label, String color) {
-    this.label = label;
-    this.color = color;
-  }
+    BuildStatusEnum(String label, String color) {
+        this.label = label;
+        this.color = color;
+    }
 }

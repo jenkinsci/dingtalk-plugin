@@ -9,7 +9,6 @@ import io.jenkins.plugins.sdk.DingTalkRobotRequest.At;
 import io.jenkins.plugins.sdk.DingTalkRobotRequest.Link;
 import io.jenkins.plugins.sdk.DingTalkRobotRequest.Markdown;
 import io.jenkins.plugins.sdk.DingTalkRobotRequest.Text;
-import io.jenkins.plugins.tools.AntdColor;
 import io.jenkins.plugins.tools.Constants;
 import io.jenkins.plugins.tools.Utils;
 import lombok.extern.slf4j.Slf4j;
@@ -198,7 +197,7 @@ public class DingTalkSender {
     }
     String atContent = "@" + StringUtils.join(atMobiles, " @");
     if (markdown) {
-      return content + "\n\n" + Utils.dye(atContent, AntdColor.BLUE.toString()) + "\n";
+      return content + "\n\n" + Utils.dye(atContent, Constants.COLOR_BLUE) + "\n";
     }
     return content + atContent;
   }
