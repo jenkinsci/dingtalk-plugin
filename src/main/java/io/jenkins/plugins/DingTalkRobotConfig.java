@@ -5,7 +5,6 @@ import hudson.model.Describable;
 import hudson.model.Descriptor;
 import hudson.model.User;
 import hudson.util.FormValidation;
-import hudson.util.FormValidation.Kind;
 import hudson.util.Secret;
 import io.jenkins.plugins.DingTalkSecurityPolicyConfig.DingTalkSecurityPolicyConfigDescriptor;
 import io.jenkins.plugins.enums.BuildStatusEnum;
@@ -14,12 +13,7 @@ import io.jenkins.plugins.enums.SecurityPolicyEnum;
 import io.jenkins.plugins.model.BuildJobModel;
 import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.sdk.DingTalkSender;
-import java.net.Proxy;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import io.jenkins.plugins.tools.Constants;
 import jenkins.model.Jenkins;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +25,13 @@ import net.sf.json.JSONSerializer;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
+
+import java.net.Proxy;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * 机器人配置页面
@@ -155,7 +156,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
       if (StringUtils.isBlank(value)) {
         return FormValidation.error(Messages.RobotConfigFormValidation_webhook());
       }
-      if (!value.startsWith("https://oapi.dingtalk.com/robot/send?access_token=")) {
+      if (!value.startsWith(Constants.DINGTALK_WEBHOOK_URL_PREFIX)) {
         return FormValidation.error(Messages.RobotConfigFormValidation_webhook_invalid());
       }
       return FormValidation.ok();
@@ -183,7 +184,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
       if (StringUtils.isBlank(webhook)) {
           return "Error: " + Messages.RobotConfigFormValidation_webhook();
       }
-      if (!webhook.startsWith("https://oapi.dingtalk.com/robot/send?access_token=")) {
+      if (!webhook.startsWith(Constants.DINGTALK_WEBHOOK_URL_PREFIX)) {
           return "Error: " + Messages.RobotConfigFormValidation_webhook_invalid();
       }
 

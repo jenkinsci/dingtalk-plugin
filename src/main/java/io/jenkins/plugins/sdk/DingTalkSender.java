@@ -10,6 +10,7 @@ import io.jenkins.plugins.sdk.DingTalkRobotRequest.Link;
 import io.jenkins.plugins.sdk.DingTalkRobotRequest.Markdown;
 import io.jenkins.plugins.sdk.DingTalkRobotRequest.Text;
 import io.jenkins.plugins.tools.AntdColor;
+import io.jenkins.plugins.tools.Constants;
 import io.jenkins.plugins.tools.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
