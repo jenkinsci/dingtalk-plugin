@@ -1,5 +1,6 @@
 package io.jenkins.plugins.sdk;
 
+import com.google.gson.Gson;
 import io.jenkins.plugins.DingTalkRobotConfig;
 import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.model.RobotConfigModel;
@@ -9,14 +10,24 @@ import io.jenkins.plugins.sdk.DingTalkRobotRequest.Link;
 import io.jenkins.plugins.sdk.DingTalkRobotRequest.Markdown;
 import io.jenkins.plugins.sdk.DingTalkRobotRequest.Text;
 import io.jenkins.plugins.tools.AntdColor;
+import io.jenkins.plugins.tools.Constants;
 import io.jenkins.plugins.tools.Utils;
-import java.io.IOException;
-import java.net.Proxy;
-import java.util.List;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.ProxySelector;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 消息发送器
@@ -27,12 +38,22 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 public class DingTalkSender {
 
   private final RobotConfigModel robotConfigModel;
-
-  private final Proxy proxy;
+  private final HttpClient httpClient;
 
   public DingTalkSender(DingTalkRobotConfig robotConfig, Proxy proxy) {
     this.robotConfigModel = RobotConfigModel.of(robotConfig);
-    this.proxy = proxy;
+
+    // Build HttpClient with proxy support
+    HttpClient.Builder clientBuilder = HttpClient.newBuilder()
+        .connectTimeout(Duration.ofSeconds(30));
+
+    if (proxy != null && proxy.type() != Proxy.Type.DIRECT) {
+      if (proxy.address() instanceof InetSocketAddress inetSocketAddress) {
+        clientBuilder.proxy(ProxySelector.of(inetSocketAddress));
+      }
+    }
+
+    this.httpClient = clientBuilder.build();
   }
 
   /**
@@ -107,23 +128,42 @@ public class DingTalkSender {
     try {
       String server = robotConfigModel.getServer();
       Map<String, Object> content = request.getParams();
+      String jsonBody = new Gson().toJson(content);
 
-      HttpResponse response =
-          HttpRequest.builder()
-              .server(server)
-              .data(content)
-              .method(Constants.METHOD_POST)
-              .proxy(proxy)
-              .build()
-              .request();
-      String body = response.getBody();
-      DingTalkRobotResponse data = Utils.fromJson(body, DingTalkRobotResponse.class);
+      HttpRequest httpRequest = HttpRequest.newBuilder()
+          .uri(URI.create(server))
+          .timeout(Duration.ofSeconds(30))
+          .header("Content-Type", Constants.CONTENT_TYPE_APPLICATION_JSON)
+          .POST(HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8))
+          .build();
+
+      HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+      // Check for error status codes
+      int statusCode = httpResponse.statusCode();
+      if (statusCode >= 400) {
+        String errorMessage = String.format("HTTP %d", statusCode);
+        if (statusCode == 400 && StringUtils.isNotEmpty(httpResponse.body())) {
+          // OAuth bad request always return 400 status, continue to parse response
+          log.warn("钉钉接口返回400状态码：{}", httpResponse.body());
+        } else {
+          log.error("钉钉接口请求失败：{}", errorMessage);
+          return errorMessage;
+        }
+      }
+
+      String responseBody = httpResponse.body();
+      DingTalkRobotResponse data = Utils.fromJson(responseBody, DingTalkRobotResponse.class);
       if (data.getErrcode() != 0) {
-        log.error("钉钉消息发送失败：{}", body);
-        return body;
+        log.error("钉钉消息发送失败：{}", responseBody);
+        return responseBody;
       }
     } catch (IOException e) {
       log.error("钉钉消息发送失败", e);
+      return ExceptionUtils.getStackTrace(e);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      log.error("钉钉消息发送被中断", e);
       return ExceptionUtils.getStackTrace(e);
     }
     return null;
