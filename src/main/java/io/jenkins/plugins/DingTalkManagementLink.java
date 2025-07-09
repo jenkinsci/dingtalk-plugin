@@ -54,7 +54,7 @@ public class DingTalkManagementLink extends ManagementLink implements RootAction
     // Check configuration permission
     checkPermission(DingTalkPermissions.CONFIGURE);
     getDingTalkGlobalConfigDescriptor().configure(req, req.getSubmittedForm());
-    FormApply.success(req.getContextPath() + "/manage").generateResponse(req, res, null);
+    FormApply.success("..").generateResponse(req, res, null);
   }
 
   /**
@@ -89,6 +89,7 @@ public class DingTalkManagementLink extends ManagementLink implements RootAction
    *
    * @return configuration permission
    */
+  @NonNull
   @Override
   public Permission getRequiredPermission() {
     return DingTalkPermissions.CONFIGURE;
