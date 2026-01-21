@@ -41,3 +41,5 @@ pom.xml.releaseBackup
 
 docs/.vitepress/dist/
 docs/.vitepress/cache/
+
+local/
