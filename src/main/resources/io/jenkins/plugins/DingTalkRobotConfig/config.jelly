@@ -22,13 +22,17 @@
     </f:entry>
 
     <j:scope>
-      <f:entry title="安全设置">
+      <f:entry title="${%securitySettingsTitle}"
+        help="/descriptor/io.jenkins.plugins.DingTalkRobotConfig/help/securitySettings">
+        <f:description/>
+      </f:entry>
+      <f:entry>
         <f:hetero-list
           name="securityPolicyConfigs"
           items="${instance != null ? instance.getSecurityPolicyConfigs() : null}"
           descriptors="${it.securityPolicyConfigsDescriptors}"
           oneEach="true"
-          addCaption="添加安全设置"/>
+          addCaption="${%securitySettingsAddCaption}"/>
       </f:entry>
     </j:scope>
 

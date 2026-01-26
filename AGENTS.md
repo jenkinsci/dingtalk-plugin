@@ -70,3 +70,12 @@
 - Edit content under `docs/` and preview with `yarn docs:dev`.
 - Build the static site with `yarn docs:build` and verify locally using `yarn docs:serve`.
 - Use the GitHub Actions workflow to publish docs when changes are ready.
+
+## Lessons Learned (Jelly & Jenkins UI)
+- Avoid XML-unsafe operators in Jelly expressions (`&&`); use `and` to prevent SAX parse failures.
+- When embedding a config.jelly inside a `f:repeatable`, the current item may be exposed as `item`; set `instance` explicitly if the sub-view expects it.
+- `f:hetero-list` requires a non-null descriptor list; for data-bound lists prefer `f:repeatableHeteroProperty` or provide an explicit `*Descriptors` getter that matches the `field` name (`<field>Descriptors`).
+- If the view can be rendered under a global descriptor context, ensure descriptor getters exist on that context too, or access the descriptor directly via `it`.
+- `renderOnDemand` requires the `l` namespace; missing it causes parse errors. Use it only when needed to avoid `$stapler/bound/.../render` failures.
+- Avoid `j:new` with plugin classes in views; class loading can fail in runtime. Prefer descriptor-backed prototypes and standard `f:*` tags.
+- For new UI fields, keep labels and add-button captions in `config.properties` / `config_zh_CN.properties`, and add `help-*.html` where needed.
