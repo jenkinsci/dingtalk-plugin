@@ -28,10 +28,7 @@ import org.kohsuke.stapler.QueryParameter;
 
 import java.net.Proxy;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * 机器人配置页面
@@ -89,20 +86,26 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
   }
 
   public ArrayList<DingTalkSecurityPolicyConfig> getSecurityPolicyConfigs() {
-    return Arrays.stream(SecurityPolicyEnum.values())
-        .map(
-            enumItem -> {
-              DingTalkSecurityPolicyConfig newItem = DingTalkSecurityPolicyConfig.of(enumItem);
-              if (securityPolicyConfigs != null) {
-                Optional<DingTalkSecurityPolicyConfig> config =
-                    securityPolicyConfigs.stream()
-                        .filter(configItem -> enumItem.name().equals(configItem.getType()))
-                        .findAny();
-                config.ifPresent(t -> newItem.setValue(t.getValue()));
-              }
-              return newItem;
-            })
-        .collect(Collectors.toCollection(ArrayList::new));
+    if (securityPolicyConfigs == null) {
+      return new ArrayList<>();
+    }
+    ArrayList<DingTalkSecurityPolicyConfig> resolved = new ArrayList<>();
+    for (DingTalkSecurityPolicyConfig config : securityPolicyConfigs) {
+      if (config instanceof KeySecurityPolicyConfig || config instanceof SecretSecurityPolicyConfig) {
+        resolved.add(config);
+        continue;
+      }
+      if (SecurityPolicyEnum.KEY.name().equals(config.getType())) {
+        resolved.add(new KeySecurityPolicyConfig(config.getValue()));
+        continue;
+      }
+      if (SecurityPolicyEnum.SECRET.name().equals(config.getType())) {
+        resolved.add(new SecretSecurityPolicyConfig(config.getValue()));
+        continue;
+      }
+      resolved.add(config);
+    }
+    return resolved;
   }
 
   @Override
@@ -128,9 +131,27 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
      * @return 默认的安全配置选项
      */
     public ArrayList<DingTalkSecurityPolicyConfig> getDefaultSecurityPolicyConfigs() {
-      return Arrays.stream(SecurityPolicyEnum.values())
-          .map(DingTalkSecurityPolicyConfig::of)
-          .collect(Collectors.toCollection(ArrayList::new));
+      return new ArrayList<>();
+    }
+
+    /**
+     * 获取安全配置描述符
+     *
+     * @return 安全策略描述符
+     */
+    public ArrayList<Descriptor> getSecurityPolicyConfigsDescriptors() {
+      ArrayList<Descriptor> descriptors = new ArrayList<>();
+      Descriptor keyDescriptor =
+          Jenkins.get().getDescriptorByType(KeySecurityPolicyConfig.DescriptorImpl.class);
+      if (keyDescriptor != null) {
+        descriptors.add(keyDescriptor);
+      }
+      Descriptor secretDescriptor =
+          Jenkins.get().getDescriptorByType(SecretSecurityPolicyConfig.DescriptorImpl.class);
+      if (secretDescriptor != null) {
+        descriptors.add(secretDescriptor);
+      }
+      return descriptors;
     }
 
     /**
