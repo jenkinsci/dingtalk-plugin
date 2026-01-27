@@ -79,3 +79,6 @@
 - `renderOnDemand` requires the `l` namespace; missing it causes parse errors. Use it only when needed to avoid `$stapler/bound/.../render` failures.
 - Avoid `j:new` with plugin classes in views; class loading can fail in runtime. Prefer descriptor-backed prototypes and standard `f:*` tags.
 - For new UI fields, keep labels and add-button captions in `config.properties` / `config_zh_CN.properties`, and add `help-*.html` where needed.
+- Spacing issues are usually caused by the outer `f:entry`/`.jenkins-form-item` wrapper, not inner content. Adjust structure first, then tweak margins only if needed.
+- Use browser devtools to inspect the actual DOM and computed margins before trying inline CSS. Otherwise changes can be invisible because the wrong element is targeted.
+- Prefer matching core/known plugin patterns (e.g., LDAP config) over ad‑hoc layout tweaks; validate against the live UI early to avoid repeated trial-and-error.
