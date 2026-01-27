@@ -1,10 +1,14 @@
 <?jelly escape-by-default='true'?>
 
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:f="/lib/form">
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:f="/lib/form" xmlns:l="/lib/layout">
   <st:once>
     <script type="text/javascript"
       src="${rootURL}/plugin/dingding-notifications/scripts/robotConfigValidator.js"/>
   </st:once>
+
+  <j:if test="${item != null}">
+    <j:set var="instance" value="${item}"/>
+  </j:if>
 
   <div class="robot-config-container">
     <f:entry title="id" field="id">
@@ -18,25 +22,23 @@
     </f:entry>
 
     <j:scope>
-      <j:set var="securityPolicyConfigDescriptor"
-        value="${descriptor.getDingTalkSecurityPolicyConfigDescriptor()}"/>
-      <j:set var="securityPolicyConfigs"
-        value="${instance != null ? instance.getSecurityPolicyConfigs(): descriptor.getDefaultSecurityPolicyConfigs()}"/>
-      <f:entry title="安全设置">
-        <f:repeatable
-          header=""
+      <f:entry title="${%securitySettingsTitle}"
+        help="/descriptor/io.jenkins.plugins.DingTalkRobotConfig/help/securitySettings">
+        <f:description/>
+      </f:entry>
+      <f:entry>
+        <f:hetero-list
           name="securityPolicyConfigs"
-          noAddButton="true"
-          var="instance"
-          items="${securityPolicyConfigs}">
-          <st:include page="config.jelly" class="${securityPolicyConfigDescriptor.clazz}"/>
-        </f:repeatable>
+          items="${instance != null ? instance.getSecurityPolicyConfigs() : null}"
+          descriptors="${it.securityPolicyConfigsDescriptors}"
+          oneEach="true"
+          addCaption="${%securitySettingsAddCaption}"/>
       </f:entry>
     </j:scope>
 
     <st:adjunct includes="io.jenkins.plugins.DingTalkRobotConfig.validate-robot-config-onclick"/>
-    <div class="robot-config-validate-msg" style="white-space: pre-wrap;"><!-- this is where the error message goes --></div>
-    <div style="text-align: right;">
+    <div class="robot-config-validate-msg" style="white-space: pre-wrap; margin-top: -40px;"><!-- this is where the error message goes --></div>
+    <div class="dt-robot-config-actions" style="margin-top: -15px; margin-bottom: -25px; text-align: right;">
       <button
         type="button"
         class="jenkins-button robot-config-validate-btn"

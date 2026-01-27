@@ -160,6 +160,19 @@ public class DingTalkGlobalConfig extends Descriptor<DingTalkGlobalConfig> imple
     return Jenkins.get().getDescriptorByType(DingTalkRobotConfigDescriptor.class);
   }
 
+  /**
+   * 获取安全配置描述符
+   *
+   * @return 安全策略描述符
+   */
+  public ArrayList<Descriptor> getSecurityPolicyConfigsDescriptors() {
+    DingTalkRobotConfigDescriptor descriptor = getDingTalkRobotConfigDescriptor();
+    if (descriptor == null) {
+      return new ArrayList<>();
+    }
+    return descriptor.getSecurityPolicyConfigsDescriptors();
+  }
+
 
   /**
    * 获取全局配置信息
