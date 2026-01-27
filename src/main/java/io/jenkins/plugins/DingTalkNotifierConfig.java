@@ -4,10 +4,11 @@ import hudson.EnvVars;
 import hudson.Extension;
 import hudson.model.AbstractDescribableImpl;
 import hudson.model.Descriptor;
-import io.jenkins.plugins.enums.NoticeOccasionEnum;
+import io.jenkins.plugins.model.NoticeOccasionOption;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
@@ -127,8 +128,8 @@ public class DingTalkNotifierConfig extends AbstractDescribableImpl<DingTalkNoti
 		 *
 		 * @return 通知时机
 		 */
-		public NoticeOccasionEnum[] getNoticeOccasionTypes() {
-			return NoticeOccasionEnum.values();
-		}
-	}
+    public List<List<NoticeOccasionOption>> getNoticeOccasionRows() {
+      return DingTalkGlobalConfig.buildNoticeOccasionRows();
+    }
+  }
 }

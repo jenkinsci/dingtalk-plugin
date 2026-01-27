@@ -5,9 +5,11 @@ import hudson.model.Describable;
 import hudson.model.Descriptor;
 import io.jenkins.plugins.DingTalkRobotConfig.DingTalkRobotConfigDescriptor;
 import io.jenkins.plugins.enums.NoticeOccasionEnum;
+import io.jenkins.plugins.model.NoticeOccasionOption;
 import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -36,6 +38,7 @@ import org.kohsuke.stapler.StaplerRequest2;
 @Symbol("dingtalk")
 public class DingTalkGlobalConfig extends Descriptor<DingTalkGlobalConfig> implements
     Describable<DingTalkGlobalConfig> {
+  private static final int NOTICE_OCCASION_COLUMNS = 3;
 
   /**
    * 网络代理
@@ -121,19 +124,25 @@ public class DingTalkGlobalConfig extends Descriptor<DingTalkGlobalConfig> imple
         return StringUtils.isEmpty(webhook);
       });
     }
-//    System.out.println(json);
     req.bindJSON(this, json);
     this.save();
     return super.configure(req, json);
   }
 
-  /**
-   * 通知时机列表
-   *
-   * @return 通知时机
-   */
-  public NoticeOccasionEnum[] getAllNoticeOccasions() {
-    return NoticeOccasionEnum.values();
+  static List<List<NoticeOccasionOption>> buildNoticeOccasionRows() {
+    List<NoticeOccasionOption> options = Arrays.stream(NoticeOccasionEnum.values())
+        .map(item -> new NoticeOccasionOption(item.name(), item.getDesc()))
+        .collect(Collectors.toList());
+    List<List<NoticeOccasionOption>> rows = new ArrayList<>();
+    for (int i = 0; i < options.size(); i += NOTICE_OCCASION_COLUMNS) {
+      int end = Math.min(i + NOTICE_OCCASION_COLUMNS, options.size());
+      rows.add(options.subList(i, end));
+    }
+    return rows;
+  }
+
+  public List<List<NoticeOccasionOption>> getNoticeOccasionRows() {
+    return buildNoticeOccasionRows();
   }
 
   @Override

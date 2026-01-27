@@ -4,26 +4,27 @@
   <f:section title="通知时机">
     <f:entry>
       <j:scope>
-        <!-- 通知时机列表 -->
-        <j:set var="allNoticeOccasions" value="${descriptor.getAllNoticeOccasions()}"/>
-        <!-- 用户选择的通知时机-->
+        <!-- 用户选择的通知时机 -->
         <j:set var="checkedNoticeOccasions"
           value="${descriptor.getNoticeOccasions()}"/>
-        <j:forEach var="noticeOccasionItem"
-          items="${allNoticeOccasions}">
-          <j:scope>
-            <j:set var="name" value="${noticeOccasionItem.name()}"/>
-            <j:set var="desc" value="${noticeOccasionItem.getDesc()}"/>
-            <label>
-              <f:checkbox
-                json="${name}"
-                name="noticeOccasions"
-                checked="${checkedNoticeOccasions.contains(name)}"
-              />
-              ${desc}
-            </label>
-          </j:scope>
-        </j:forEach>
+        <table class="jenkins-table">
+          <tbody>
+            <j:forEach var="row" items="${descriptor.noticeOccasionRows}">
+              <tr>
+                <j:forEach var="option" items="${row}">
+                  <td>
+                    <f:checkbox
+                      json="${option.name}"
+                      name="noticeOccasions"
+                      checked="${checkedNoticeOccasions.contains(option.name)}"
+                      title="${option.label}"
+                    />
+                  </td>
+                </j:forEach>
+              </tr>
+            </j:forEach>
+          </tbody>
+        </table>
       </j:scope>
     </f:entry>
   </f:section>
