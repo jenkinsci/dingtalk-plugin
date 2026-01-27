@@ -50,16 +50,13 @@
         var="item"
         items="robotConfigs">
         <st:include from="${robotConfigDescriptor}" page="${descriptor.configPage}"/>
-        <div style="margin-top: 20px; text-align: right;">
-          <f:repeatableDeleteButton/>
-        </div>
+        <f:repeatableDeleteButton/>
       </f:repeatable>
     </j:scope>
   </f:section>
 
   <f:bottomButtonBar>
-    <f:submit value="Submit"/>
-    <f:apply value="Apply"/>
+    <f:saveApplyBar/>
   </f:bottomButtonBar>
 
 

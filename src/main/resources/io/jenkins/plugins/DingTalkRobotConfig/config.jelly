@@ -37,8 +37,8 @@
     </j:scope>
 
     <st:adjunct includes="io.jenkins.plugins.DingTalkRobotConfig.validate-robot-config-onclick"/>
-    <div class="robot-config-validate-msg" style="white-space: pre-wrap; margin-top: -40px;"><!-- this is where the error message goes --></div>
-    <div class="dt-robot-config-actions" style="margin-top: -15px; margin-bottom: -25px; text-align: right;">
+    <div class="robot-config-validate-msg" style="white-space: pre-wrap; margin-top: -40px; margin-bottom: 5px"><!-- this is where the error message goes --></div>
+    <div class="dt-robot-config-actions" style="text-align: right;">
       <button
         type="button"
         class="jenkins-button robot-config-validate-btn"

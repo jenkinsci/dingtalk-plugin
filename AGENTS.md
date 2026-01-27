@@ -82,3 +82,4 @@
 - Spacing issues are usually caused by the outer `f:entry`/`.jenkins-form-item` wrapper, not inner content. Adjust structure first, then tweak margins only if needed.
 - Use browser devtools to inspect the actual DOM and computed margins before trying inline CSS. Otherwise changes can be invisible because the wrong element is targeted.
 - Prefer matching core/known plugin patterns (e.g., LDAP config) over ad‑hoc layout tweaks; validate against the live UI early to avoid repeated trial-and-error.
+- When referencing Jenkins core Jelly templates, extract jars into a temp directory and clean up; do not leave `hudson/` or `jenkins/` folders in the repo root.
