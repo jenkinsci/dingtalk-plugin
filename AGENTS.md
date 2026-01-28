@@ -40,6 +40,7 @@
 - Keep user-facing strings in `Messages.properties` and access them via `Messages.*` helpers (for example, `Messages.DingTalkPermissions_GroupTitle()`).
 - When adding a new config field, update the matching `config.jelly`, `help-*.html`, and defaults (for example, `DingTalkJobPropertyDescriptor.getDefaultNotifierConfigs()`).
 - UI resources follow the plugin class path, e.g., `DingTalkRobotConfig` -> `src/main/resources/io/jenkins/plugins/DingTalkRobotConfig/config.jelly`.
+- Resource/localization files should be UTF-8 (no Unicode escape sequences), for example `Messages_zh_CN.properties` should contain direct Chinese text.
 
 ## Testing Guidelines
 - Tests use JUnit 5 (`org.junit.jupiter`).

@@ -1,7 +1,7 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler"
   xmlns:f="/lib/form">
-  <f:section title="通知时机">
+  <f:section title="${%section.noticeOccasion}">
     <f:entry>
       <j:scope>
         <!-- 用户选择的通知时机 -->
@@ -29,18 +29,18 @@
     </f:entry>
   </f:section>
 
-  <f:section title="日志">
+  <f:section title="${%section.log}">
     <f:entry field="verbose">
-      <f:checkbox title="详细日志"/>
+      <f:checkbox title="${%verbose}"/>
     </f:entry>
   </f:section>
 
-  <f:section title="代理">
+  <f:section title="${%section.proxy}">
     <f:property field="proxyConfig"
       propertyDescriptor="${descriptor.getDingTalkProxyConfigDescriptor()}"/>
   </f:section>
 
-  <f:section title="机器人">
+  <f:section title="${%section.robot}">
     <j:scope>
       <j:set var="robotConfigs" value="${descriptor.robotConfigs}"/>
       <j:set var="robotConfigDescriptor"
