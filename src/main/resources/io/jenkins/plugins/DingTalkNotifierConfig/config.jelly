@@ -41,7 +41,7 @@
 			</div>
 			<div class="dt-raw-content-builtin">
 				<f:entry title="${%notifyPeople}" field="at">
-					<f:checkbox title="atAll" field="atAll"/>
+					<f:checkbox title="${%atAll}" field="atAll"/>
 					<f:textarea field="atMobile"/>
 				</f:entry>
 				<f:entry field="content" title="${%customContent}">
