@@ -12,12 +12,12 @@ public class Logger {
   /**
    * 日志 icon
    */
-  private static final String LOG_ICON = "\uD83C\uDF4F";
+  private static final String LOG_ICON = "🍏";
 
   /**
    * 日志连接线符号
    */
-  private static final String LOG_LINE_SYMBOL = "\uD83C\uDF2B";
+  private static final String LOG_LINE_SYMBOL = "🌫";
 
   /**
    * 连接线单边的长度

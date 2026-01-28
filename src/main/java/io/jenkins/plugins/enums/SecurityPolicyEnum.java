@@ -1,7 +1,6 @@
 package io.jenkins.plugins.enums;
 
 import io.jenkins.plugins.Messages;
-import lombok.Getter;
 import lombok.ToString;
 
 /**
@@ -9,19 +8,19 @@ import lombok.ToString;
  *
  * @author liuwei
  */
-@Getter
 @ToString
 public enum SecurityPolicyEnum {
 
   /** 关键字 */
-  KEY(Messages.SecurityPolicyType_key()),
+  KEY,
 
   /** 加签 */
-  SECRET(Messages.SecurityPolicyType_secret());
+  SECRET;
 
-  private final String desc;
-
-  SecurityPolicyEnum(String desc) {
-    this.desc = desc;
+  public String getDesc() {
+    return switch (this) {
+      case KEY -> Messages.SecurityPolicyType_key();
+      case SECRET -> Messages.SecurityPolicyType_secret();
+    };
   }
 }

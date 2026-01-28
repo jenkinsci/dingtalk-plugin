@@ -21,7 +21,7 @@
     </d:tag>
   </d:taglib>
 
-  <f:entry title="钉钉机器人">
+  <f:entry title="${%robotTitle}">
     <div
       class="jenkins-form-item hetero-list-container one-each">
       <!-- display existing items -->
@@ -55,7 +55,7 @@
         </j:forEach>
       </div>
       <div>
-        <input type="button" value="添加机器人" class="hetero-list-add"
+        <input type="button" value="${%addRobot}" class="hetero-list-add"
         />
       </div>
     </div>

@@ -11,13 +11,13 @@
   </j:if>
 
   <div class="robot-config-container">
-    <f:entry title="id" field="id">
+    <f:entry title="${%id}" field="id">
       <f:textbox name="id"/>
     </f:entry>
-    <f:entry title="名称" field="name">
+    <f:entry title="${%name}" field="name">
       <f:textbox name="name"/>
     </f:entry>
-    <f:entry title="webhook" field="webhook">
+    <f:entry title="${%webhook}" field="webhook">
       <f:textbox name="webhook"/>
     </f:entry>
 
@@ -37,8 +37,8 @@
     </j:scope>
 
     <st:adjunct includes="io.jenkins.plugins.DingTalkRobotConfig.validate-robot-config-onclick"/>
-    <div class="robot-config-validate-msg" style="white-space: pre-wrap; margin-top: -40px;"><!-- this is where the error message goes --></div>
-    <div class="dt-robot-config-actions" style="margin-top: -15px; margin-bottom: -25px; text-align: right;">
+    <div class="robot-config-validate-msg" style="white-space: pre-wrap; margin-top: -40px; margin-bottom: 5px"><!-- this is where the error message goes --></div>
+    <div class="dt-robot-config-actions" style="text-align: right;">
       <button
         type="button"
         class="jenkins-button robot-config-validate-btn"
