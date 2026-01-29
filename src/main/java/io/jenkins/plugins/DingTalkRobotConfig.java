@@ -91,6 +91,9 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
     }
     ArrayList<DingTalkSecurityPolicyConfig> resolved = new ArrayList<>();
     for (DingTalkSecurityPolicyConfig config : securityPolicyConfigs) {
+      if (StringUtils.isBlank(config.getValue())) {
+        continue;
+      }
       if (config instanceof KeySecurityPolicyConfig || config instanceof SecretSecurityPolicyConfig) {
         resolved.add(config);
         continue;
