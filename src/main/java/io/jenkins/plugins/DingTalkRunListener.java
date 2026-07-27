@@ -61,7 +61,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 			DingTalkUtils.log(listener, "发送消息时报错: %s", e);
 		} finally {
 			// 重置环境变量
-			PipelineEnvContext.reset();
+			PipelineEnvContext.reset(run);
 		}
 	}
 
@@ -188,7 +188,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 			Thread.currentThread().interrupt();
 		}
 		try {
-			EnvVars pipelineEnvVars = PipelineEnvContext.get();
+			EnvVars pipelineEnvVars = PipelineEnvContext.get(run);
 			jobEnvVars.overrideAll(pipelineEnvVars);
 		} catch (Exception e) {
 			log.error(e);
