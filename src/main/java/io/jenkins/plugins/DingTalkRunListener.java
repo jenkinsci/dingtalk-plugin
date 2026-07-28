@@ -102,7 +102,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 			User user = User.getById(userIdCause.getUserId(), false);
 			if (user != null) {
 				String name = user.getDisplayName();
-				String mobile = user.getProperty(DingTalkUserProperty.class).getMobile();
+				String mobile = mobileOf(user);
 				if (StringUtils.isEmpty(mobile)) {
 					DingTalkUtils.log(
 							listener,
@@ -116,6 +116,19 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Reads the mobile number a user configured for DingTalk.
+	 *
+	 * <p>{@link User#getProperty} is documented to return null: a user only carries the properties
+	 * that were registered when the user was loaded, and nothing attaches them afterwards. A user
+	 * without this property simply has no mobile number configured, which the caller already
+	 * handles.
+	 */
+	static String mobileOf(User user) {
+		DingTalkUserProperty property = user.getProperty(DingTalkUserProperty.class);
+		return property == null ? null : property.getMobile();
 	}
 
 	private BuildExecutor getExecutorFromRemote(Run<?, ?> run) {
