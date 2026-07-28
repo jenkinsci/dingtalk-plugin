@@ -34,6 +34,13 @@ dingtalk(
 | at    |       List\<String\>        | 需要 @ 的手机号码 |
 | atAll |           boolean           | 是否 @ 全部    |
 
+::: warning
+
+不同消息类型的 @ 表现不同：`MARKDOWN` 和 `ACTION_CARD` 的 @ 在**手机端不高亮、不可点击**，
+只有 `TEXT` 类型两端都可点击。详见 [@ 人](../advance/at-mention.md)。
+
+:::
+
 ::: tip
 
 `robot` 参数可以在机器人配置中找到

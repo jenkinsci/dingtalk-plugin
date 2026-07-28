@@ -62,6 +62,10 @@ export default defineConfig({
             link: '/advance/user-property'
           },
           {
+            text: '@ 人',
+            link: '/advance/at-mention'
+          },
+          {
             text: 'Markdown 语法',
             link: '/advance/markdown'
           }

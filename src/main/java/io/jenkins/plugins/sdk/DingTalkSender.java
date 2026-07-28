@@ -25,6 +25,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -58,14 +59,16 @@ public class DingTalkSender {
   /**
    * 发送 text 类型的消息
    *
+   * <p>Unlike markdown and actionCard, DingTalk renders the mention for this type from the
+   * {@code at} object on its own — appending one to the content as well gets it rendered twice.
+   *
    * @param msg 消息
    * @return 异常信息
    */
   public String sendText(MessageModel msg) {
-    At at = msg.getAt();
     Text text = new Text();
-    text.setAt(at);
-    text.setContent(addKeyWord(addAtInfo(msg.getText(), at, false)));
+    text.setAt(msg.getAt());
+    text.setContent(addKeyWord(msg.getText()));
 
     return call(text);
   }
@@ -73,15 +76,17 @@ public class DingTalkSender {
   /**
    * 发送 link 类型的消息
    *
+   * <p>DingTalk documents the link type as not supporting mentions at all: the {@code at} object is
+   * ignored, and an appended {@code @<mobile>} is never resolved — it would just leave a bare phone
+   * number in the message and notify nobody.
+   *
    * @param msg 消息
    * @return 异常信息
    */
   public String sendLink(MessageModel msg) {
-    At at = msg.getAt();
     Link link = new Link();
-    link.setAt(at);
     link.setTitle(addKeyWord(msg.getTitle()));
-    link.setText(addAtInfo(msg.getText(), at, false));
+    link.setText(msg.getText());
     link.setMessageUrl(msg.getMessageUrl());
     link.setPicUrl(msg.getPicUrl());
 
@@ -93,7 +98,7 @@ public class DingTalkSender {
     Markdown markdown = new Markdown();
     markdown.setAt(at);
     markdown.setTitle(addKeyWord(msg.getTitle()));
-    markdown.setText(addAtInfo(msg.getText(), at, true));
+    markdown.setText(addAtInfo(msg.getText(), at));
 
     return call(markdown);
   }
@@ -103,7 +108,7 @@ public class DingTalkSender {
     ActionCard actioncard = new ActionCard();
     actioncard.setAt(at);
     actioncard.setTitle(addKeyWord(msg.getTitle()));
-    actioncard.setText(addAtInfo(msg.getText(), at, true));
+    actioncard.setText(addAtInfo(msg.getText(), at));
     String singleTitle = msg.getSingleTitle();
     if (StringUtils.isEmpty(singleTitle)) {
       actioncard.setBtns(msg.getRobotBtns());
@@ -185,20 +190,35 @@ public class DingTalkSender {
   /**
    * 添加 at 信息
    *
+   * <p>Only markdown and actionCard need this. A mobile never resolves for them unless the body
+   * carries its {@code @<mobile>} token, and actionCard needs one for {@code isAtAll} as well;
+   * markdown is the single case that notifies without a token, and even there the token is what
+   * makes the mention visible. Text messages are the other way round — DingTalk renders their
+   * mention itself — and the link type supports none.
+   *
+   * <p>Tokens the caller already placed in the body are skipped, so a hand-written template keeps
+   * its mention where the author put it instead of getting a second copy appended.
+   *
    * @param content 原始内容
    * @param at at 配置
-   * @param markdown 是否是 markdown 格式的内容
    * @return 包含 at 信息的内容
    */
-  private String addAtInfo(String content, At at, boolean markdown) {
-    List<String> atMobiles = at.getAtMobiles();
-    if (atMobiles == null || atMobiles.isEmpty()) {
-      return content;
+  private String addAtInfo(String content, At at) {
+    String body = StringUtils.defaultString(content);
+    List<String> tokens = new ArrayList<>();
+    if (at.isAtAll()) {
+      // Mentioning everyone stops DingTalk from resolving individual mobiles, so adding them here
+      // as well would leave bare phone numbers in the message where a name should have appeared —
+      // and everybody has already been notified anyway.
+      tokens.add(Constants.AT_ALL);
+    } else if (at.getAtMobiles() != null) {
+      at.getAtMobiles().forEach(mobile -> tokens.add("@" + mobile));
     }
-    String atContent = "@" + StringUtils.join(atMobiles, " @");
-    if (markdown) {
-      return content + "\n\n" + Utils.dye(atContent, Constants.COLOR_BLUE) + "\n";
+    tokens.removeIf(body::contains);
+    if (tokens.isEmpty()) {
+      return body;
     }
-    return content + atContent;
+    String atContent = String.join(" ", tokens);
+    return body + "\n\n" + Utils.dye(atContent, Constants.COLOR_BLUE) + "\n";
   }
 }
