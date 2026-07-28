@@ -292,7 +292,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 
 			String robotId = item.getRobotId();
 			String content = item.getContent();
-			String message = item.getMessage();
+			String rawMessage = item.getMessage();
 			boolean atAll = item.isAtAll();
 			Set<String> atMobiles = item.resolveAtMobiles(envVars);
 
@@ -306,7 +306,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
                     ? MessageModel.builder()
                             .type(MsgTypeEnum.MARKDOWN)
                             .title(title)
-                            .text(envVars.expand(message).replace("\\\\n", "\n"))
+                            .text(envVars.expand(rawMessage).replace("\\\\n", "\n"))
                             .build()
                     : MessageModel.builder()
                             .type(MsgTypeEnum.ACTION_CARD)
@@ -329,7 +329,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
                             .build();
 
 			DingTalkUtils.log(listener, "当前机器人信息，%s", Utils.toJson(item));
-			DingTalkUtils.log(listener, "发送的消息详情，%s", Utils.toJson(message));
+			DingTalkUtils.log(listener, "发送的消息详情，%s", Utils.toJson(msgModel));
 
 			String msg = DingTalkService.getInstance().send(robotId, msgModel);
 
