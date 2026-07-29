@@ -16,6 +16,7 @@ dingtalk(
         messageUrl: '',
         picUrl: '',
         singleTitle: '',
+        singleUrl: '',
         btns: [],
         btnLayout: '',
         hideAvatar: false
@@ -27,12 +28,12 @@ dingtalk(
 
 ### 通用的参数
 
-| 参数    |             类型              | 说明         |
-|-------|:---------------------------:|------------|
-| robot |           String            | 机器人 id     |
-| type  | [MsgTypeEnum](#MsgTypeEnum) | 消息类型       |
-| at    |       List\<String\>        | 需要 @ 的手机号码 |
-| atAll |           boolean           | 是否 @ 全部    |
+| 参数    |             类型              | 说明               |
+|-------|:---------------------------:|------------------|
+| robot |           String            | 机器人 id           |
+| type  | [MsgTypeEnum](#msgtypeenum) | 消息类型             |
+| at    |        Set\<String\>        | 需要 @ 的手机号码，重复的会去重 |
+| atAll |           boolean           | 是否 @ 全部          |
 
 ::: warning
 
@@ -95,15 +96,15 @@ public enum MsgTypeEnum {
 | 参数    |       类型       | 说明                                       |
 |-------|:--------------:|------------------------------------------|
 | title |     String     | [首屏会话](#首屏会话) 透出的展示内容                    |
-| text  | List\<String\> | 消息内容，支持 [受限的 markdonw](#受限的 markdonw) 语法 |
+| text  | List\<String\> | 消息内容，支持[受限的 markdown 语法](../advance/markdown.md) |
 
 ### ACTION_CARD 类型的消息
 
 | 参数         |               类型                | 说明                                       |
 |------------|:-------------------------------:|------------------------------------------|
 | title      |             String              | [首屏会话](#首屏会话) 透出的展示内容                    |
-| text       |         List\<String\>          | 消息内容，支持 [受限的 markdonw](#受限的 markdonw) 语法 |
-| btnLayout  | [BtnLayoutEnum](#BtnLayoutEnum) | 按钮的排列方式                                  |
+| text       |         List\<String\>          | 消息内容，支持[受限的 markdown 语法](../advance/markdown.md) |
+| btnLayout  | [BtnLayoutEnum](#btnlayoutenum) | 按钮的排列方式                                  |
 | hideAvatar |             boolean             | 是否隐藏发消息者头像                               |
 
 ### BtnLayoutEnum
@@ -113,16 +114,15 @@ public enum MsgTypeEnum {
 public enum BtnLayoutEnum {
 
   /**
-   * horizotal：水平排列
+   * horizontal：水平排列
    */
   H,
 
   /**
    * vertical：垂直排列
    */
-  V;
+  V
 }
-
 
 ```
 
@@ -137,7 +137,7 @@ public enum BtnLayoutEnum {
 
 | 参数   |                类型                 | 说明     |
 |------|:---------------------------------:|--------|
-| btns | List<[ButtonModel](#ButtonModel)> | 自定义按钮组 |
+| btns | List<[ButtonModel](#buttonmodel)> | 自定义按钮组 |
 
 ### ButtonModel
 
@@ -162,7 +162,7 @@ public class ButtonModel {
 
 ### title 参数
 
-当参数为空时，默认会使用 _Jenkins 通知_
+当参数为空时，默认会使用 _Jenkins 构建通知_
 
 ### ACTION_CARD 类型的消息
 
@@ -174,7 +174,7 @@ public class ButtonModel {
 
 :::details 点击查看
 
-![text](https://img.alicdn.com/tfs/TB1jFpqaRxRMKJjy0FdXXaifFXa-497-133.png)
+![text](../assets/text-example.jpg)
 
 :::
 
@@ -182,7 +182,7 @@ public class ButtonModel {
 
 :::details 点击查看
 
-![link](https://ding-doc.oss-cn-beijing.aliyuncs.com/images/0.0.239/1570679827267-6243216b-d1c3-48b7-9b1e-0f0b4211b50b.png)
+![link](../assets/link-example.jpg)
 
 :::
 
@@ -190,7 +190,7 @@ public class ButtonModel {
 
 :::details 点击查看
 
-![markdown](https://img.alicdn.com/tfs/TB1yL3taUgQMeJjy0FeXXXOEVXa-492-380.png)
+![markdown](../assets/markdown-example.jpg)
 
 :::
 
@@ -198,7 +198,7 @@ public class ButtonModel {
 
 :::details 点击查看
 
-![actionCard](https://img.alicdn.com/tfs/TB1nhWCiBfH8KJjy1XbXXbLdXXa-547-379.png)
+![actionCard](../assets/action-card-default-example.jpg)
 
 :::
 
@@ -206,7 +206,7 @@ public class ButtonModel {
 
 :::details 点击查看
 
-![actionCard](https://ding-doc.oss-cn-beijing.aliyuncs.com/images/0.0.239/1570679939723-c1fb7861-5bcb-4c30-9e1b-033932f6b72f.png)
+![actionCard](../assets/action-card-custom-btns-example.jpg)
 
 :::
 

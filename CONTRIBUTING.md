@@ -4,8 +4,20 @@
 
 ## 开发服务
 
-在 `IDEA` 右侧 `maven` 控制面板中添加 `hpi:run` 到启动配置：
-![启动配置](./docs/assets/contribuiting-config.png) 
+命令行启动一个带本插件的本地 Jenkins：
+
+```shell
+mvn hpi:run
+```
+
+跑测试：
+
+```shell
+mvn verify
+```
+
+`IDEA` 下也可以在右侧 `maven` 控制面板中把 `hpi:run` 添加到启动配置：
+![启动配置](./docs/assets/contribuiting-config.png)
 
 ## 开发约定
 
@@ -15,15 +27,18 @@
 
 ## 参考文档
 
-1. [Plugin tutorial](https://wiki.jenkins.io/display/JENKINS/Plugin+tutorial#Plugintutorial-SettingUpEnvironment)
-2. [Jenkins 插件开发之旅：两天内从 idea 到发布(上篇)](https://jenkins-zh.cn/wechat/articles/2019/05/2019-05-06-jenkins-plugin-develop-within-two-days-part01/)
-3. [Jenkins 插件开发之旅：两天内从 idea 到发布(下篇)](https://jenkins-zh.github.io/wechat/articles/2019/05/2019-05-08-jenkins-plugin-develop-within-two-days-part02/)
+1. [Jenkins 插件开发教程](https://www.jenkins.io/doc/developer/tutorial/)
+2. [Jenkins 插件开发文档](https://www.jenkins.io/doc/developer/plugin-development/)
 
 ---
 
 ## 文档服务
 
-1. 安装 node.js 环境
-2. 安装 yarn 包管理器
-3. 在项目根目录执行 `yarn` 安装依赖
-4. 执行 `yarn docs:dev` 启动文档开发环境
+文档站用 [VitePress](https://vitepress.dev/) 构建，源文件在 `docs/` 下。
+
+1. 安装 Node.js
+2. 在项目根目录执行 `npm ci` 安装依赖
+3. 执行 `npm run docs:dev` 启动文档开发环境
+4. `npm run docs:build` 构建静态站点，`npm run docs:serve` 预览构建结果
+
+推送到 `main` 后由 GitHub Actions 自动发布，不需要手动执行发布脚本。

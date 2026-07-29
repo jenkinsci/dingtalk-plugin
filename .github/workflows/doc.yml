@@ -4,23 +4,59 @@ on:
   push:
     branches:
       - main
+    paths:
+      - docs/**
+      - package.json
+      - package-lock.json
+      - .github/workflows/doc.yml
+  workflow_dispatch:
+
+# Grant GITHUB_TOKEN the permissions required to make a Pages deployment.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and
+# the latest queued one. In-progress runs are not cancelled, so a deployment always completes.
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
+    # A fork has no Pages site to deploy to.
+    if: github.repository_owner == 'jenkinsci'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          # the lastUpdated option reads each page's git history
+          fetch-depth: 0
       - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
-      - run: npm install 
+      - run: npm ci
 
       - name: Build
         run: npm run docs:build
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
         with:
-          github_token: ${{ secrets.GH_TOKEN }}
-          publish_dir: docs/.vitepress/dist
+          path: docs/.vitepress/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v5

@@ -1,16 +1,12 @@
 # DTMD 协议的消息
 
-关于 DTMD 协议的消息，可以参考钉钉官方文档 资料较少
-
-[如何通过钉钉链接发送消息给机器人](https://dingtalk.com/qidian/help-detail-1060976699.html)
-
-[dtmd介绍](https://www.dingtalk.com/qidian/help-detail-1066741046.html)
-
-[dtmd协议只能在markdown actioncard feedcard 消息类型中使用](https://open.dingtalk.com/document/orgapp/dingtalk-chatbot-for-one-on-one-query)
+`dtmd` 是钉钉的消息链接协议，用它可以在消息里放一个链接，点击后由用户向机器人发一条消息回去。
+钉钉侧关于它的公开资料不多。
 
 ::: warning
 
-`dtmd` 协议只能在markdown、actioncard、feedcard 消息类型中使用
+`dtmd` 协议只能在 markdown、actionCard、feedCard 消息类型中使用，见
+[官方文档](https://open.dingtalk.com/document/orgapp/dingtalk-chatbot-for-one-on-one-query)。
 
 :::
 
@@ -32,7 +28,7 @@ pipeline {
                         text: [
                             '# DTMD 消息',
                             '- [点我](dtmd://dingtalkclient/sendMessage?content=你好)',
-                            '- [再点](dtmd://dingtalkclient/sendMessage?content=傻逼)'
+                            '- [再点](dtmd://dingtalkclient/sendMessage?content=收到)'
                         ]
                     )
                 }
@@ -45,6 +41,8 @@ pipeline {
 
 :::details 查看结果
 
-![dtmt-example](../assets/dtmt-example.jpg)
+点击消息里的链接，钉钉会以你的身份向机器人发出对应内容：
+
+![dtmd-example](../assets/dtmd-example.jpg)
 
 :::

@@ -4,7 +4,6 @@
 - `src/main/java` and `src/main/resources` contain the Jenkins plugin source and resources.
 - `src/test/java` holds JUnit 5 tests.
 - `docs/` contains the VitePress documentation site.
-- `bin/` includes helper scripts such as `docs-release.sh`.
 
 ## Key Classes
 - `io.jenkins.plugins.DingTalkRunListener`: listens to build lifecycle events and triggers notifications.
@@ -23,10 +22,10 @@
 ## Build, Test, and Development Commands
 - `mvn hpi:run` runs the plugin in a local Jenkins for development (use the Maven tool window in IntelliJ as noted in `CONTRIBUTING.md`).
 - `mvn test` runs the JUnit 5 test suite.
-- `yarn` installs documentation dependencies for the `docs/` site.
-- `yarn docs:dev` starts the VitePress docs dev server.
-- `yarn docs:build` builds the static docs site.
-- `yarn docs:serve` serves the built docs locally on port 5173.
+- `npm ci` installs documentation dependencies for the `docs/` site.
+- `npm run docs:dev` starts the VitePress docs dev server.
+- `npm run docs:build` builds the static docs site.
+- `npm run docs:serve` serves the built docs locally on port 5173.
 
 ## Coding Style & Naming Conventions
 - Java code follows Google Java Style; use your IDE formatter with the Google style XML.
@@ -68,8 +67,8 @@
 - Documentation releases are triggered via GitHub Actions; do not run local release scripts.
 
 ## Docs Flow
-- Edit content under `docs/` and preview with `yarn docs:dev`.
-- Build the static site with `yarn docs:build` and verify locally using `yarn docs:serve`.
+- Edit content under `docs/` and preview with `npm run docs:dev`.
+- Build the static site with `npm run docs:build` and verify locally using `npm run docs:serve`.
 - Use the GitHub Actions workflow to publish docs when changes are ready.
 
 ## Lessons Learned (Jelly & Jenkins UI)
