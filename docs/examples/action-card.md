@@ -41,7 +41,7 @@ pipeline {
 
 ```groovy
 singleTitle: '查看更多',
-singleUrl: 'https://liuweigl.github.io/dingtalk-plugin/'
+singleUrl: 'https://jenkinsci.github.io/dingtalk-plugin/'
 ```
 
 :::details 查看结果
@@ -84,7 +84,7 @@ singleUrl: 'https://liuweigl.github.io/dingtalk-plugin/'
 
 :::details 查看结果
 
-![action-card-at-all-example](../assets/action-card-btn-layout-example.jpg)
+![action-card-btn-layout-example](../assets/action-card-btn-layout-example.jpg)
 
 :::
 

@@ -1,11 +1,15 @@
-import path from 'path'
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   base: '/dingtalk-plugin/',
+  lang: 'zh-CN',
   title: '钉钉机器人插件',
   description: '在 Jenkins 中使用钉钉机器人发送消息',
-  head: [['link', { rel: 'icon', href: '/dingtalk-plugin/favicion.ico' }]],
+  head: [['link', { rel: 'icon', href: '/dingtalk-plugin/favicon.ico' }]],
+  lastUpdated: true,
+  sitemap: {
+    hostname: 'https://jenkinsci.github.io/dingtalk-plugin/'
+  },
   vue: {
     template: {
       compilerOptions: {
@@ -13,18 +17,49 @@ export default defineConfig({
       }
     }
   },
-  vite: {
-    build: {
-      emptyOutDir: true
-    },
-    publicDir: path.resolve(__dirname, 'public')
-  },
   themeConfig: {
-    lastUpdatedText: 'Updated Date',
+    logo: '/dingtalk-logo.png',
+    outline: [2, 3],
+    outlineTitle: '本页目录',
+    lastUpdatedText: '最后更新',
+    returnToTopLabel: '回到顶部',
+    sidebarMenuLabel: '目录',
+    darkModeSwitchLabel: '外观',
+    docFooter: {
+      prev: '上一页',
+      next: '下一页'
+    },
+    search: {
+      provider: 'local',
+      options: {
+        translations: {
+          button: {
+            buttonText: '搜索文档',
+            buttonAriaLabel: '搜索文档'
+          },
+          modal: {
+            noResultsText: '无法找到相关结果',
+            resetButtonTitle: '清除查询条件',
+            displayDetails: '显示详细列表',
+            footer: {
+              selectText: '选择',
+              navigateText: '切换',
+              closeText: '关闭'
+            }
+          }
+        }
+      }
+    },
+    socialLinks: [
+      {
+        icon: 'github',
+        link: 'https://github.com/jenkinsci/dingtalk-plugin'
+      }
+    ],
     editLink: {
       pattern:
         'https://github.com/jenkinsci/dingtalk-plugin/edit/main/docs/:path',
-      text: 'Edit this page on GitHub'
+      text: '在 GitHub 上编辑此页'
     },
     nav: [
       {
@@ -60,6 +95,10 @@ export default defineConfig({
           {
             text: '用户属性扩展',
             link: '/advance/user-property'
+          },
+          {
+            text: '自定义消息',
+            link: '/advance/custom-message'
           },
           {
             text: '@ 人',

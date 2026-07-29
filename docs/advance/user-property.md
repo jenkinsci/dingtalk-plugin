@@ -32,3 +32,8 @@
 ![user-detail](../assets/user-detail.jpg)
 
 :::
+
+## 拿不到真实用户的场景
+
+定时构建、webhook 触发这类没有登录用户的构建，这里配的属性用不上。可以改用
+`EXECUTOR_NAME` / `EXECUTOR_MOBILE` 环境变量直接指定，见[环境变量](../guide/environment-variables.md)。

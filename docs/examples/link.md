@@ -19,8 +19,8 @@ pipeline {
                             '测试链接类型的消息',
                             '分行显示，哈哈哈哈'
                         ],
-                        messageUrl: 'http://www.baidu.com',
-                        picUrl: 'https://www.picdiet.com/img/photographer_compressed.jpg'
+                        messageUrl: 'https://jenkinsci.github.io/dingtalk-plugin/',
+                        picUrl: 'https://raw.githubusercontent.com/jenkinsci/dingtalk-plugin/main/jenkins-logo.png'
                     )
                 }
             }
