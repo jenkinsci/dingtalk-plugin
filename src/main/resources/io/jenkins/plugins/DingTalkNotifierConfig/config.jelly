@@ -34,16 +34,16 @@
 					</tbody>
 				</table>
 			</f:entry>
+			<f:entry title="${%notifyPeople}" field="at">
+				<f:checkbox title="${%atAll}" field="atAll"/>
+				<f:textarea field="atMobile"/>
+			</f:entry>
 			<div class="dt-raw-content-custom" style="display: none;">
 				<f:entry field="message" title="${%customMessage}">
 					<f:textarea/>
 				</f:entry>
 			</div>
 			<div class="dt-raw-content-builtin">
-				<f:entry title="${%notifyPeople}" field="at">
-					<f:checkbox title="${%atAll}" field="atAll"/>
-					<f:textarea field="atMobile"/>
-				</f:entry>
 				<f:entry field="content" title="${%customContent}">
 					<f:textarea/>
 				</f:entry>

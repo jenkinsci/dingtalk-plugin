@@ -16,6 +16,11 @@ public class Constants {
     // Content Types
     public static final String CONTENT_TYPE_APPLICATION_JSON = "application/json";
 
+    // Mentions
+    // The literal DingTalk resolves into a mention of the whole group. Its English spellings are
+    // delivered but not resolved, so this string cannot be localised.
+    public static final String AT_ALL = "@所有人";
+
     // API Endpoints
     public static final String DINGTALK_WEBHOOK_URL_PREFIX = "https://oapi.dingtalk.com/robot/send?access_token=";
 

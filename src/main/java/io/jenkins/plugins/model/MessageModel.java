@@ -93,7 +93,7 @@ public class MessageModel {
               .filter(StringUtils::isNotEmpty)
               .collect(Collectors.toList()));
     }
-    at.setIsAtAll(atAll);
+    at.setAtAll(atAll);
     return at;
   }
 

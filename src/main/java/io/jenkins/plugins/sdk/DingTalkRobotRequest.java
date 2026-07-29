@@ -46,7 +46,7 @@ public abstract class DingTalkRobotRequest {
     /** 被 @ 人的手机号 */
     private List<String> atMobiles;
     /** 是否 @ 所有人 */
-    private Boolean isAtAll;
+    private boolean isAtAll;
   }
 
   /**

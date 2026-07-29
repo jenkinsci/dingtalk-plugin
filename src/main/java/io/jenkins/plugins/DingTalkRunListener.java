@@ -305,6 +305,8 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
             MessageModel msgModel = item.isRaw()
                     ? MessageModel.builder()
                             .type(MsgTypeEnum.MARKDOWN)
+                            .atAll(atAll)
+                            .atMobiles(atMobiles)
                             .title(title)
                             .text(envVars.expand(rawMessage).replace("\\\\n", "\n"))
                             .build()
