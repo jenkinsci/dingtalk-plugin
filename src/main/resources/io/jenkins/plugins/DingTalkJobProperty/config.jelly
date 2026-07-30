@@ -14,10 +14,21 @@
     value="${instance.getCheckedNotifierConfigs()}"/>
 
   <d:taglib uri="local">
+    <!-- Mirrors the per-item structure of lib/form/hetero-list, which this view has to render
+         itself: its items are one per robot rather than one per descriptor, which the tag cannot
+         express. The drag handle is left out on purpose — the order here comes from the global
+         robot list, so it is not the job's to rearrange. -->
     <d:tag name="body">
-        <f:repeatableDeleteButton/>
+        <div class="repeated-chunk__header repeated-chunk__header--no-handle">
+            ${attrs.title}
+            <j:if test="${!readOnlyMode}">
+                <f:repeatableDeleteButton/>
+            </j:if>
+        </div>
         <f:class-entry descriptor="${descriptor}"/>
-        <d:invokeBody/>
+        <div class="jenkins-repeated-chunk__content">
+            <d:invokeBody/>
+        </div>
     </d:tag>
   </d:taglib>
 

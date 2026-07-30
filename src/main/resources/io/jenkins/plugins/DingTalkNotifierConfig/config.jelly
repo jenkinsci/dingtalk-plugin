@@ -6,50 +6,48 @@
 			src="${rootURL}/plugin/dingding-notifications/scripts/notifierConfig.js"/>
 	</st:once>
 
-	<f:entry title="${instance.getRobotName()}" class="">
-		<f:advanced>
-			<f:entry title="${%disable}" field="disabled">
-				<f:checkbox checked="${instance.getDisabled()}"/>
+	<f:advanced>
+		<f:entry title="${%disable}" field="disabled">
+			<f:checkbox checked="${instance.getDisabled()}"/>
+		</f:entry>
+		<f:entry title="${%disableBuiltIn}" field="raw">
+			<f:checkbox checked="${instance.getRaw()}" class="dt-notifier-config-raw"/>
+		</f:entry>
+		<f:entry title="${%noticeOccasion}" field="noticeOccasions">
+			<table class="jenkins-table">
+				<tbody>
+					<j:forEach var="row" items="${descriptor.noticeOccasionRows}">
+						<tr>
+							<j:forEach var="option" items="${row}">
+								<td>
+									<f:checkbox
+										json="${option.name}"
+										name="noticeOccasions"
+										checked="${instance.noticeOccasions.contains(option.name)}"
+										title="${option.label}"
+									/>
+								</td>
+							</j:forEach>
+						</tr>
+					</j:forEach>
+				</tbody>
+			</table>
+		</f:entry>
+		<f:entry title="${%notifyPeople}" field="at">
+			<f:checkbox title="${%atAll}" field="atAll"/>
+			<f:textarea field="atMobile"/>
+		</f:entry>
+		<div class="dt-raw-content-custom" style="display: none;">
+			<f:entry field="message" title="${%customMessage}">
+				<f:textarea/>
 			</f:entry>
-			<f:entry title="${%disableBuiltIn}" field="raw">
-				<f:checkbox checked="${instance.getRaw()}" class="dt-notifier-config-raw"/>
+		</div>
+		<div class="dt-raw-content-builtin">
+			<f:entry field="content" title="${%customContent}">
+				<f:textarea/>
 			</f:entry>
-			<f:entry title="${%noticeOccasion}" field="noticeOccasions">
-				<table class="jenkins-table">
-					<tbody>
-						<j:forEach var="row" items="${descriptor.noticeOccasionRows}">
-							<tr>
-								<j:forEach var="option" items="${row}">
-									<td>
-										<f:checkbox
-											json="${option.name}"
-											name="noticeOccasions"
-											checked="${instance.noticeOccasions.contains(option.name)}"
-											title="${option.label}"
-										/>
-									</td>
-								</j:forEach>
-							</tr>
-						</j:forEach>
-					</tbody>
-				</table>
-			</f:entry>
-			<f:entry title="${%notifyPeople}" field="at">
-				<f:checkbox title="${%atAll}" field="atAll"/>
-				<f:textarea field="atMobile"/>
-			</f:entry>
-			<div class="dt-raw-content-custom" style="display: none;">
-				<f:entry field="message" title="${%customMessage}">
-					<f:textarea/>
-				</f:entry>
-			</div>
-			<div class="dt-raw-content-builtin">
-				<f:entry field="content" title="${%customContent}">
-					<f:textarea/>
-				</f:entry>
-			</div>
-		</f:advanced>
-	</f:entry>
+		</div>
+	</f:advanced>
 	<f:invisibleEntry>
 		<input type="hidden" name="robotId" value="${instance.getRobotId()}"/>
 	</f:invisibleEntry>

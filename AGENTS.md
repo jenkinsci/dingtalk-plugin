@@ -74,7 +74,8 @@
 ## Lessons Learned (Jelly & Jenkins UI)
 - Avoid XML-unsafe operators in Jelly expressions (`&&`); use `and` to prevent SAX parse failures.
 - When embedding a config.jelly inside a `f:repeatable`, the current item may be exposed as `item`; set `instance` explicitly if the sub-view expects it.
-- `f:hetero-list` requires a non-null descriptor list; for data-bound lists prefer `f:repeatableHeteroProperty` or provide an explicit `*Descriptors` getter that matches the `field` name (`<field>Descriptors`).
+- `f:hetero-list` keys items by descriptor — one prototype per descriptor, and `oneEach` caps the list at that count — so it cannot express one item per instance of a single descriptor. `DingTalkRobotConfig/config.jelly` uses it as intended for the security policies; `DingTalkJobProperty/config.jelly` cannot, and renders the hetero-list item structure itself with robot ids where the tag puts descriptor ids — keep that copy in step with `lib/form/hetero-list`.
+- For ordinary data-bound lists use `f:repeatableHeteroProperty`, or give `f:hetero-list` an explicit `<field>Descriptors` getter.
 - If the view can be rendered under a global descriptor context, ensure descriptor getters exist on that context too, or access the descriptor directly via `it`.
 - `renderOnDemand` requires the `l` namespace; missing it causes parse errors. Use it only when needed to avoid `$stapler/bound/.../render` failures.
 - Avoid `j:new` with plugin classes in views; class loading can fail in runtime. Prefer descriptor-backed prototypes and standard `f:*` tags.
