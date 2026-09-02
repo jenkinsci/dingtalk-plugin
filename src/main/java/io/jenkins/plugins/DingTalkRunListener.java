@@ -13,6 +13,7 @@ import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.model.User;
 import hudson.model.listeners.RunListener;
+import hudson.scm.ChangeLogSet;
 import io.jenkins.plugins.context.PipelineEnvContext;
 import io.jenkins.plugins.enums.BuildStatusEnum;
 import io.jenkins.plugins.enums.MsgTypeEnum;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import jenkins.model.Jenkins;
+import jenkins.scm.RunWithSCM;
 import lombok.extern.log4j.Log4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -223,6 +225,32 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 	}
 
 
+	/** The last entry of the build's changelog; null before checkout or when nothing changed. */
+	static ChangeLogSet.Entry latestChangeOf(Run<?, ?> run) {
+		if (!(run instanceof RunWithSCM)) {
+			return null;
+		}
+		ChangeLogSet.Entry latest = null;
+		for (ChangeLogSet<? extends ChangeLogSet.Entry> changeSet : ((RunWithSCM<?, ?>) run).getChangeSets()) {
+			for (ChangeLogSet.Entry entry : changeSet) {
+				latest = entry;
+			}
+		}
+		return latest;
+	}
+
+	/** The first line of the commit message; git reports only that, Subversion the whole text. */
+	static String titleOf(ChangeLogSet.Entry change) {
+		return StringUtils.substringBefore(StringUtils.defaultString(change.getMsg()), "\n").trim();
+	}
+
+	/** {@code <short id> <title>（<author>）}, without the id when the SCM has none. */
+	static String summaryOf(ChangeLogSet.Entry change) {
+		String id = change.getCommitId();
+		String prefix = StringUtils.isEmpty(id) ? "" : StringUtils.left(id, 7) + " ";
+		return prefix + titleOf(change) + "（" + change.getAuthor().getDisplayName() + "）";
+	}
+
 	private void send(Run<?, ?> run, TaskListener listener, NoticeOccasionEnum noticeOccasion) {
 		Job<?, ?> job = run.getParent();
 		DingTalkJobProperty property = job.getProperty(DingTalkJobProperty.class);
@@ -278,6 +306,10 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 		envVars.put("JOB_URL", jobUrl);
 		envVars.put("JOB_DURATION", duration);
 		envVars.put("JOB_STATUS", statusType.getLabel());
+		ChangeLogSet.Entry change = latestChangeOf(run);
+		envVars.put("COMMIT_ID", change == null ? "" : StringUtils.defaultString(change.getCommitId()));
+		envVars.put("COMMIT_TITLE", change == null ? "" : titleOf(change));
+		envVars.put("COMMIT_AUTHOR", change == null ? "" : change.getAuthor().getDisplayName());
 
 		List<ButtonModel> btns = Utils.createDefaultBtns(jobUrl);
 		List<String> result = new ArrayList<>();
@@ -324,6 +356,7 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
                                     .duration(duration)
                                     .executorName(executorName)
                                     .executorMobile(executorMobile)
+                                    .change(change == null ? "" : summaryOf(change))
                                     .content(envVars.expand(content).replace("\\\\n", "\n"))
                                     .build()
                                     .toMarkdown())

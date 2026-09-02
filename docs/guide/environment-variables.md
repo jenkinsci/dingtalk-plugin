@@ -15,6 +15,9 @@
 | JOB_URL         | **本次构建**的地址                                 |
 | JOB_DURATION    | 构建耗时，例如 `1 min 20 sec`                      |
 | JOB_STATUS      | 本次通知对应的构建状态：开始 / 成功 / 失败 / 取消 / 不稳定 / 未构建   |
+| COMMIT_ID       | 本次构建最新一次提交的 id，SCM 不提供时为空                   |
+| COMMIT_TITLE    | 最新一次提交的标题，即 message 的第一行                    |
+| COMMIT_AUTHOR   | 最新一次提交的作者，取对应 Jenkins 用户的显示名                |
 
 ::: warning
 
@@ -27,6 +30,13 @@
 `PROJECT_URL` 与 `JOB_URL` 依赖系统设置里的 Jenkins URL。没配的话构建日志里会提示
 `Please set jenkins Root URL in [ System Configuration >> System >> Jenkins Location >> Jenkins URL ]`，
 并且 `JOB_URL` 会是空字符串、`PROJECT_URL` 退化成不带域名的相对路径。
+
+:::
+
+::: tip
+
+`COMMIT_*` 来自本次构建的变更记录。`构建启动时` 那条通知发出时还没开始 checkout，这三个变量为空。
+git 任务默认记录的是 committer，经 GitHub 合并的仓库要在任务的 git 配置里勾上 `Use commit author in changelog`，否则作者会是 GitHub。
 
 :::
 

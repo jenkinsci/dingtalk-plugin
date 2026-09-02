@@ -2,9 +2,11 @@ package io.jenkins.plugins.model;
 
 import io.jenkins.plugins.enums.BuildStatusEnum;
 import io.jenkins.plugins.tools.Utils;
-import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author liuwei
@@ -31,10 +33,11 @@ public class BuildJobModel {
 
   private String content;
 
+  private String change;
+
   public String toMarkdown() {
 
-    return Utils.join(
-        Arrays.asList(
+    return Stream.of(
             String.format("# [%s](%s)", projectName, projectUrl),
             "---",
             String.format("- 任务：[%s](%s)", jobName, jobUrl),
@@ -46,8 +49,9 @@ public class BuildJobModel {
             ),
             String.format("- 持续时间：%s", duration),
             String.format("- 执行人：%s", executorName),
-            content == null ? "" : content
-        )
-    );
+            StringUtils.isEmpty(change) ? "" : String.format("- 变更：%s", change),
+            content)
+        .filter(StringUtils::isNotEmpty)
+        .collect(Collectors.joining("\n"));
   }
 }
