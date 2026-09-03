@@ -139,6 +139,8 @@ public enum BtnLayoutEnum {
 |------|:---------------------------------:|--------|
 | btns | List<[ButtonModel](#buttonmodel)> | 自定义按钮组 |
 
+`singleUrl` 和 `btns` 里的地址会被改写成钉钉的跳转协议，PC 和手机都在系统浏览器里打开。想自己控制打开方式，直接写 `dingtalk://` 开头的地址，插件原样发送；协议见官方[《统一跳转协议》](https://open.dingtalk.com/document/development/unified-jump-protocol)。
+
 ### ButtonModel
 
 ```java
