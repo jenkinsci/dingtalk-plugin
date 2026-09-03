@@ -6,6 +6,7 @@ import io.jenkins.plugins.model.MessageModel;
 import io.jenkins.plugins.model.RobotConfigModel;
 import io.jenkins.plugins.sdk.DingTalkRobotRequest.ActionCard;
 import io.jenkins.plugins.sdk.DingTalkRobotRequest.At;
+import io.jenkins.plugins.sdk.DingTalkRobotRequest.Btns;
 import io.jenkins.plugins.sdk.DingTalkRobotRequest.Link;
 import io.jenkins.plugins.sdk.DingTalkRobotRequest.Markdown;
 import io.jenkins.plugins.sdk.DingTalkRobotRequest.Text;
@@ -20,6 +21,7 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.ProxySelector;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -111,15 +113,42 @@ public class DingTalkSender {
     actioncard.setText(addAtInfo(msg.getText(), at));
     String singleTitle = msg.getSingleTitle();
     if (StringUtils.isEmpty(singleTitle)) {
-      actioncard.setBtns(msg.getRobotBtns());
+      List<Btns> btns = msg.getRobotBtns();
+      if (btns != null) {
+        btns.forEach(btn -> btn.setActionURL(browserLink(btn.getActionURL())));
+      }
+      actioncard.setBtns(btns);
     } else {
       actioncard.setSingleTitle(singleTitle);
-      actioncard.setSingleURL(msg.getSingleUrl());
+      actioncard.setSingleURL(browserLink(msg.getSingleUrl()));
     }
     actioncard.setBtnOrientation(msg.getBtnOrientation());
     actioncard.setHideAvatar(msg.getHideAvatar());
 
     return call(actioncard);
+  }
+
+  /**
+   * The jump-protocol form of a link that both the PC and the mobile client open in the system
+   * browser. A {@code dingtalk://} link is returned as is.
+   *
+   * @param url 按钮地址
+   * @return 钉钉跳转协议形式的地址
+   * @see <a href="https://open.dingtalk.com/document/orgapp/message-link-description">消息链接说明</a>
+   * @see <a href="https://open.dingtalk.com/document/development/unified-jump-protocol">统一跳转协议</a>
+   */
+  static String browserLink(String url) {
+    if (StringUtils.isEmpty(url) || url.startsWith("dingtalk://")) {
+      return url;
+    }
+    String target = urlEncode(url);
+    String pc = urlEncode("dingtalk://dingtalkclient/page/link?url=" + target + "&pc_slide=false");
+    String mobile = urlEncode("dingtalk://dingtalkclient/action/jump?url=" + target);
+    return "dingtalk://dingtalkclient/action/open_platform_link?pcLink=" + pc + "&mobileLink=" + mobile;
+  }
+
+  private static String urlEncode(String value) {
+    return URLEncoder.encode(value, StandardCharsets.UTF_8).replace("+", "%20");
   }
 
   /**
