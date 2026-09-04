@@ -20,9 +20,10 @@ class DingTalkGlobalConfigTest {
 
       List<List<NoticeOccasionOption>> rows = DingTalkGlobalConfig.buildNoticeOccasionRows();
 
-      assertEquals(2, rows.size());
+      assertEquals(3, rows.size());
       assertEquals(3, rows.get(0).size());
       assertEquals(3, rows.get(1).size());
+      assertEquals(1, rows.get(2).size());
 
       List<String> names = rows.stream()
           .flatMap(List::stream)

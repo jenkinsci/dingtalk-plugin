@@ -7,6 +7,8 @@ import static org.mockito.Mockito.when;
 
 import hudson.model.User;
 import hudson.scm.ChangeLogSet;
+import io.jenkins.plugins.enums.NoticeOccasionEnum;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class DingTalkRunListenerTest {
@@ -67,5 +69,22 @@ class DingTalkRunListenerTest {
 
     assertEquals("fix: show the textarea", DingTalkRunListener.titleOf(change));
     assertEquals("fix: show the textarea（Bob Du）", DingTalkRunListener.summaryOf(change));
+  }
+
+  @Test
+  void fixedFallsBackToSuccessForANotifierThatDidNotOptIn() {
+    DingTalkNotifierConfig successOnly = mock(DingTalkNotifierConfig.class);
+    when(successOnly.getNoticeOccasions()).thenReturn(Set.of("SUCCESS"));
+    DingTalkNotifierConfig withFixed = mock(DingTalkNotifierConfig.class);
+    when(withFixed.getNoticeOccasions()).thenReturn(Set.of("SUCCESS", "FIXED"));
+
+    assertEquals(
+        NoticeOccasionEnum.SUCCESS,
+        DingTalkRunListener.occasionFor(successOnly, NoticeOccasionEnum.FIXED));
+    assertEquals(
+        NoticeOccasionEnum.FIXED, DingTalkRunListener.occasionFor(withFixed, NoticeOccasionEnum.FIXED));
+    assertEquals(
+        NoticeOccasionEnum.FAILURE,
+        DingTalkRunListener.occasionFor(successOnly, NoticeOccasionEnum.FAILURE));
   }
 }

@@ -29,6 +29,11 @@ public enum NoticeOccasionEnum {
   SUCCESS,
 
   /**
+   * 构建从失败或不稳定恢复为成功时通知
+   */
+  FIXED,
+
+  /**
    * 构建不稳定时通知
    */
   UNSTABLE,
@@ -44,6 +49,7 @@ public enum NoticeOccasionEnum {
       case ABORTED -> Messages.NoticeOccasion_aborted();
       case FAILURE -> Messages.NoticeOccasion_failure();
       case SUCCESS -> Messages.NoticeOccasion_success();
+      case FIXED -> Messages.NoticeOccasion_fixed();
       case UNSTABLE -> Messages.NoticeOccasion_unstable();
       case NOT_BUILT -> Messages.NoticeOccasion_not_built();
     };
