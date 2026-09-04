@@ -9,6 +9,7 @@ import hudson.model.Cause.UpstreamCause;
 import hudson.model.Cause.UserIdCause;
 import hudson.model.Job;
 import hudson.model.Result;
+import hudson.model.ResultTrend;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import hudson.model.User;
@@ -55,7 +56,10 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 	@Override
 	public void onCompleted(Run<?, ?> run, @NonNull TaskListener listener) {
 		Result result = run.getResult();
-		NoticeOccasionEnum noticeOccasion = getNoticeOccasion(result);
+		NoticeOccasionEnum noticeOccasion =
+				Result.SUCCESS.equals(result) && ResultTrend.getResultTrend(run) == ResultTrend.FIXED
+						? NoticeOccasionEnum.FIXED
+						: getNoticeOccasion(result);
 		try {
 			this.send(run, listener, noticeOccasion);
 		} catch (Exception e) {
@@ -86,10 +90,20 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 		return null;
 	}
 
+	/** A notifier without FIXED among its occasions is told about the build as a SUCCESS. */
+	static NoticeOccasionEnum occasionFor(DingTalkNotifierConfig notifier, NoticeOccasionEnum occasion) {
+		if (occasion == NoticeOccasionEnum.FIXED
+				&& !notifier.getNoticeOccasions().contains(NoticeOccasionEnum.FIXED.name())) {
+			return NoticeOccasionEnum.SUCCESS;
+		}
+		return occasion;
+	}
+
 	private BuildStatusEnum getBuildStatus(NoticeOccasionEnum noticeOccasion) {
 		return switch (noticeOccasion) {
 			case START -> BuildStatusEnum.START;
 			case SUCCESS -> BuildStatusEnum.SUCCESS;
+			case FIXED -> BuildStatusEnum.FIXED;
 			case FAILURE -> BuildStatusEnum.FAILURE;
 			case ABORTED -> BuildStatusEnum.ABORTED;
 			case UNSTABLE -> BuildStatusEnum.UNSTABLE;
@@ -295,7 +309,6 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
         }
 
 		String duration = run.getDurationString();
-		BuildStatusEnum statusType = getBuildStatus(noticeOccasion);
 
 		// 设置环境变量
 		envVars.put("EXECUTOR_NAME", executorName == null ? "" : executorName);
@@ -305,7 +318,6 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 		envVars.put("JOB_NAME", jobName);
 		envVars.put("JOB_URL", jobUrl);
 		envVars.put("JOB_DURATION", duration);
-		envVars.put("JOB_STATUS", statusType.getLabel());
 		ChangeLogSet.Entry change = latestChangeOf(run);
 		envVars.put("COMMIT_ID", change == null ? "" : StringUtils.defaultString(change.getCommitId()));
 		envVars.put("COMMIT_TITLE", change == null ? "" : titleOf(change));
@@ -316,11 +328,15 @@ public class DingTalkRunListener extends RunListener<Run<?, ?>> {
 		List<DingTalkNotifierConfig> notifierConfigs = property.getAvailableNotifierConfigs();
 
 		for (DingTalkNotifierConfig item : notifierConfigs) {
-			boolean skipped = skip(listener, noticeOccasion, item);
+			NoticeOccasionEnum occasion = occasionFor(item, noticeOccasion);
+			boolean skipped = skip(listener, occasion, item);
 
 			if (skipped) {
 				continue;
 			}
+
+			BuildStatusEnum statusType = getBuildStatus(occasion);
+			envVars.put("JOB_STATUS", statusType.getLabel());
 
 			String robotId = item.getRobotId();
 			String content = item.getContent();

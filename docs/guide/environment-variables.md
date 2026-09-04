@@ -18,7 +18,7 @@
 | JOB_NAME        | **本次构建**的名称，默认是 `#42` 这样的构建号                |
 | JOB_URL         | **本次构建**的地址                                 |
 | JOB_DURATION    | 构建耗时，例如 `1 min 20 sec`                      |
-| JOB_STATUS      | 本次通知对应的构建状态：开始 / 成功 / 失败 / 取消 / 不稳定 / 未构建   |
+| JOB_STATUS      | 本次通知对应的构建状态：开始/成功/恢复正常/失败/取消/不稳定/未构建        |
 | COMMIT_ID       | 本次构建最新一次提交的 id，SCM 不提供时为空                   |
 | COMMIT_TITLE    | 最新一次提交的标题，即 message 的第一行                    |
 | COMMIT_AUTHOR   | 最新一次提交的作者，取对应 Jenkins 用户的显示名                |
