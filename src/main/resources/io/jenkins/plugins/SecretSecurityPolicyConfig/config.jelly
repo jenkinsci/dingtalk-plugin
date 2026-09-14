@@ -4,8 +4,4 @@
   <f:entry title="${descriptor.displayName}" field="value">
     <f:textbox/>
   </f:entry>
-  <f:invisibleEntry>
-    <input type="hidden" name="type" value="${instance.getType()}"/>
-    <input type="hidden" name="desc" value="${instance.getDesc()}"/>
-  </f:invisibleEntry>
 </j:jelly>

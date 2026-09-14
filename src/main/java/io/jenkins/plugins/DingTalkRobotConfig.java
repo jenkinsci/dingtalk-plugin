@@ -19,12 +19,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
+import org.kohsuke.stapler.StaplerRequest2;
 
 import java.net.Proxy;
 import java.util.ArrayList;
@@ -189,6 +189,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
     /**
      * 测试配置信息
      *
+     * @param req                     请求
      * @param id                      id
      * @param name                    名称
      * @param webhook                 webhook
@@ -197,6 +198,7 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
      * @return 机器人配置是否正确
      */
     public String doTest(
+        StaplerRequest2 req,
         @QueryParameter("id") String id,
         @QueryParameter("name") String name,
         @QueryParameter("webhook") String webhook,
@@ -213,7 +215,9 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
       }
 
       ArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs =
-          parseSecurityPolicyConfigs(securityPolicyConfigStr);
+          new ArrayList<>(
+              req.bindJSONToList(
+                  DingTalkSecurityPolicyConfig.class, JSONSerializer.toJSON(securityPolicyConfigStr)));
       DingTalkRobotConfig robotConfig =
           new DingTalkRobotConfig(id, name, webhook, securityPolicyConfigs);
       Proxy proxy = getProxy(proxyStr);
@@ -225,20 +229,6 @@ public class DingTalkRobotConfig implements Describable<DingTalkRobotConfig> {
           return Messages.RobotConfigFormValidation_success();
       }
       return "Error: " + message;
-    }
-
-    private ArrayList<DingTalkSecurityPolicyConfig> parseSecurityPolicyConfigs(String param) {
-      ArrayList<DingTalkSecurityPolicyConfig> securityPolicyConfigs =
-          new ArrayList<>();
-      JSONArray array = (JSONArray) JSONSerializer.toJSON(param);
-      for (Object item : array) {
-        JSONObject json = (JSONObject) item;
-        securityPolicyConfigs.add(
-            new DingTalkSecurityPolicyConfig(
-                (String) json.get("type"), (String) json.get("value"), "")
-        );
-      }
-      return securityPolicyConfigs;
     }
 
     private String getText() {
