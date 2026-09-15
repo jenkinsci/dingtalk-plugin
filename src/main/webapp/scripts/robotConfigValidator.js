@@ -1,16 +1,17 @@
 function applyErrorMessage(elt, rsp) {
-	if (rsp.status == 200) {
-		elt.innerHTML = rsp.responseText
-    if (rsp.responseText.startsWith('Error:')) {
-      elt.classList.add('jenkins-alert', 'jenkins-alert-danger')
-    } else {
-      elt.classList.add('jenkins-alert', 'jenkins-alert-success')
-    }
-  }
+	var text = rsp.status == 200
+			? rsp.responseText
+			: 'Error: ' + (rsp.status ? 'HTTP ' + rsp.status : rsp.responseText)
+	elt.innerHTML = text
+	if (text.startsWith('Error:')) {
+		elt.classList.add('jenkins-alert', 'jenkins-alert-danger')
+	} else {
+		elt.classList.add('jenkins-alert', 'jenkins-alert-success')
+	}
 	Behaviour.applySubtree(elt)
 }
 
-async function validateRobotConfig(btn) {
+function validateRobotConfig(btn) {
 	var checkUrl = btn.dataset['validateButtonDescriptorUrl'] +
 			'/' +
 			btn.dataset['validateButtonMethod']
@@ -26,15 +27,10 @@ async function validateRobotConfig(btn) {
 		url.searchParams.set(k, v)
 	})
 
-	var res = await fetch(url, {
-		method: 'GET'
-	})
-
-	var resText = await res.text()
-	applyErrorMessage($msg, {
-		status: res.status,
-		responseText: resText
-	})
+	fetch(url)
+		.then(res => Promise.all([res.status, res.text()]))
+		.then(([status, responseText]) => applyErrorMessage($msg, { status, responseText }))
+		.catch(err => applyErrorMessage($msg, { status: 0, responseText: String(err) }))
 }
 
 function getParameters($robot) {
@@ -57,11 +53,11 @@ function getParameters($robot) {
 	// 安全策略
 	var securityPolicyConfigs = []
 
-	$robot.querySelectorAll('.dt-security-config-container').forEach(
+	$robot.querySelectorAll('.repeated-chunk[name="securityPolicyConfigs"]').forEach(
 			function (item) {
 				securityPolicyConfigs.push({
-					type: item.querySelector('input[name=type]').value,
-					value: item.querySelector('input[name=value]').value
+					$class: item.querySelector('input[name="$class"]').value,
+					value: item.querySelector('input[name="_.value"]').value
 				})
 			})
 

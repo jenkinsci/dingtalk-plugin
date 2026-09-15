@@ -7,7 +7,7 @@
   <div class="dt-security-config-container">
     <f:entry title="${desc}" field="value"
       help="${type == 'KEY' ? '/descriptor/io.jenkins.plugins.DingTalkSecurityPolicyConfig/help/key' : null}">
-      <f:textbox name="value"/>
+      <f:textbox/>
     </f:entry>
     <f:invisibleEntry>
       <input type="hidden" name="type" value="${type}"/>
